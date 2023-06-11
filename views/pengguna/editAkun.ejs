@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" />
+    <title>Halaman Edit akun</title>
+  </head>
+  <body>
+    <%- include('./layout/navbar.ejs') %>
+    <main id="main-EditAkun-Pengguna">
+      <h1 class="headline">Edit Akun</h1>
+      <div class="containerEditAkun-bintang">
+        <form id="form-EditAkun-Pengguna" method="post" action="">
+            <div class="profile">
+              <img id="foto-profile" src="./assets/users1.jpg" alt="" />
+              <input name="ubahProfile" id="input-ubah-profile" type="file">
+              <label for="input-ubah-profile" id="btn-uploadFoto">Pilih Foto</label>
+            </div>
+            <div class="flex-kolom-EditAkun">
+              <div>
+                <label class="label-EditAkun-Pengguna" for="nama">Nama</label>
+                <input class="input-EditAkun" type="text" name="nama" id="nama" value="Samuel Edward" />
+              </div>
+              <div class="flex-row-EditAkun">
+                <div>
+                  <label class="label-EditAkun-Pengguna" for="tgl_lahir">Tangga Lahir</label>
+                  <input
+                    class="input-EditAkun"
+                    type="date"
+                    name="tgl_lahir"
+                    id="tgl_lahir"
+                    value="2002-04-12"
+                  />
+                </div>
+                <div>
+                  <label class="label-EditAkun-Pengguna" for="jenis_kelamin">Jenis Kelamin</label>
+                  <select class="input-EditAkun" name="kelamin" id="kelamin">
+                    <option value="pria">Pria</option>
+                    <option value="wanita">Wanita</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="label-EditAkun-Pengguna" for="noTelepon">No Telepon</label>
+                <input
+                  class="input-EditAkun"
+                  type="text"
+                  name="noTelepon"
+                  id="noTelepon"
+                  value="081382189198"
+                />
+              </div>
+              <div>
+                <label class="label-EditAkun-Pengguna" for="email">Email</label>
+                <input
+                  class="input-EditAkun"
+                  type="text"
+                  name="email"
+                  id="email"
+                  value="samueledward@gmail.com"
+                />
+              </div>
+              <div>
+                <label class="label-EditAkun-Pengguna" for="password">Kata Sandi</label>
+                <input class="input-EditAkun" type="text" name="password" id="password" value="briirG" />
+              </div>
+              <div>
+                <label class="label-EditAkun-Pengguna" for="sVerifikasi">Status verifikasi</label>
+                <input
+                  class="input-EditAkun"
+                  type="text"
+                  name="sVerifikasi"
+                  id="sVerifikasi"
+                  value="Sudah Terverifikasi"
+                />
+                <i
+                  class="fa fa-check-circle"
+                  id="sudah-verifikasi"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <div class="kartu-pemilu">
+                <label class="label-EditAkun-Pengguna" for="kartu-p">Kartu Pemilu</label>
+                <button class="cetak-kartu">Cetak</button>
+              </div>
+            </div>
+            <button type="submit" name="submit" id="submit-editAkun">Simpan</button>
+          </form>
+      </div>
+    </main>
+  </body>
+</html>

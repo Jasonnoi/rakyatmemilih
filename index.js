@@ -32,6 +32,11 @@ app.get("/pengguna/verif-data-pengguna", (req, res) => {
   res.render("pengguna/verifikasiData", { active: "verifikasiData" });
 });
 
+app.get("/pengguna/edit-akun", (req, res) => {
+  res.render("pengguna/editAkun", { active: "editAkun" });
+});
+
+
 //routing untuk admin
 app.get("/admin/", (req, res) => {
   res.render("admin/beranda", { active: "beranda" });
