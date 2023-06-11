@@ -552,7 +552,7 @@ table.dataTable thead th:first-child {
 }
 
 .headline {
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 }
 
 .label-Verif-Pengguna {
@@ -683,16 +683,16 @@ table.dataTable thead th:first-child {
 }
 
 .flex-row-EditAkun > div > input {
-  width: 13.7rem;
+  width: 11rem;
 }
 
 .flex-row-EditAkun > div > select {
-  width: 16rem;
+  width: 13.8rem;
 }
 
 .profile {
-  height: 200px;
-  width: 200px;
+  height: 130px;
+  width: 130px;
   border-radius: 50%;
   margin-right: 7px;
   overflow: hidden;
@@ -709,7 +709,6 @@ table.dataTable thead th:first-child {
 
 #btn-uploadFoto{
   left: 50%;
-  position: static;
   height: 40px;
   width: 250px;
   background-color: rgba(0, 0, 0, 7);
@@ -777,13 +776,13 @@ table.dataTable thead th:first-child {
 }
 
 .input-EditAkun{
-  width: 30rem;
-  height: 2.5rem;
+  width: 25rem;
+  height: 1.5rem;
   border: transparent;
   border-bottom: solid black;
   background-color: transparent;
   border-radius: 6px;
-  font-size: larger;
+  font-size: 400;
   font-weight: 200;
   padding-left: 1rem;
   padding-right: 1rem;
