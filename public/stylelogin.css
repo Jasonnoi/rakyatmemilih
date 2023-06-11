@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;500;700&display=swap");
+
+*,
+html,
+body {
+  font-family: "Outfit", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e5ded6;
+}
+.container {
+  width: 50vw;
+  height: 60vh;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: "login";
+  border-radius: 6px;
+  background: white;
+  border-radius: 6px;
+}
+
+.foto {
+  background-image: url("./assets/merahputih.jpeg");
+  background-size: cover;
+  grid-area: foto;
+  display: none;
+}
+
+.login {
+  font-weight: 200;
+  grid-area: login;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.login h3{
+  font-size: 30px;
+}
+button
+.login h3.title {
+  margin: 15px 0;
+  position: absolute;
+  top: 10pt;
+  font-size: 40px;
+  color: #322c38;
+}
+.text-input input {
+  background: #eeeeee;
+  height: 25px;
+  display: flex;
+  width: 230px;
+  align-items: center;
+  border-radius: 20px;
+  padding: 8px;
+  margin: 5px;
+  border: none;
+}
+
+.Login {
+  font-weight: 700;
+  background: #322c38;
+  color: white;
+  font-size: 1em;
+  display: inline-flex;
+
+  align-items: center;
+  border-radius: 20px;
+  padding: 10px 35px;
+  margin-top: 13px;
+  border: none;
+}
+
+.Signup {
+  display: inline-flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0vh;
+  margin-bottom: 15pt;
+  text-align: right;
+}
+
+.Unregistered {
+  margin-right: 40pt;
+}
+
+.Unregistered2 {
+  margin-right: 3px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-areas: "foto login";
+  }
+  .foto {
+    display: initial;
+  }
+}

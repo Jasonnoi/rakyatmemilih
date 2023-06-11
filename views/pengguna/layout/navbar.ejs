@@ -1,0 +1,36 @@
+
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../assets/logo-pemilu-2019.webp" alt="" />
+      <a href="">Rakyat Memilih</a>
+    </div>
+    <div class="nav-group <% if (active === 'beranda') { %>active<% } %>">
+      <i class="fa-solid fa-house-chimney"></i>
+      <a href="/pengguna/">Beranda</a>
+    </div>
+    <div
+      class="nav-group <% if (active === 'verifikasiData') { %>active<% } %>"
+    >
+      <i class="fa fa-check-circle" aria-hidden="true"></i>
+      <a href="/pengguna/verif-data-pengguna">Verifikasi Data</a>
+    </div>
+    <div class="nav-group">
+      <i class="fa-solid fa-user-pen"></i>
+      <a href="/editAkun.html">Edit Akun</a>
+    </div>
+    <div class="nav-group">
+      <i class="fa-solid fa-address-card"></i>
+      <a href="/kartupemilu.html">Kartu Pemilu</a>
+    </div>
+    <div class="user-account">
+      <img class="user-image" src="../assets/users1.jpg" alt="" />
+      <div class="user-info">
+        <h1 class="name">Adrian Jason</h1>
+        <p class="info">Online</p>
+      </div>
+      <a href="/">
+        <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
+      </a>
+    </div>
+  </aside>
+

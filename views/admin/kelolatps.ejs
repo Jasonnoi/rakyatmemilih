@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styleadmin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <%- include('./layout/navbar.ejs') %>
+    <main>
+      <h1>Kelola TPS Kelurahan Sangkanhurip</h1>
+      <div class="body">
+        <div class="header-body">
+          <div class="card-form opacity">
+            <h2>Tambahkan TPS</h2>
+            <form action="">
+              <div class="form-group">
+                <label for="nama">Nama TPS</label>
+                <input
+                  type="text"
+                  name="nama"
+                  id="nama"
+                  placeholder="Masukan Nama TPS"
+                />
+              </div>
+              <div class="form-group">
+                <label for="Nomor">Nomor TPS</label>
+                <input
+                  type="text"
+                  name="nomor"
+                  id="nomor"
+                  placeholder="Masukan Nomor TPS"
+                />
+              </div>
+              <div class="form-group">
+                <label for="RW">RW TPS</label>
+                <input
+                  type="text"
+                  name="RW"
+                  id="RW"
+                  placeholder="Masukan RW TPS"
+                />
+              </div>
+              <div class="form-group">
+                <label for="Kapasitas">Kapasitas TPS</label>
+                <input
+                  type="text"
+                  name="Kapasitas"
+                  id="Kapasitas"
+                  placeholder="Masukan Kapasitas TPS"
+                />
+              </div>
+              <button class="button-large primary">Tambah</button>
+            </form>
+          </div>
+        </div>
+        <div class="card-table opacity">
+          <table id="example" class="display compact" style="width: 100%">
+            <thead>
+              <tr>
+                <th>Nama TPS</th>
+                <th>Nomor TPS</th>
+                <th>RW TPS</th>
+                <th>Kapasitas TPS</th>
+                <th>Hapus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TPS A</td>
+                <td>TPS 01</td>
+                <td>RW 01</td>
+                <td>100</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS B</td>
+                <td>TPS 02</td>
+                <td>RW 02</td>
+                <td>150</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS C</td>
+                <td>TPS 03</td>
+                <td>RW 03</td>
+                <td>200</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS D</td>
+                <td>TPS 04</td>
+                <td>RW 04</td>
+                <td>120</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS E</td>
+                <td>TPS 05</td>
+                <td>RW 05</td>
+                <td>180</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS F</td>
+                <td>TPS 06</td>
+                <td>RW 06</td>
+                <td>220</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS G</td>
+                <td>TPS 07</td>
+                <td>RW 07</td>
+                <td>130</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS H</td>
+                <td>TPS 08</td>
+                <td>RW 08</td>
+                <td>190</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS I</td>
+                <td>TPS 09</td>
+                <td>RW 09</td>
+                <td>250</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS J</td>
+                <td>TPS 10</td>
+                <td>RW 10</td>
+                <td>140</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS K</td>
+                <td>TPS 11</td>
+                <td>RW 11</td>
+                <td>200</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS L</td>
+                <td>TPS 12</td>
+                <td>RW 12</td>
+                <td>160</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS M</td>
+                <td>TPS 13</td>
+                <td>RW 13</td>
+                <td>210</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS N</td>
+                <td>TPS 14</td>
+                <td>RW 14</td>
+                <td>180</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>TPS O</td>
+                <td>TPS 15</td>
+                <td>RW 15</td>
+                <td>240</td>
+                <td>
+                  <button class="status-button">
+                    <i class="fa fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+    <%- include('./layout/notif.ejs') %>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="/script.js"></script>
+    <script>
+      // Ambil semua elemen dengan class "status-button"
+      var buttons = document.getElementsByClassName("status-button");
+
+      // Loop melalui setiap tombol
+      for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i];
+
+        // Periksa teks pada tombol
+
+        // Jika tombol belum diverifikasi, ubah warna menjadi merah
+        button.style.backgroundColor = "red";
+      }
+      Array.from(buttons).forEach((button) => {
+        button.addEventListener("click", () => {
+          Swal.fire({
+            title: "Apakah anda ingin menghapus data ini?",
+            text: "anda tidak akan bisa membatalkan data yang di hapus",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Hapus",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

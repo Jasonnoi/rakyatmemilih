@@ -1,0 +1,161 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;700;900&family=Secular+One&display=swap");
+
+:root {
+  --color-danger: #e73d377e;
+  --color-dangger: rgb(197, 63, 59);
+  --color-success: #33bf41ae;
+  --color-primary: #1c78db;
+  --color-secondary: #6c757d;
+  --color-dangger-hover: rgb(162, 54, 50);
+  --color-bg: #f7efe7;
+  --card-radius: 30px;
+}
+
+*,
+html {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  font-family: "Outfit", sans-serif;
+}
+
+.sidebar {
+  position: relative;
+  height: 96vh;
+  width: 350px;
+  background-color: rgba(191, 176, 160, 30%);
+  border-radius: 20px;
+  margin: 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar .logo {
+  background-color: var(--color-dangger);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo a {
+  margin-left: 13px;
+  color: white;
+  margin-top: 5px;
+  font-weight: 900;
+  font-size: 1.3rem;
+  width: auto;
+}
+
+.logo img {
+  margin-left: 20px;
+  width: 40px;
+  height: 50px;
+}
+
+.sidebar .nav-group {
+  padding: 10px;
+  border-radius: 30px;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+  width: 165px;
+  height: 30px;
+}
+
+.nav-group:hover {
+  background-color: rgba(255, 255, 255, 0.607);
+}
+
+.nav-group:hover a {
+  color: var(--color-dangger-hover);
+}
+
+.nav-group:hover i {
+  color: var(--color-dangger-hover);
+}
+
+.nav-group a {
+  color: rgb(197, 63, 59);
+  font-weight: 700;
+  font-size: 16px;
+  width: auto;
+}
+
+.nav-group i {
+  color: var(--color-dangger);
+  justify-content: center;
+  font-size: 18px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  width: 30px;
+  height: 40px;
+}
+
+.active {
+  background-color: rgba(197, 64, 59, 0.896);
+  color: white;
+}
+
+.active a {
+  color: white;
+}
+
+.active i {
+  color: white;
+}
+
+.user-account {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.user-image {
+  margin-left: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+}
+
+.user-info {
+  width: auto;
+  height: 50px;
+  margin-left: 10px;
+}
+
+.user-info h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-dangger);
+  padding: 0;
+}
+
+.user-info p {
+  font-weight: 400;
+  color: var(--color-secondary);
+  font-size: 12px;
+}
+
+.user-account a i {
+  color: var(--color-dangger);
+  font-size: 1.1rem;
+  font-weight: 900;
+  margin-left: 20px;
+}
+
+.user-account a i:hover {
+  color: var(--color-dangger-hover);
+}
