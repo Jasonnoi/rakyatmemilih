@@ -532,7 +532,7 @@ table.dataTable thead th:first-child {
   width: 13rem;
 }
 
-#submit {
+#submit-Verif-Pengguna {
   width: 5rem;
   height: 2.5rem;
   justify-content: center;
@@ -547,11 +547,11 @@ table.dataTable thead th:first-child {
   transition: background 0.2s ease-in-out;
 }
 
-#submit:hover {
+#submit-Verif-Pengguna:hover {
   background: var(--color-dangger-hover);
 }
 
-#h1-verif-pengguna {
+.headline {
   padding-bottom: 30px;
 }
 
@@ -562,10 +562,7 @@ table.dataTable thead th:first-child {
   color: black;
 }
 
-input[type="text"],
-input[type="date"],
-input[type="email"],
-select {
+.input-Verif-Pengguna {
   width: 25rem;
   height: 1.5rem;
   border: transparent;
@@ -577,7 +574,7 @@ select {
   justify-content: center;
 }
 
-input[type="file"] {
+.inputFile-Verif-Pengguna {
   width: 57rem;
   height: 1.5rem;
   background-color: rgba(191, 176, 160, 30%);
@@ -588,7 +585,7 @@ input[type="file"] {
   justify-content: center;
 }
 
-input[type="file"]::file-selector-button {
+.inputFile-Verif-Pengguna::file-selector-button {
   justify-content: center;
   width: 100px;
   text-align: center;
@@ -601,12 +598,20 @@ input[type="file"]::file-selector-button {
   transition: background 0.2s ease-in-out;
 }
 
-input[type="file"]::file-selector-button:hover {
+.inputFile-Verif-Pengguna::file-selector-button:hover {
   background: #e73d37e0;
 }
 
-select {
+.inputSelect-Verif-Pengguna {
+  width: 25rem;
   height: 2.5rem;
+  border: transparent;
+  background-color: rgba(191, 176, 160, 30%);
+  border-radius: 20px;
+  font-size: 400;
+  font-weight: 200;
+  padding: 8px;
+  justify-content: center;
 }
 
 .kiri-kolom {
@@ -636,6 +641,7 @@ select {
 }
 
 /*END MAIN VERIFIKASI DATA BINTANG*/
+
 
 /*MAIN EDIT AKUN BINTANG*/
 
