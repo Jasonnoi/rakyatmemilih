@@ -691,7 +691,7 @@ table.dataTable thead th:first-child {
 }
 
 .profile {
-  height: 160px;
+  height: 145px;
   width: 130px;
   border-radius: 50%;
   margin-right: 7px;
@@ -725,18 +725,20 @@ table.dataTable thead th:first-child {
 }
 
 #submit-editAkun {
+  width: 5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 30px;
+  font-size:medium;
   justify-content: center;
   text-align: center;
   border: none;
   background: #322c38;
-  padding: 2rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-radius: 15px;
-  font-size: large;
   color: white;
   cursor: pointer;
   transition: background 0.2s ease-in-out;
+  color: white;
+  cursor: pointer;
 }
 
 #submit-editAkun:hover {
@@ -748,13 +750,10 @@ table.dataTable thead th:first-child {
   text-align: center;
   border: none;
   background: var(--color-dangger);
-  width: max-content;
-  height: auto;
-  padding: 1em;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
+  width: 4rem;
+  height: 2rem;
   border-radius: 30px;
-  font-size: large;
+  font-size: medium;
   cursor: pointer;
   color: white;
   transition: background 0.2s ease-in-out;
@@ -802,11 +801,74 @@ table.dataTable thead th:first-child {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3%;
-  height: auto;
+  gap: 1%;
+  height:auto;
 }
 
 /*END MAIN EDIT AKUN BINTANG*/
+
+/*MAIN KARTU PEMILU BINTANG*/
+#main-kartuPemilu-Pengguna {
+  position: sticky;
+  padding: 30px;
+  width: 74vw;
+  height: 86vh;
+  background-color: rgba(191, 176, 160, 30%);
+  border-radius: 20px;
+  margin: 15px;
+  overflow-y:auto;
+  overflow-x: hidden;
+}
+
+#headline-KP {
+  padding-bottom: 3rem;
+}
+
+.containerKartu-bintang {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbarKartu-bintang {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid black;
+  font-size: 400;
+}
+
+.active-navKartu {
+  color: var(--color-dangger) !important;
+}
+
+.navbarKartu-bintang > a {
+  padding-bottom: 1rem;
+  color: black;
+}
+
+.navbarKartu-bintang a:hover {
+  color: var(--color-dangger);
+}
+
+.image-kartu {
+  display: flex;
+  padding-top: 5rem;
+  height: 30%;
+  width: 50%;
+  justify-content: center;
+  align-self: center;
+}
+
+#kartu-pemilu {
+  height: 100%;
+  width: 100%;
+}
+
+#barcode-pemilu {
+  height: 60%;
+  width: 60%;
+}
+
+/*END MAIN KARTU PEMILU BINTANG*/
 
 .success {
   background-color: var(--color-success);
@@ -1096,6 +1158,8 @@ table td {
   .user-info h1 {
     font-size: 1rem;
   }
+
+
   /* End Of Sidebar */
 }
 @media (max-width: 1199px) {

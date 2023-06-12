@@ -36,6 +36,16 @@ app.get("/pengguna/edit-akun", (req, res) => {
   res.render("pengguna/editAkun", { active: "editAkun" });
 });
 
+app.get("/pengguna/kartu-pemilu", (req, res) => {
+  res.render("pengguna/kartuPemilu", { active: "kartuPemilu", activeNav: "kartu"});
+});
+
+app.get("/pengguna/kartu-pemiluB", (req, res) => {
+  res.render("pengguna/kartuPemilu", { active: "kartuPemilu", activeNav: "barcode"});
+});
+
+
+
 
 //routing untuk admin
 app.get("/admin/", (req, res) => {
