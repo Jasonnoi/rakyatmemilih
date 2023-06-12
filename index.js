@@ -35,17 +35,25 @@ app.get("/pengguna/verif-data-pengguna", (req, res) => {
 
 //routing untuk admin
 app.get("/admin/", async (req, res) => {
+  res.render("admin/beranda", { active: "beranda" });
+});
+
+app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
   try {
     const conn = await dbConnect();
-    res.render("admin/beranda", { active: "beranda" });
+    const query = `SELECT * FROM view_verifikasi_pengguna`;
+    conn.query(query, (err, results) => {
+      if (err) {
+        console.error("Tidak dapat mengeksekusi query:", err);
+        res.status(500).send("Tidak dapat mengeksekusi query");
+      } else {
+        res.render("admin/verifdata", { results, active: "verifikasi" });
+      }
+    });
     conn.release();
   } catch (err) {
     res.status(500).send("Database connection error");
   }
-});
-
-app.get("/admin/verifikasi-data-pemilih", (req, res) => {
-  res.render("admin/verifdata", { active: "verifikasi" });
 });
 app.get("/admin/kelola-tps", (req, res) => {
   res.render("admin/kelolatps", { active: "tps" });
