@@ -47,7 +47,19 @@ app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
         console.error("Tidak dapat mengeksekusi query:", err);
         res.status(500).send("Tidak dapat mengeksekusi query");
       } else {
-        res.render("admin/verifdata", { results, active: "verifikasi" });
+        const query2 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna`;
+        conn.query(query2, (err, totalPemilih) => {
+          if (err) {
+            console.error("Tidak dapat mengeksekusi query:", err);
+            res.status(500).send("Tidak dapat mengeksekusi query");
+          } else {
+            res.render("admin/verifdata", {
+              totalPemilih,
+              results,
+              active: "verifikasi",
+            });
+          }
+        });
       }
     });
     conn.release();

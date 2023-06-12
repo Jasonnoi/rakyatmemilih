@@ -27,7 +27,7 @@
             </div>
             <div class="info-verif">
               <h4>Jumlah Semua Data Pemilih :</h4>
-              <h2>300</h2>
+              <h2><?= totalPemilih[0] ?></h2>
               <button class="large primary">Lihat</button>
             </div>
           </div>
@@ -58,8 +58,8 @@
               <tr>
                 <th>Nama</th>
                 <th>NIK</th>
-                <th>RT</th>
                 <th>RW</th>
+                <th>RT</th>
                 <th>TPS</th>
                 <th>Status</th>
               </tr>
@@ -69,13 +69,22 @@
                 <tr>
                   <td><%= row.nama %></td>
                   <td><%= row.NIK %></td>
-                  <td><%= row.rw %></td>
-                  <td><%= row.rt %></td>
+                  <td><%= "RW " + row.rw %></td>
+                  <td><%= "RT " + row.rt %></td>
                   <td><%= row.id_pengguna %></td>
-                  <td><%= row.status %></td>
+                  <td>
+    
+                      <% if (row.status == null) { %>
+                        <button class="status-button">Belum Verifikasi</button>
+                        <% } else { %>
+                          <button class="status-button">Belum Verifikasi</button>
+                      <% } %>
+                  
+                  </td>
                 </tr>
-                <% } %>
+              <% } %>
             </tbody>
+            
           </table>
         </div>
       </div>
@@ -87,19 +96,20 @@
     <script>
       // Ambil semua elemen dengan class "status-button"
       var buttons = document.getElementsByClassName("status-button");
-
       // Loop melalui setiap tombol
       for (var i = 0; i < buttons.length; i++) {
         var button = buttons[i];
-
+    
         // Periksa teks pada tombol
         if (button.textContent === "Belum Verifikasi") {
           // Jika tombol belum diverifikasi, ubah warna menjadi merah
-          button.style.backgroundColor = "var(--color-dangger)";
+          button.style.backgroundColor = "red";
         } else if (button.textContent === "Sudah Verifikasi") {
           // Jika tombol sudah diverifikasi, ubah warna menjadi hijau
-          button.style.backgroundColor = "var(--color-success)";
+          button.style.backgroundColor = "green";
         }
+
+        console.log(totalPemilih)
       }
     </script>
     <script src="/script.js"></script>
