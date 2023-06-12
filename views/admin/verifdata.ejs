@@ -27,7 +27,7 @@
             </div>
             <div class="info-verif">
               <h4>Jumlah Semua Data Pemilih :</h4>
-              <h2><?= totalPemilih[0] ?></h2>
+              <h2><%= totalPemilih[0].totalData %></h2>
               <button class="large primary">Lihat</button>
             </div>
           </div>
@@ -37,7 +37,7 @@
             </div>
             <div class="info-verif">
               <h4>Jumlah Data Ter-Verifikasi :</h4>
-              <h2>300</h2>
+              <h2><%= total[1].totalData %></h2>
               <button class="large success">Lihat</button>
             </div>
           </div>
@@ -47,7 +47,7 @@
             </div>
             <div class="info-verif">
               <h4>Jumlah Data Belum Verifikasi :</h4>
-              <h2>300</h2>
+              <h2><%= total[0].totalData %></h2>
               <button class="large danger">Lihat</button>
             </div>
           </div>
@@ -77,7 +77,7 @@
                       <% if (row.status == null) { %>
                         <button class="status-button">Belum Verifikasi</button>
                         <% } else { %>
-                          <button class="status-button">Belum Verifikasi</button>
+                          <button class="status-button">Sudah Verifikasi</button>
                       <% } %>
                   
                   </td>
@@ -109,7 +109,7 @@
           button.style.backgroundColor = "green";
         }
 
-        console.log(totalPemilih)
+    
       }
     </script>
     <script src="/script.js"></script>
