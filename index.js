@@ -1,6 +1,7 @@
 import express from "express";
 import { fileURLToPath } from "url";
 import path from "path";
+import dbConnect from "./Database/connection.js";
 
 const port = 3000;
 const app = express();
@@ -33,8 +34,14 @@ app.get("/pengguna/verif-data-pengguna", (req, res) => {
 });
 
 //routing untuk admin
-app.get("/admin/", (req, res) => {
-  res.render("admin/beranda", { active: "beranda" });
+app.get("/admin/", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    res.render("admin/beranda", { active: "beranda" });
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
 });
 
 app.get("/admin/verifikasi-data-pemilih", (req, res) => {
