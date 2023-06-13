@@ -691,16 +691,17 @@ table.dataTable thead th:first-child {
 }
 
 .profile {
-  height: 145px;
-  width: 130px;
+  position: relative;
+  height: 140px;
+  width: 140px;
   border-radius: 50%;
   margin-right: 7px;
   overflow: hidden;
 }
 
-#foto-profile {
-  height: 100%;
+#foto-profile{
   width: 100%;
+  height: 100%;
 }
 
 #input-ubah-profile{
@@ -708,15 +709,21 @@ table.dataTable thead th:first-child {
 }
 
 #btn-uploadFoto{
+  position: absolute; 
   left: 50%;
+  bottom: 0; 
   height: 40px;
   width: 250px;
-  background-color: rgba(0, 0, 0, 7);
+  background-color: #18151b;
   color: white;
   text-align: center;
   transform: translateX(-50%);
-  bottom: 650px;
   line-height: 30px;
+  transition: background 0.3s ease-in-out;
+}
+
+#btn-uploadFoto:hover{
+  background-color: var(--color-dangger) ;
 }
 
 .kartu-pemilu {
