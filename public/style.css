@@ -715,6 +715,7 @@ table.dataTable thead th:first-child {
   height: 40px;
   width: 250px;
   background-color: #18151b;
+  opacity: 80%;
   color: white;
   text-align: center;
   transform: translateX(-50%);
@@ -723,7 +724,7 @@ table.dataTable thead th:first-child {
 }
 
 #btn-uploadFoto:hover{
-  background-color: var(--color-dangger) ;
+  background-color: #18151b;
 }
 
 .kartu-pemilu {
