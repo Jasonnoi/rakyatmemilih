@@ -41,7 +41,18 @@ app.get("/admin/", async (req, res) => {
 app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
   try {
     const conn = await dbConnect();
-    const query = `SELECT * FROM view_verifikasi_pengguna`;
+    let query = `SELECT * FROM view_verifikasi_pengguna`;
+    const hashedStatus = req.query.jenis_data_pemilih;
+
+    // Cek apakah parameter status ada dalam URL query
+    if (decodeURIComponent(hashedStatus) === "Pemilih Sudah Verifikasi") {
+      query = `SELECT * FROM view_verifikasi_pengguna WHERE status = 1`;
+    } else if (
+      decodeURIComponent(hashedStatus) === "Pemilih Belum Verifikasi"
+    ) {
+      query = `SELECT * FROM view_verifikasi_pengguna WHERE status is NULL`;
+    }
+
     conn.query(query, (err, results) => {
       if (err) {
         console.error("Tidak dapat mengeksekusi query:", err);
@@ -53,8 +64,7 @@ app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
             console.error("Tidak dapat mengeksekusi query:", err);
             res.status(500).send("Tidak dapat mengeksekusi query");
           } else {
-            const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status
-            `;
+            const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status`;
             conn.query(query3, (err, total) => {
               if (err) {
                 console.error("Tidak dapat mengeksekusi query:", err);
@@ -77,6 +87,7 @@ app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
     res.status(500).send("Database connection error");
   }
 });
+
 app.get("/admin/kelola-tps", (req, res) => {
   res.render("admin/kelolatps", { active: "tps" });
 });

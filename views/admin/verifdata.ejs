@@ -28,7 +28,7 @@
             <div class="info-verif">
               <h4>Jumlah Semua Data Pemilih :</h4>
               <h2><%= totalPemilih[0].totalData %></h2>
-              <button class="large primary">Lihat</button>
+              <button onclick="redirectToDataLengkap()" class="large primary">Lihat</button>
             </div>
           </div>
           <div class="card-small opacity">
@@ -38,7 +38,7 @@
             <div class="info-verif">
               <h4>Jumlah Data Ter-Verifikasi :</h4>
               <h2><%= total[1].totalData %></h2>
-              <button class="large success">Lihat</button>
+              <button  class="large success" onclick="redirectToVerifikasiData()">Lihat</button>
             </div>
           </div>
           <div class="card-small opacity">
@@ -48,7 +48,7 @@
             <div class="info-verif">
               <h4>Jumlah Data Belum Verifikasi :</h4>
               <h2><%= total[0].totalData %></h2>
-              <button class="large danger">Lihat</button>
+              <button onclick="redirectToDataTidakLengkap()" class="large danger">Lihat</button>
             </div>
           </div>
         </div>
@@ -103,10 +103,10 @@
         // Periksa teks pada tombol
         if (button.textContent === "Belum Verifikasi") {
           // Jika tombol belum diverifikasi, ubah warna menjadi merah
-          button.style.backgroundColor = "red";
+          button.style.backgroundColor = "var(--color-dangger)";
         } else if (button.textContent === "Sudah Verifikasi") {
           // Jika tombol sudah diverifikasi, ubah warna menjadi hijau
-          button.style.backgroundColor = "green";
+          button.style.backgroundColor = "var(--color-success)";
         }
 
     
