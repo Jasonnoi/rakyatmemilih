@@ -94,6 +94,32 @@ app.get("/admin/kelola-tps", (req, res) => {
 app.get("/admin/kelola-rw", (req, res) => {
   res.render("admin/kelolarw", { active: "kelolarw" });
 });
+// Pozt Untuk admin
+app.post('/hapus-data', async (req, res) => {
+  const idPemilih = req.body.idPemilih; // Mendapatkan nilai ID Pemilih dari permintaan POST
+  const db = await dbConnect();
+  // Lakukan proses penghapusan data dari tabel pengguna dan tabel_verifikasi berdasarkan ID
+  // Anda dapat menggunakan operasi database yang sesuai di sini
+
+  // Contoh penghapusan data dari tabel pengguna
+  db.query('DELETE FROM pengguna WHERE id = ?', [idPemilih], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send('Terjadi kesalahan saat menghapus data');
+    } else {
+      db.query('DELETE FROM tabel_verifikasi WHERE id_pengguna = ?', [idPemilih], (error, results) => {
+        if (error) {
+          console.error(error);
+          res.status(500).send('Terjadi kesalahan saat menghapus data');
+        } else {
+          res.status(200).send('Data berhasil dihapus');
+          db.release();
+        }
+      });
+    }
+  });
+});
+
 
 //routing untuk lurah
 app.get("/lurah/", (req, res) => {

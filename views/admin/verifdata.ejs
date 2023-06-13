@@ -56,6 +56,7 @@
           <table id="example" class="display compact" style="width: 100%">
             <thead>
               <tr>
+                <th>Nomor</th>
                 <th>Nama</th>
                 <th>NIK</th>
                 <th>RW</th>
@@ -65,25 +66,33 @@
               </tr>
             </thead>
             <tbody>
+              <% let i = 1; %>
               <% for(const row of results) { %>
                 <tr>
+                  <td><%= i %></td>
                   <td><%= row.nama %></td>
                   <td><%= row.NIK %></td>
                   <td><%= "RW " + row.rw %></td>
                   <td><%= "RT " + row.rt %></td>
-                  <td><%= row.id_pengguna %></td>
                   <td>
-    
-                      <% if (row.status == null) { %>
-                        <button class="status-button">Belum Verifikasi</button>
-                        <% } else { %>
-                          <button class="status-button">Sudah Verifikasi</button>
-                      <% } %>
-                  
+                    <% if (row.id_tps == null) { %>
+                      Verifikasi Terlebih Dahulu
+                    <% } else { %>
+                      <%= "TPS " + row.id_tps %>
+                    <% } %>
+                  </td>
+                  <td>
+                    <% if (row.status == null) { %>
+                      <button class="status-button" data-id="<%= row.id %>" data-nama="<%= row.nama %>" data-nik="<%= row.NIK %>" data-rw="<%= row.rw %>" data-rt="<%= row.rt %>">Belum Verifikasi</button>
+                    <% } else { %>
+                      <button class="status-button" disabled>Sudah Verifikasi</button>
+                    <% } %>
                   </td>
                 </tr>
+                <% i++; %>
               <% } %>
             </tbody>
+            
             
           </table>
         </div>
@@ -92,47 +101,67 @@
     <div id="myModal" class="modal">
       <div class="modal-content">
         <span id="closeModal" class="close">&times;</span>
-        <h2>Edit Data Calon Presiden</h2>
-        <form action="">
+        <h2>Verifikasi Data Pemilih</h2>
+        <h4  style="color: red; font-size: 12px;">Isi TPS untuk Verifikasi</h4>
+        <form action="/hapus-data" method="POST">
+          <input type="text" name="" id="idPemilih" value="" hidden>
           <div class="form-group">
-            <label for="nama">Nama Calon Presiden</label>
+            <label for="nama">Nama Pemilih</label>
             <input
               type="text"
               name="nama"
               id="nama"
-              placeholder="Masukan Nama Calon Presiden"
+              value=""
+              placeholder=""
+              disabled
             />
           </div>
           <div class="form-group">
-            <label for="Nomor">Nomor Urut</label>
+            <label for="NIK">NIK Pemilih</label>
             <input
               type="text"
-              name="nomor"
-              id="nomor"
-              placeholder="Masukan Nomor Urut Calon Presiden"
+              name="NIK"
+              id="NIK"
+              value=""
+              placeholder=""
+              disabled
             />
           </div>
           <div class="form-group">
-            <label for="Visi">Visi Presiden</label>
+            <label for="RW">RW</label>
             <input
               type="text"
-              name="Visi"
-              id="Visi"
-              placeholder="Masukan Visi Presiden"
+              name="RW"
+              id="RW"
+              placeholder=""
+              value=""
+              disabled
             />
           </div>
           <div class="form-group">
-            <label for="Misi">Misi Presiden</label>
+            <label for="RT">RT</label>
             <input
               type="text"
-              name="Misi"
-              id="Misi"
-              placeholder="Masukan Misi Presiden"
+              name="RT"
+              id="RT"
+              placeholder=""
+              value=""
+              disabled
             />
           </div>
-
+          <div class="form-group">
+            <label for="TPS">TPS</label>
+            <input
+              type="text"
+              name="TPS"
+              id="TPS"
+              placeholder=""
+              value=""
+            />
+          </div>
           <br />
-          <button class="button-large primary">Ubah</button>
+          <button class="button-large success">Verifikasi</button>
+          <button class="button-large danger">Tolak Data</button>
         </form>
       </div>
     </div>
@@ -159,17 +188,37 @@
 
     
       }
+      
       for (let index = 0; index < buttons.length; index++) {
-        buttons[index].addEventListener("click", ()=>{
+        buttons[index].addEventListener("click", () => {
+          const id = buttons[index].getAttribute('data-id');
+          const nama = buttons[index].getAttribute('data-nama');
+          const nik = buttons[index].getAttribute('data-nik');
+          const rw = buttons[index].getAttribute('data-rw');
+          const rt = buttons[index].getAttribute('data-rt');
+
+          const idInput = document.getElementById('idPemilih');
+          const namaInput = document.getElementById('nama');
+          const nikInput = document.getElementById('NIK');
+          const rwInput = document.getElementById('RW');
+          const rtInput = document.getElementById('RT');
+          const tpsInput = document.getElementById('TPS');
+
+          idInput.value = id;
+          namaInput.value = nama;
+          nikInput.value = nik;
+          rwInput.value = rw;
+          rtInput.value = rt;
+
           var modal = document.getElementById("myModal");
           var overlay = document.getElementById("overlay");
 
           modal.style.display = "block";
           overlay.style.display = "block";
-
-        })
-        
+        });
       }
+
+
       var closeModalBtn = document.getElementById("closeModal");
       var overlay = document.getElementById("overlay");
 
