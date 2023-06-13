@@ -1,8 +1,9 @@
 import express from "express";
 import { fileURLToPath } from "url";
 import path from "path";
+import dbConnect from "./Database/connection.js";
 
-const port = 8080;
+const port = 3000;
 const app = express();
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -48,13 +49,60 @@ app.get("/pengguna/kartu-pemiluB", (req, res) => {
 
 
 //routing untuk admin
-app.get("/admin/", (req, res) => {
+app.get("/admin/", async (req, res) => {
   res.render("admin/beranda", { active: "beranda" });
 });
 
-app.get("/admin/verifikasi-data-pemilih", (req, res) => {
-  res.render("admin/verifdata", { active: "verifikasi" });
+app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    let query = `SELECT * FROM view_verifikasi_pengguna`;
+    const hashedStatus = req.query.jenis_data_pemilih;
+
+    // Cek apakah parameter status ada dalam URL query
+    if (decodeURIComponent(hashedStatus) === "Pemilih Sudah Verifikasi") {
+      query = `SELECT * FROM view_verifikasi_pengguna WHERE status = 1`;
+    } else if (
+      decodeURIComponent(hashedStatus) === "Pemilih Belum Verifikasi"
+    ) {
+      query = `SELECT * FROM view_verifikasi_pengguna WHERE status is NULL`;
+    }
+
+    conn.query(query, (err, results) => {
+      if (err) {
+        console.error("Tidak dapat mengeksekusi query:", err);
+        res.status(500).send("Tidak dapat mengeksekusi query");
+      } else {
+        const query2 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna`;
+        conn.query(query2, (err, totalPemilih) => {
+          if (err) {
+            console.error("Tidak dapat mengeksekusi query:", err);
+            res.status(500).send("Tidak dapat mengeksekusi query");
+          } else {
+            const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status`;
+            conn.query(query3, (err, total) => {
+              if (err) {
+                console.error("Tidak dapat mengeksekusi query:", err);
+                res.status(500).send("Tidak dapat mengeksekusi query");
+              } else {
+                res.render("admin/verifdata", {
+                  total,
+                  totalPemilih,
+                  results,
+                  active: "verifikasi",
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
 });
+
 app.get("/admin/kelola-tps", (req, res) => {
   res.render("admin/kelolatps", { active: "tps" });
 });

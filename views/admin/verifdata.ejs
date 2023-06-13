@@ -27,8 +27,8 @@
             </div>
             <div class="info-verif">
               <h4>Jumlah Semua Data Pemilih :</h4>
-              <h2>300</h2>
-              <button class="large primary">Lihat</button>
+              <h2><%= totalPemilih[0].totalData %></h2>
+              <button onclick="redirectToDataLengkap()" class="large primary">Lihat</button>
             </div>
           </div>
           <div class="card-small opacity">
@@ -37,8 +37,8 @@
             </div>
             <div class="info-verif">
               <h4>Jumlah Data Ter-Verifikasi :</h4>
-              <h2>300</h2>
-              <button class="large success">Lihat</button>
+              <h2><%= total[1].totalData %></h2>
+              <button  class="large success" onclick="redirectToVerifikasiData()">Lihat</button>
             </div>
           </div>
           <div class="card-small opacity">
@@ -47,8 +47,8 @@
             </div>
             <div class="info-verif">
               <h4>Jumlah Data Belum Verifikasi :</h4>
-              <h2>300</h2>
-              <button class="large danger">Lihat</button>
+              <h2><%= total[0].totalData %></h2>
+              <button onclick="redirectToDataTidakLengkap()" class="large danger">Lihat</button>
             </div>
           </div>
         </div>
@@ -58,437 +58,85 @@
               <tr>
                 <th>Nama</th>
                 <th>NIK</th>
-                <th>RT</th>
                 <th>RW</th>
+                <th>RT</th>
                 <th>TPS</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              <!-- Data 1 -->
-              <tr>
-                <th>John Doe</th>
-                <th>1234567890</th>
-                <th>RT 001</th>
-                <th>RW 002</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 2 -->
-              <tr>
-                <th>Jane Smith</th>
-                <th>0987654321</th>
-                <th>RT 002</th>
-                <th>RW 003</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 3 -->
-              <tr>
-                <th>Michael Johnson</th>
-                <th>4567890123</th>
-                <th>RT 003</th>
-                <th>RW 004</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 4 -->
-              <tr>
-                <th>Sarah Williams</th>
-                <th>9876543210</th>
-                <th>RT 004</th>
-                <th>RW 005</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 5 -->
-              <tr>
-                <th>Robert Johnson</th>
-                <th>2345678901</th>
-                <th>RT 005</th>
-                <th>RW 006</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 6 -->
-              <tr>
-                <th>Emily Davis</th>
-                <th>8901234567</th>
-                <th>RT 006</th>
-                <th>RW 007</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 7 -->
-              <tr>
-                <th>David Wilson</th>
-                <th>5678901234</th>
-                <th>RT 007</th>
-                <th>RW 008</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 8 -->
-              <tr>
-                <th>Olivia Johnson</th>
-                <th>0123456789</th>
-                <th>RT 008</th>
-                <th>RW 009</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 9 -->
-              <tr>
-                <th>James Smith</th>
-                <th>6789012345</th>
-                <th>RT 009</th>
-                <th>RW 010</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 10 -->
-              <tr>
-                <th>Amy Johnson</th>
-                <th>3456789012</th>
-                <th>RT 010</th>
-                <th>RW 011</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 11 -->
-              <tr>
-                <th>Daniel Brown</th>
-                <th>9012345678</th>
-                <th>RT 011</th>
-                <th>RW 012</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 12 -->
-              <tr>
-                <th>Linda Davis</th>
-                <th>5678901234</th>
-                <th>RT 012</th>
-                <th>RW 013</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 13 -->
-              <tr>
-                <th>Christopher Johnson</th>
-                <th>2345678901</th>
-                <th>RT 013</th>
-                <th>RW 014</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 14 -->
-              <tr>
-                <th>Sophia Wilson</th>
-                <th>8901234567</th>
-                <th>RT 014</th>
-                <th>RW 015</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 15 -->
-              <tr>
-                <th>Matthew Davis</th>
-                <th>4567890123</th>
-                <th>RT 015</th>
-                <th>RW 016</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 16 -->
-              <tr>
-                <th>Emma Smith</th>
-                <th>0987654321</th>
-                <th>RT 016</th>
-                <th>RW 017</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 17 -->
-              <tr>
-                <th>Aiden Johnson</th>
-                <th>1234567890</th>
-                <th>RT 017</th>
-                <th>RW 018</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 18 -->
-              <tr>
-                <th>Mia Davis</th>
-                <th>5678901234</th>
-                <th>RT 018</th>
-                <th>RW 019</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 19 -->
-              <tr>
-                <th>William Johnson</th>
-                <th>9012345678</th>
-                <th>RT 019</th>
-                <th>RW 020</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 20 -->
-              <tr>
-                <th>Sophia Smith</th>
-                <th>3456789012</th>
-                <th>RT 020</th>
-                <th>RW 021</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 21 -->
-              <tr>
-                <th>James Davis</th>
-                <th>8901234567</th>
-                <th>RT 021</th>
-                <th>RW 022</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 22 -->
-              <tr>
-                <th>Ava Johnson</th>
-                <th>4567890123</th>
-                <th>RT 022</th>
-                <th>RW 023</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 23 -->
-              <tr>
-                <th>Oliver Davis</th>
-                <th>2345678901</th>
-                <th>RT 023</th>
-                <th>RW 024</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Belum Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 24 -->
-              <tr>
-                <th>Isabella Johnson</th>
-                <th>6789012345</th>
-                <th>RT 024</th>
-                <th>RW 025</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 25 -->
-              <tr>
-                <th>Liam Smith</th>
-                <th>0123456789</th>
-                <th>RT 025</th>
-                <th>RW 026</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 26 -->
-              <tr>
-                <th>Sophia Davis</th>
-                <th>3456789012</th>
-                <th>RT 026</th>
-                <th>RW 027</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 27 -->
-              <tr>
-                <th>Logan Johnson</th>
-                <th>9012345678</th>
-                <th>RT 027</th>
-                <th>RW 028</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 28 -->
-              <tr>
-                <th>Mia Smith</th>
-                <th>5678901234</th>
-                <th>RT 028</th>
-                <th>RW 029</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 29 -->
-              <tr>
-                <th>Mason Davis</th>
-                <th>2345678901</th>
-                <th>RT 029</th>
-                <th>RW 030</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 30 -->
-              <tr>
-                <th>Charlotte Johnson</th>
-                <th>8901234567</th>
-                <th>RT 030</th>
-                <th>RW 031</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 31 -->
-              <tr>
-                <th>Ethan Smith</th>
-                <th>4567890123</th>
-                <th>RT 031</th>
-                <th>RW 032</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 32 -->
-              <tr>
-                <th>Lily Davis</th>
-                <th>0987654321</th>
-                <th>RT 032</th>
-                <th>RW 033</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 33 -->
-              <tr>
-                <th>Aiden Johnson</th>
-                <th>1234567890</th>
-                <th>RT 033</th>
-                <th>RW 034</th>
-                <th>TPS 03</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 34 -->
-              <tr>
-                <th>Chloe Smith</th>
-                <th>5678901234</th>
-                <th>RT 034</th>
-                <th>RW 035</th>
-                <th>TPS 01</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
-
-              <!-- Data 35 -->
-              <tr>
-                <th>Lucas Davis</th>
-                <th>9012345678</th>
-                <th>RT 035</th>
-                <th>RW 036</th>
-                <th>TPS 02</th>
-                <th>
-                  <button class="status-button">Sudah Verifikasi</button>
-                </th>
-              </tr>
+              <% for(const row of results) { %>
+                <tr>
+                  <td><%= row.nama %></td>
+                  <td><%= row.NIK %></td>
+                  <td><%= "RW " + row.rw %></td>
+                  <td><%= "RT " + row.rt %></td>
+                  <td><%= row.id_pengguna %></td>
+                  <td>
+    
+                      <% if (row.status == null) { %>
+                        <button class="status-button">Belum Verifikasi</button>
+                        <% } else { %>
+                          <button class="status-button">Sudah Verifikasi</button>
+                      <% } %>
+                  
+                  </td>
+                </tr>
+              <% } %>
             </tbody>
+            
           </table>
         </div>
       </div>
     </main>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Edit Data Calon Presiden</h2>
+        <form action="">
+          <div class="form-group">
+            <label for="nama">Nama Calon Presiden</label>
+            <input
+              type="text"
+              name="nama"
+              id="nama"
+              placeholder="Masukan Nama Calon Presiden"
+            />
+          </div>
+          <div class="form-group">
+            <label for="Nomor">Nomor Urut</label>
+            <input
+              type="text"
+              name="nomor"
+              id="nomor"
+              placeholder="Masukan Nomor Urut Calon Presiden"
+            />
+          </div>
+          <div class="form-group">
+            <label for="Visi">Visi Presiden</label>
+            <input
+              type="text"
+              name="Visi"
+              id="Visi"
+              placeholder="Masukan Visi Presiden"
+            />
+          </div>
+          <div class="form-group">
+            <label for="Misi">Misi Presiden</label>
+            <input
+              type="text"
+              name="Misi"
+              id="Misi"
+              placeholder="Masukan Misi Presiden"
+            />
+          </div>
+
+          <br />
+          <button class="button-large primary">Ubah</button>
+        </form>
+      </div>
+    </div>
+    <div id="overlay"></div>
     <%- include('./layout/notif.ejs') %>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -496,11 +144,10 @@
     <script>
       // Ambil semua elemen dengan class "status-button"
       var buttons = document.getElementsByClassName("status-button");
-
       // Loop melalui setiap tombol
       for (var i = 0; i < buttons.length; i++) {
         var button = buttons[i];
-
+    
         // Periksa teks pada tombol
         if (button.textContent === "Belum Verifikasi") {
           // Jika tombol belum diverifikasi, ubah warna menjadi merah
@@ -509,6 +156,32 @@
           // Jika tombol sudah diverifikasi, ubah warna menjadi hijau
           button.style.backgroundColor = "var(--color-success)";
         }
+
+    
+      }
+      for (let index = 0; index < buttons.length; index++) {
+        buttons[index].addEventListener("click", ()=>{
+          var modal = document.getElementById("myModal");
+          var overlay = document.getElementById("overlay");
+
+          modal.style.display = "block";
+          overlay.style.display = "block";
+
+        })
+        
+      }
+      var closeModalBtn = document.getElementById("closeModal");
+      var overlay = document.getElementById("overlay");
+
+      closeModalBtn.addEventListener("click", closeModal);
+      overlay.addEventListener("click", closeModal);
+
+      function closeModal() {
+        var modal = document.getElementById("myModal");
+        var overlay = document.getElementById("overlay");
+
+        modal.style.display = "none";
+        overlay.style.display = "none";
       }
     </script>
     <script src="/script.js"></script>
