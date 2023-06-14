@@ -61,6 +61,9 @@ app.get("/admin/kelola-rw", (req, res) => {
   res.render("admin/kelolarw", { active: "kelolarw" });
 });
 
+// Register User
+app.post("/register-data", async (req, res) => {});
+
 //server listening
 app.listen(port, () => {
   console.log("ready, dengan port: " + port);

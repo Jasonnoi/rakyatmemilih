@@ -8,7 +8,7 @@
     <div class="foto"></div>
     <div class="Signup">
       <h3 class="title">Sign Up</h3>
-      <form action="#">
+      <form method="post" action="/register-data">
         <div class="split-form">
           <div class="left">
             <div class="form-group">
@@ -20,51 +20,31 @@
               <input type="text" />
             </div>
             <div class="form-group">
-              <label class="details">Tanggal Lahir</label>
-              <input type="date" />
+              <label class="details">Username</label>
+              <input type="text" />
             </div>
             <div class="form-group">
-              <label class="details">Alamat Lengkap</label>
-              <input type="text" />
+              <label class="details">Password</label>
+              <input type="password" />
             </div>
             <div class="form-group">
               <label class="details">Email</label>
               <input type="text" />
             </div>
             <div class="form-group">
-              <label class="details">Username</label>
-              <input type="text" />
+              <label class="details">Tanggal Lahir</label>
+              <input type="date" />
             </div>
           </div>
           <div class="right">
             <div class="form-group">
-              <label class="details">RT</label>
-              <select name="RT">
+              <label class="details">Kota</label>
+              <select name="Kota">
                 <option value="kosong"></option>
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="details">RW</label>
-              <select name="RW">
-                <option value="kosong"></option>
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="details">Kelurahan</label>
-              <select name="Kelurahan">
-                <option value="kosong"></option>
-                <option value="Astana Anyar">01</option>
-                <option value="Antapani">Antapani</option>
-                <option value="Bandung Kidul">Bandung Kidul</option>
-                <option value="Bandung Kulon">Bandung Kulon</option>
+                <option value="Kota Bandung">Kota Bandung</option>
+                <option value="Kab. Bandung">Kab.Bandung</option>
+                <option value="Garut">Garut</option>
+                <option value="Tasikmalaya">Tasikmalaya</option>
               </select>
             </div>
             <div class="form-group">
@@ -78,18 +58,38 @@
               </select>
             </div>
             <div class="form-group">
-              <label class="details">Kota</label>
-              <select name="Kota">
+              <label class="details">Kelurahan</label>
+              <select name="Kelurahan">
                 <option value="kosong"></option>
-                <option value="Kota Bandung">Kota Bandung</option>
-                <option value="Kab. Bandung">Kab.Bandung</option>
-                <option value="Garut">Garut</option>
-                <option value="Tasikmalaya">Tasikmalaya</option>
+                <option value="Astana Anyar">01</option>
+                <option value="Antapani">Antapani</option>
+                <option value="Bandung Kidul">Bandung Kidul</option>
+                <option value="Bandung Kulon">Bandung Kulon</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="details">Password</label>
-              <input type="password" />
+              <label class="details">RW</label>
+              <select name="RW">
+                <option value="kosong"></option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="details">RT</label>
+              <select name="RT">
+                <option value="kosong"></option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="details">Alamat Lengkap</label>
+              <input type="text" />
             </div>
           </div>
         </div>
