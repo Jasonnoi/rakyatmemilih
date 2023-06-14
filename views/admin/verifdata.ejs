@@ -150,14 +150,11 @@
             />
           </div>
           <div class="form-group">
-            <label for="TPS">TPS</label>
-            <input
-              type="text"
-              name="tps"
-              id="TPS"
-              placeholder=""
-              value=""
-            />
+            <label for="TPS">Pilih TPS</label>
+            <select id="tps" name="tps">
+                <option value="">-- Pilih TPS --</option>                
+                    <option value="hai">Hai</option>
+            </select>
           </div>
           <br />
           <button id="verifikasiButton" class="button-large success">Verifikasi</button>
@@ -190,50 +187,70 @@
       }
       
       for (let index = 0; index < buttons.length; index++) {
-        buttons[index].addEventListener("click", () => {
-          const id = buttons[index].getAttribute('data-id');
-          const nama = buttons[index].getAttribute('data-nama');
-          const nik = buttons[index].getAttribute('data-nik');
-          const rw = buttons[index].getAttribute('data-rw');
-          const rt = buttons[index].getAttribute('data-rt');
+  buttons[index].addEventListener("click", () => {
+    const id = buttons[index].getAttribute('data-id');
+    const nama = buttons[index].getAttribute('data-nama');
+    const nik = buttons[index].getAttribute('data-nik');
+    const rw = buttons[index].getAttribute('data-rw');
+    const rt = buttons[index].getAttribute('data-rt');
 
-          const idInput = document.getElementById('idPemilih');
-          const namaInput = document.getElementById('nama');
-          const nikInput = document.getElementById('NIK');
-          const rwInput = document.getElementById('RW');
-          const rtInput = document.getElementById('RT');
-          const tpsInput = document.getElementById('TPS');
+    const idInput = document.getElementById('idPemilih');
+    const namaInput = document.getElementById('nama');
+    const nikInput = document.getElementById('NIK');
+    const rwInput = document.getElementById('RW');
+    const rtInput = document.getElementById('RT');
+    const tpsSelect = document.getElementById('tps');
 
-          idInput.value = id;
-          namaInput.value = nama;
-          nikInput.value = nik;
-          rwInput.value = rw;
-          rtInput.value = rt;
+    idInput.value = id;
+    namaInput.value = nama;
+    nikInput.value = nik;
+    rwInput.value = rw;
+    rtInput.value = rt;
 
-          var modal = document.getElementById("myModal");
-          var overlay = document.getElementById("overlay");
+    var modal = document.getElementById("myModal");
+    var overlay = document.getElementById("overlay");
 
-          modal.style.display = "block";
-          overlay.style.display = "block";
+    modal.style.display = "block";
+    overlay.style.display = "block";
 
-          const verifikasiButton = document.getElementById('verifikasiButton');
-          const tolakButton = document.getElementById('tolakButton');
-          const form = document.getElementById('form-pemilih');
+    const verifikasiButton = document.getElementById('verifikasiButton');
+    const tolakButton = document.getElementById('tolakButton');
+    const form = document.getElementById('form-pemilih');
 
-          // Menambahkan event listener ke tombol Verifikasi
-          verifikasiButton.addEventListener('click', () => {
-            form.action = '/verif-data'; // Mengubah action ke '/verif-data'
-            form.submit(); // Mengirimkan permintaan POST
-          });
-
-          // Menambahkan event listener ke tombol Tolak Data
-          tolakButton.addEventListener('click', () => {
-            form.action = '/hapus-data'; // Mengubah action ke '/hapus-data'
-            form.submit(); // Mengirimkan permintaan POST
+    // Menambahkan event listener ke tombol Verifikasi
+    verifikasiButton.addEventListener('click', () => {
+      form.action = '/verif-data'; // Mengubah action ke '/verif-data'
+      form.submit(); // Mengirimkan permintaan POST
     });
-        });
-      }
 
+    // Menambahkan event listener ke tombol Tolak Data
+    tolakButton.addEventListener('click', () => {
+      form.action = '/hapus-data'; // Mengubah action ke '/hapus-data'
+      form.submit(); // Mengirimkan permintaan POST
+    });
+
+    // Mengosongkan dan mengganti pilihan TPS
+    tpsSelect.innerHTML = '<option value="">-- Pilih TPS --</option>';
+
+    fetch(`/admin/tps-by-rw/${rw}`)
+      .then(response => response.json())
+      .then(data => {
+        // Memperbarui select list TPS dengan hasil yang diperoleh
+        data.forEach(tps => {
+          console.log(tps)
+          const option = document.createElement('option');
+          option.value = tps.id;
+          option.textContent = tps.nama_TPS;
+
+          // Tambahkan elemen option ke dalam elemen select
+          tpsSelect.appendChild(option);
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  });
+}
 
       var closeModalBtn = document.getElementById("closeModal");
       var overlay = document.getElementById("overlay");

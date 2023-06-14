@@ -78,6 +78,27 @@ app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
     res.status(500).send("Database connection error");
   }
 });
+app.get("/admin/tps-by-rw/:rw", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const rw = req.params.rw;
+
+    // Query untuk mendapatkan TPS berdasarkan RW
+    const query = `SELECT * FROM tps WHERE id_RW = ${rw} `;
+    conn.query(query, (err, results) => {
+      if (err) {
+        console.error("Tidak dapat mengeksekusi query TPS:", err);
+        res.status(500).send("Tidak dapat mengeksekusi query TPS");
+        return;
+      }
+      res.json(results);
+    });
+
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
+});
 
 app.get("/admin/kelola-tps", (req, res) => {
   res.render("admin/kelolatps", { active: "tps" });
