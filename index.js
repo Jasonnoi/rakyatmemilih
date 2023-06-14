@@ -54,34 +54,25 @@ app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
     }
 
     conn.query(query, (err, results) => {
-      if (err) {
-        console.error("Tidak dapat mengeksekusi query:", err);
-        res.status(500).send("Tidak dapat mengeksekusi query");
-      } else {
-        const query2 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna`;
-        conn.query(query2, (err, totalPemilih) => {
+      const query2 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna`;
+      conn.query(query2, (err, totalPemilih) => {
+        const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status`;
+        conn.query(query3, (err, total) => {
           if (err) {
             console.error("Tidak dapat mengeksekusi query:", err);
             res.status(500).send("Tidak dapat mengeksekusi query");
           } else {
-            const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status`;
-            conn.query(query3, (err, total) => {
-              if (err) {
-                console.error("Tidak dapat mengeksekusi query:", err);
-                res.status(500).send("Tidak dapat mengeksekusi query");
-              } else {
-                res.render("admin/verifdata", {
-                  total,
-                  totalPemilih,
-                  results,
-                  active: "verifikasi",
-                });
-              }
+            res.render("admin/verifdata", {
+              total,
+              totalPemilih,
+              results,
+              active: "verifikasi",
             });
           }
         });
-      }
+      });
     });
+
     conn.release();
   } catch (err) {
     res.status(500).send("Database connection error");
@@ -95,28 +86,57 @@ app.get("/admin/kelola-rw", (req, res) => {
   res.render("admin/kelolarw", { active: "kelolarw" });
 });
 // Pozt Untuk admin
-app.post('/hapus-data', async (req, res) => {
-  const idPemilih = req.body.idPemilih; // Mendapatkan nilai ID Pemilih dari permintaan POST
-  const db = await dbConnect();
-  // Lakukan proses penghapusan data dari tabel pengguna dan tabel_verifikasi berdasarkan ID
-  // Anda dapat menggunakan operasi database yang sesuai di sini
-
-  // Contoh penghapusan data dari tabel pengguna
-  db.query('DELETE FROM pengguna WHERE id = ?', [idPemilih], (error, results) => {
-    if (error) {
-      console.error(error);
-      res.status(500).send('Terjadi kesalahan saat menghapus data');
+app.post("/hapus-data", async (req, res) => {
+  const conn = await dbConnect();
+  const idPemilih = req.body.idPemilih;
+  const query = `DELETE FROM pengguna WHERE id = ${idPemilih}`;
+  conn.query(query, (err, result) => {
+    if (err) {
+      console.error("Gagal menghapus data:", err);
+      res.send(
+        "<script>alert('Gagal menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+      );
     } else {
-      db.query('DELETE FROM tabel_verifikasi WHERE id_pengguna = ?', [idPemilih], (error, results) => {
-        if (error) {
-          console.error(error);
-          res.status(500).send('Terjadi kesalahan saat menghapus data');
+      const query2 = `DELETE FROM tabel_verifikasi WHERE id_pengguna =  ${idPemilih}`;
+      conn.query(query2, (err, resu) => {
+        if (err) {
+          console.error("Gagal menghapus data:", err);
+          res.send(
+            "<script>alert('Gagal menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+          );
         } else {
-          res.status(200).send('Data berhasil dihapus');
-          db.release();
+          console.log("Berhasil menghapus data");
+          res.send(
+            "<script>alert('Berhasil menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+          );
         }
       });
     }
+    conn.release();
+  });
+});
+
+app.post("/verif-data", async (req, res) => {
+  const conn = await dbConnect();
+  const idPemilih = req.body.idPemilih;
+  const tps = req.body.tps;
+  console.log(tps);
+  // Mengubah status menjadi 'Ditolak' dan mengupdate TPS
+  const query = `UPDATE tabel_verifikasi SET status = 1 , id_tps = ${tps}  WHERE id_pengguna = ${idPemilih}`;
+
+  conn.query(query, (err, result) => {
+    if (err) {
+      console.error("Gagal verifikasi data:", err);
+      res.send(
+        "<script>alert('Gagal verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+      );
+    } else {
+      console.log("Berhasil verifikasi data");
+      res.send(
+        "<script>alert('Berhasil verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+      );
+    }
+    conn.release();
   });
 });
 

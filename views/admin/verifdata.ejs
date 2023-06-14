@@ -103,8 +103,8 @@
         <span id="closeModal" class="close">&times;</span>
         <h2>Verifikasi Data Pemilih</h2>
         <h4  style="color: red; font-size: 12px;">Isi TPS untuk Verifikasi</h4>
-        <form action="/hapus-data" method="POST">
-          <input type="text" name="" id="idPemilih" value="" hidden>
+        <form method="post" id="form-pemilih">
+          <input type="text" name="idPemilih" id="idPemilih" value="" hidden>
           <div class="form-group">
             <label for="nama">Nama Pemilih</label>
             <input
@@ -153,15 +153,15 @@
             <label for="TPS">TPS</label>
             <input
               type="text"
-              name="TPS"
+              name="tps"
               id="TPS"
               placeholder=""
               value=""
             />
           </div>
           <br />
-          <button class="button-large success">Verifikasi</button>
-          <button class="button-large danger">Tolak Data</button>
+          <button id="verifikasiButton" class="button-large success">Verifikasi</button>
+          <button id="tolakButton" class="button-large danger">Tolak Data</button>
         </form>
       </div>
     </div>
@@ -215,6 +215,22 @@
 
           modal.style.display = "block";
           overlay.style.display = "block";
+
+          const verifikasiButton = document.getElementById('verifikasiButton');
+          const tolakButton = document.getElementById('tolakButton');
+          const form = document.getElementById('form-pemilih');
+
+          // Menambahkan event listener ke tombol Verifikasi
+          verifikasiButton.addEventListener('click', () => {
+            form.action = '/verif-data'; // Mengubah action ke '/verif-data'
+            form.submit(); // Mengirimkan permintaan POST
+          });
+
+          // Menambahkan event listener ke tombol Tolak Data
+          tolakButton.addEventListener('click', () => {
+            form.action = '/hapus-data'; // Mengubah action ke '/hapus-data'
+            form.submit(); // Mengirimkan permintaan POST
+    });
         });
       }
 
