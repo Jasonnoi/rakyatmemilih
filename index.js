@@ -29,8 +29,84 @@ app.get("/pengguna/", (req, res) => {
   res.render("pengguna/beranda", { active: "beranda" });
 });
 
-app.get("/pengguna/verif-data-pengguna", (req, res) => {
-  res.render("pengguna/verifikasiData", { active: "verifikasiData" });
+app.get("/pengguna/verif-data-pengguna", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const idPengguna = 2; // blm terverifikasi
+    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const resultPenggunaId = await getData();
+    // membuat format date
+    const dateStr = '1995-02-13T17:00:00.000Z';
+    const dateObj = new Date(dateStr);
+
+    const tahun = dateObj.getFullYear();
+    const bulan = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const hari = String(dateObj.getDate()).padStart(2, '0');
+    const formattedDate = `${tahun}-${bulan}-${hari}`;
+
+
+    const idKelurahan = resultPenggunaId.id_kelurahan;
+    const queryRW = `SELECT * FROM rw WHERE id_kelurahan = ${idKelurahan}`;
+    const getRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const resultRW = await getRW();
+
+
+    res.render("pengguna/verifikasiData", {
+      resultPenggunaId,
+      formattedDate,
+      resultRW,
+      active: "verifikasiData",
+    });
+
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
+});
+
+app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const idRw = req.params.rw;
+    // Query untuk mendapatkan TPS berdasarkan RW
+    const query = `SELECT * FROM rt WHERE no_RW = ${idRw}`;
+    conn.query(query, (err, results) => {
+      if (err) {
+        console.error("Tidak dapat mengeksekusi query TPS:", err);
+        res.status(500).send("Tidak dapat mengeksekusi query TPS");
+        return;
+      }
+      res.json(results);
+    });
+
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
 });
 
 app.get("/pengguna/edit-akun", (req, res) => {

@@ -27,11 +27,11 @@
           <section class="section-Verif-Pengguna kanan">
             <div class="wrap-input-verifP">
               <label class="label-Verif-Pengguna" for="nik">NIK</label>
-              <input class="input-Verif-Pengguna" type="text" name="nik" id="nik" value="327544375278923" />
+              <input class="input-Verif-Pengguna" type="text" name="nik" id="nik" value="<%= resultPenggunaId.NIK %>"/>
             </div>
             <div class="wrap-input-verifP">
               <label class="label-Verif-Pengguna" for="nama">Nama</label>
-              <input class="input-Verif-Pengguna" type="text" name="nama" id="nama" value="Samuel Edward" />
+              <input class="input-Verif-Pengguna" type="text" name="nama" id="nama" value="<%= resultPenggunaId.nama %>" />
             </div>
             <div class="flex-row">
               <div class="wrap-input-verifP">
@@ -43,7 +43,7 @@
                   type="date"
                   name="tgl_lahir"
                   id="tgl_lahir"
-                  value="2002-04-12"
+                  value="<%= formattedDate %>"
                 />
               </div>
               <div class="wrap-input-verifP">
@@ -51,9 +51,9 @@
                   >Jenis Kelamin</label
                 >
                 <select class="inputSelect-Verif-Pengguna" name="kelamin" id="kelamin">
-                  <option value="pria">Pria</option>
-                  <option value="wanita">Wanita</option>
-                </select>
+                  <option value="pria" <% if (resultPenggunaId.kelamin === 'pria') { %>selected="selected"<% } %>>Pria</option>
+                  <option value="wanita" <% if (resultPenggunaId.kelamin === 'wanita') { %>selected="selected"<% } %>>Wanita</option>
+                </select>                
               </div>
             </div>
             <div class="wrap-input-verifP">
@@ -65,7 +65,7 @@
                 type="text"
                 name="noTelepon"
                 id="noTelepon"
-                value="081382189198"
+                value="<%= resultPenggunaId.no_hp %>"
               />
             </div>
             <div class="wrap-input-verifP">
@@ -75,38 +75,26 @@
                 type="text"
                 name="email"
                 id="email"
-                value="samueledward@gmail.com"
+                value="<%= resultPenggunaId.email %>"
               />
             </div>
           </section>
           <section class="section-Verif-Pengguna kiri">
             <div class="wrap-input-verifP">
-              <label class="label-Verif-Pengguna" for="kota">Kota</label>
-              <select class="inputSelect-Verif-Pengguna" name="kota" id="kota">
-                <option value="mustika jaya">Bekasi</option>
-                <option value="Bandung">Bandung</option>
-                <option value="Jakarta">Jakarta</option>
-                <option value="Palembang">Palembang</option>
-              </select>
-            </div>
-            <div class="wrap-input-verifP">
-              <label class="label-Verif-Pengguna" for="kecamatan"
-                >Kecamatan</label
+              <label class="label-Verif-Pengguna" for="kelurahan"
+                >Kelurahan</label
               >
-              <select class="inputSelect-Verif-Pengguna" name="kecamatan" id="kecamatan">
-                <option value="cimuning">Cimuning</option>
-                <option value="bekasi timur">Bekasi timur</option>
-                <option value="bekasi barat">Bekasi barat</option>
-                <option value="Keranji">Keranji</option>
-              </select>
+              <input class="input-Verif-Pengguna" name="kelurahan" id="kelurahan" value="Cipaganti" disabled>
             </div>
             <div class="wrap-input-verifP">
               <label class="label-Verif-Pengguna" for="RW"
                 >RW</label
               >
               <select class="inputSelect-Verif-Pengguna" name="RW" id="RW">
-                <option value="18">01</option>
-                <option value="19">02</option>
+                <option value="<%= resultPenggunaId.rw %>"><%= "RW 0" + resultPenggunaId.rw %></option>
+                <% for (const RW of resultRW) { %>
+                  <option class="opsi-rw" value="<%= RW.no %>" id="opsi-rw"><%= "RW 0" + RW.no %></option>
+                <% } %>
               </select>
             </div>
             <div class="wrap-input-verifP">
@@ -114,8 +102,7 @@
                 >RT</label
               >
               <select class="inputSelect-Verif-Pengguna" name="RT" id="RT">
-                <option value="02">01</option>
-                <option value="02">02</option>
+                <option value="<%= resultPenggunaId.rt %>"><%= "RT 0" + resultPenggunaId.rt %></option>
               </select>
             </div>
           </section>
@@ -141,3 +128,32 @@
     </main>
   </body>
 </html>
+
+<script>
+const rw = document.getElementById("RW");
+let rwValue = rw.value;
+
+rw.addEventListener("change", () => {
+  rwValue = rw.value;
+  const selectRT = document.getElementById("RT");
+  selectRT.innerHTML = '<option value="">-- Pilih RT --</option>';
+
+  fetch(`/pengguna/verif-data-pengguna/select/${rwValue}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Memperbarui select list TPS dengan hasil yang diperoleh
+        data.forEach((rt) => {
+          const option = document.createElement("option");
+          option.value = rt.no;
+          option.textContent = "RT 0"+rt.no;
+
+          // Tambahkan elemen option ke dalam elemen select
+          selectRT.appendChild(option);
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    });
+</script>
