@@ -568,17 +568,27 @@ table.dataTable thead th:first-child {
   background-color: var(--color-success);
 }
 
+.success:hover {
+  background-color: #1f8028ae;
+}
+
 .danger {
   background-color: var(--color-dangger);
+}
+.danger:hover{
+  background-color: rgb(128, 40, 37);
 }
 .warning {
   color: white;
   background-color: #aac419e3;
 }
 .primary {
-  border-radius: 20px;
+
 
   background-color: var(--color-primary);
+}
+.primary:hover{
+  background-color: #134f90;
 }
 /* Main */
 /* Tables */
