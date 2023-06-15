@@ -2,6 +2,7 @@ import express from "express";
 import { fileURLToPath } from "url";
 import path from "path";
 import dbConnect from "./Database/connection.js";
+import { get } from "http";
 
 const port = 3000;
 const app = express();
@@ -99,8 +100,41 @@ app.get("/admin/tps-by-rw/:rw", async (req, res) => {
   }
 });
 
-app.get("/admin/kelola-tps", (req, res) => {
-  res.render("admin/kelolatps", { active: "tps" });
+app.get("/admin/kelola-tps", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const queryTPS = `SELECT * FROM tps `;
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryTPS, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+    const queryRW = `SELECT * FROM rw`;
+    const dataRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const dataTPS = await getData();
+    const getRW = await dataRW();
+    res.render("admin/kelolatps", { getRW, dataTPS, active: "tps" });
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
 });
 app.get("/admin/kelola-rw", (req, res) => {
   res.render("admin/kelolarw", { active: "kelolarw" });
@@ -170,7 +204,27 @@ app.post("/verif-data", async (req, res) => {
   });
 });
 
-
+app.post("/tambah-tps", async (req, res) => {
+  const conn = await dbConnect();
+  const kapasitas = req.body.Kapasitas;
+  const no_tps = req.body.nomor;
+  const nama_TPS = req.body.nama;
+  const id_RW = req.body.RW;
+  const query = `INSERT INTO tps(id, kapasitas, no_tps, nama_TPS, id_RW) VALUES ('','${kapasitas}', '${no_tps}', '${nama_TPS}', '${id_RW}')`;
+  conn.query(query, (err, result) => {
+    if (err) {
+      console.error("Gagal Tambah TPS:", err);
+      res.send(
+        "<script>alert('Gagal Tambah TPS'); window.location.href='admin/kelola-tps';</script>"
+      );
+    } else {
+      console.log("Berhasil Tambah TPS");
+      res.send(
+        "<script>alert('Berhasil Tambah TPS'); window.location.href='admin/kelola-tps';</script>"
+      );
+    }
+  });
+});
 //routing untuk lurah
 app.get("/lurah/", (req, res) => {
   res.render("lurah/beranda", { active: "beranda" });
