@@ -597,6 +597,13 @@ table td {
   background-color: rgba(143, 140, 140, 0.303);
   border-radius: 10px;
 }
+.form-group select{
+  padding: 7px;
+  border: 1px solid red;
+  background-color: rgba(190, 186, 186, 0.303);
+  border-radius: 10px;
+}
+
 
 /* End Of Tables */
 

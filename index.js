@@ -82,9 +82,8 @@ app.get("/admin/tps-by-rw/:rw", async (req, res) => {
   try {
     const conn = await dbConnect();
     const rw = req.params.rw;
-
     // Query untuk mendapatkan TPS berdasarkan RW
-    const query = `SELECT * FROM tps WHERE id_RW = ${rw} `;
+    const query = `SELECT * FROM tps WHERE id_RW = ${rw} AND kapasitas  > 0 `;
     conn.query(query, (err, results) => {
       if (err) {
         console.error("Tidak dapat mengeksekusi query TPS:", err);
@@ -144,6 +143,7 @@ app.post("/verif-data", async (req, res) => {
   console.log(tps);
   // Mengubah status menjadi 'Ditolak' dan mengupdate TPS
   const query = `UPDATE tabel_verifikasi SET status = 1 , id_tps = ${tps}  WHERE id_pengguna = ${idPemilih}`;
+  const perintah = `UPDATE tps set kapasitas = kapasitas - 1 WHERE id = ${tps}`;
 
   conn.query(query, (err, result) => {
     if (err) {
@@ -152,10 +152,19 @@ app.post("/verif-data", async (req, res) => {
         "<script>alert('Gagal verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
       );
     } else {
-      console.log("Berhasil verifikasi data");
-      res.send(
-        "<script>alert('Berhasil verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
-      );
+      conn.query(perintah, (err, haha) => {
+        if (err) {
+          console.error("Gagal verifikasi data:", err);
+          res.send(
+            "<script>alert('Gagal verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+          );
+        } else {
+          console.log("Berhasil verifikasi data");
+          res.send(
+            "<script>alert('Berhasil verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+          );
+        }
+      });
     }
     conn.release();
   });

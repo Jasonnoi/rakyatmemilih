@@ -56,6 +56,7 @@
           <table id="example" class="display compact" style="width: 100%">
             <thead>
               <tr>
+                <th style="display: none;"></th>
                 <th>Nomor</th>
                 <th>Nama</th>
                 <th>NIK</th>
@@ -69,6 +70,7 @@
               <% let i = 1; %>
               <% for(const row of results) { %>
                 <tr>
+                  <td style="display: none;"><%= row.id %></td>
                   <td><%= i %></td>
                   <td><%= row.nama %></td>
                   <td><%= row.NIK %></td>
@@ -83,7 +85,7 @@
                   </td>
                   <td>
                     <% if (row.status == null) { %>
-                      <button class="status-button" data-id="<%= row.id %>" data-nama="<%= row.nama %>" data-nik="<%= row.NIK %>" data-rw="<%= row.rw %>" data-rt="<%= row.rt %>">Belum Verifikasi</button>
+                      <button class="status-button" data-id="<%= row.id %>">Belum Verifikasi</button>
                     <% } else { %>
                       <button class="status-button" disabled>Sudah Verifikasi</button>
                     <% } %>
@@ -152,8 +154,7 @@
           <div class="form-group">
             <label for="TPS">Pilih TPS</label>
             <select id="tps" name="tps">
-                <option value="">-- Pilih TPS --</option>                
-                    <option value="hai">Hai</option>
+                
             </select>
           </div>
           <br />
@@ -173,7 +174,7 @@
       // Loop melalui setiap tombol
       for (var i = 0; i < buttons.length; i++) {
         var button = buttons[i];
-    
+        
         // Periksa teks pada tombol
         if (button.textContent === "Belum Verifikasi") {
           // Jika tombol belum diverifikasi, ubah warna menjadi merah
@@ -186,71 +187,84 @@
     
       }
       
-      for (let index = 0; index < buttons.length; index++) {
-  buttons[index].addEventListener("click", () => {
-    const id = buttons[index].getAttribute('data-id');
-    const nama = buttons[index].getAttribute('data-nama');
-    const nik = buttons[index].getAttribute('data-nik');
-    const rw = buttons[index].getAttribute('data-rw');
-    const rt = buttons[index].getAttribute('data-rt');
+      function setButtonListener() {
+        const buttons = document.getElementsByClassName("status-button");
 
-    const idInput = document.getElementById('idPemilih');
-    const namaInput = document.getElementById('nama');
-    const nikInput = document.getElementById('NIK');
-    const rwInput = document.getElementById('RW');
-    const rtInput = document.getElementById('RT');
-    const tpsSelect = document.getElementById('tps');
+        for (let index = 0; index < buttons.length; index++) {
+          buttons[index].addEventListener("click", (event) => {
+            const button = event.target;
+            const row = button.closest("tr");
+            const id =  row.querySelector("td:nth-child(1)").textContent
+            const nama = row.querySelector("td:nth-child(3)").textContent;
+            const nik = row.querySelector("td:nth-child(4)").textContent;
+            const rw = row.querySelector("td:nth-child(5)").textContent;
+            const rwSubstring = rw.substring(3);
+            const rt = row.querySelector("td:nth-child(5)").textContent;
 
-    idInput.value = id;
-    namaInput.value = nama;
-    nikInput.value = nik;
-    rwInput.value = rw;
-    rtInput.value = rt;
+            const idInput = document.getElementById("idPemilih");
+            const namaInput = document.getElementById("nama");
+            const nikInput = document.getElementById("NIK");
+            const rwInput = document.getElementById("RW");
+            const rtInput = document.getElementById("RT");
+            const tpsSelect = document.getElementById("tps");
 
-    var modal = document.getElementById("myModal");
-    var overlay = document.getElementById("overlay");
+            idInput.value = id;
+           
+            namaInput.value = nama;
+            nikInput.value = nik;
+            rwInput.value = rw;
+            rtInput.value = rt;
 
-    modal.style.display = "block";
-    overlay.style.display = "block";
+            var modal = document.getElementById("myModal");
+            var overlay = document.getElementById("overlay");
 
-    const verifikasiButton = document.getElementById('verifikasiButton');
-    const tolakButton = document.getElementById('tolakButton');
-    const form = document.getElementById('form-pemilih');
+            modal.style.display = "block";
+            overlay.style.display = "block";
 
-    // Menambahkan event listener ke tombol Verifikasi
-    verifikasiButton.addEventListener('click', () => {
-      form.action = '/verif-data'; // Mengubah action ke '/verif-data'
-      form.submit(); // Mengirimkan permintaan POST
-    });
+            const verifikasiButton = document.getElementById("verifikasiButton");
+            const tolakButton = document.getElementById("tolakButton");
+            const form = document.getElementById("form-pemilih");
 
-    // Menambahkan event listener ke tombol Tolak Data
-    tolakButton.addEventListener('click', () => {
-      form.action = '/hapus-data'; // Mengubah action ke '/hapus-data'
-      form.submit(); // Mengirimkan permintaan POST
-    });
+            // Menambahkan event listener ke tombol Verifikasi
+            verifikasiButton.addEventListener("click", () => {
+              form.action = "/verif-data"; // Mengubah action ke '/verif-data'
+              form.submit(); // Mengirimkan permintaan POST
+            });
 
-    // Mengosongkan dan mengganti pilihan TPS
-    tpsSelect.innerHTML = '<option value="">-- Pilih TPS --</option>';
+            // Menambahkan event listener ke tombol Tolak Data
+            tolakButton.addEventListener("click", () => {
+              form.action = "/hapus-data"; // Mengubah action ke '/hapus-data'
+              form.submit(); // Mengirimkan permintaan POST
+            });
 
-    fetch(`/admin/tps-by-rw/${rw}`)
-      .then(response => response.json())
-      .then(data => {
-        // Memperbarui select list TPS dengan hasil yang diperoleh
-        data.forEach(tps => {
-          console.log(tps)
-          const option = document.createElement('option');
-          option.value = tps.id;
-          option.textContent = tps.nama_TPS;
+            // Mengosongkan dan mengganti pilihan TPS
+            tpsSelect.innerHTML = '<option value="">-- Pilih TPS --</option>';
 
-          // Tambahkan elemen option ke dalam elemen select
-          tpsSelect.appendChild(option);
-        });
-      })
-      .catch(error => {
-        console.error('Error:', error);
+            fetch(`/admin/tps-by-rw/${rwSubstring}`)
+              .then((response) => response.json())
+              .then((data) => {
+                // Memperbarui select list TPS dengan hasil yang diperoleh
+                data.forEach((tps) => {
+                  const option = document.createElement("option");
+                  option.value = tps.id;
+                  option.textContent = tps.nama_TPS;
+
+                  // Tambahkan elemen option ke dalam elemen select
+                  tpsSelect.appendChild(option);
+                });
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+        }
+      }
+
+      setButtonListener();
+
+      $('#myTable').on('draw.dt', function () {
+        setButtonListener();
       });
-  });
-}
 
       var closeModalBtn = document.getElementById("closeModal");
       var overlay = document.getElementById("overlay");
