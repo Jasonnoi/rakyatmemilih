@@ -14,56 +14,101 @@
       referrerpolicy="no-referrer"
     />
     <title>Document</title>
+    <style>
+    .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .pagination a {
+    color: #000;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+    border-radius: 12px;
+  }
+
+  .pagination a.active {
+    background-color:var(--color-dangger);
+    color: white;
+    border: 1px solid var(--color-dangger);
+  }
+
+  .pagination a:hover:not(.active) {
+    background-color: #ddd;
+  }
+    </style>
   </head>
   <body>
     <%- include('./layout/navbar.ejs') %>
     <main>
-      <h1>Tambah Data RW di Kelurahan Sangkanhurip</h1>
+      <h1>Tambah Data RT di Kelurahan Sangkanhurip</h1>
       <div class="body">
-        <div class="header-body">
-          <div class="card-small opacity">
-            <div class="icon-verif primary">
-              <i class="fa-solid fa-city" aria-hidden="true"></i>
+            <div class="header-body">
+            <div class="card-small opacity">
+                <div class="icon-verif primary">
+                <i class="fa-solid fa-city" aria-hidden="true"></i>
+                </div>
+                <div class="info-verif">
+                <h4>Jumlah RT Kelurahan Sangkanhurip :</h4>
+                <h2><%= coun_rw.jumRW %></h2>
+                <button id="buttonrw" class="large primary">Tambah</button>
+                </div>
             </div>
-            <div class="info-verif">
-              <h4>Jumlah RW Kelurahan Sangkanhurip :</h4>
-              <h2><%= coun_rw.jumRW %></h2>
-              <button id="buttonrw" class="large primary">Tambah</button>
+            
             </div>
-          </div>
-          
-        </div>
-        <div class="card-table opacity">
-          <table id="example" class="display compact" style="width: 100%">
-            <thead>
-              <tr>
-                <th>Nomor</th>
-                <th>Kelurahan</th>
-                <th>Nomor RW</th>
-                <th>Tambah TPS</th>
-          
-              </tr>
-            </thead>
-            <tbody>
-              <% let i = 0; %>
-              <% for(const row of dataRW) { %>
-                <tr>
-                  <td><%= i + 1 %></td>
-                  <td>Sangkanhurip</td>
-                  <td><%= "RW 0" + row.no %></td>
-                  
-                  <td><button onclick="window.location.href = '/admin/kelola-tps'" class="status-button"><i class="fa fa-add"></i>  Tambah TPS</button></td>
-                </tr>
-                <% i++; %>
-              <% } %>
-            </tbody>
-          </table>
-          
-        </div>
+            <div class="card-table opacity">
+                <div class="header-card">
+                    
+                    <form id="search" action="/admin/kelola-rt" method="get">
+                        <div class="form-group">
+                            <input placeholder="Cari Sesuatu di Sini" type="text" name="querySearch" id="search">
+                        </div>
+                        <button class="button-large danger"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Nomor</th>
+                        <th>Kelurahan</th>
+                        <th>Nomor RW</th>
+                        <th>Nomor RT</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% let i = 0; %>
+                    <% for(const row of dataRW) { %>
+                        <tr>
+                        <td><%= i + 1 %></td>
+                        <td>Sangkanhurip</td>
+                        <td><%= "RW 0" + row.no_rw %></td>
+                        <td><%= "RT 0" + row.no %></td>
+                        </tr>
+                        <% i++; %>
+                    <% } %>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                <% if (pages.length >= 1) { %>
+                    <% for (let i = 1; i <= pageCount; i++) { %>
+                    <a href="?page=<%= i %>" class="<%= current === i ? 'active' : '' %>"><%= i %></a>
+                    <% } %>
+                <% } %>
+                </div>
+
+
+            </div>
+            
+
       </div>
     </main>
     
-    <%- include('./layout/notif.ejs') %>
+  
     <div id="overlay"></div>
     <div id="myModal"  class="modal">
       <div class="modal-content" style="height: auto !important;">
@@ -71,17 +116,16 @@
         <h2>Tambah Data RW</h2>
        
         <form method="post" action="/tambah-rw">
-        
           <div class="form-group">
-            <label for="rw">Masukan Nomor RW</label>
+            <label for="rt">Masukan Nomor RT</label>
             <input
               type="text"
-              name="rw"
-              id="rw"
+              name="rt"
+              id="rt"
               value=""
               placeholder=""
             />
-         
+         </div>
           <br />
           <button  class="button-large primary"><i class="fa fa-add"></i> Tambah</button>
         </form>

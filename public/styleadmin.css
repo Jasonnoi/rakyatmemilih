@@ -510,7 +510,7 @@ table tbody tr {
   color: rgb(82, 78, 78);
 }
 
-table.dataTable thead th:first-child {
+table.dataTable thead th:first-child, table thead th:first-child {
   border-top-left-radius: 10px;
 }
 /* End Of Main Content Styling */
@@ -544,7 +544,7 @@ table.dataTable thead th:first-child {
 /* Main */
 /* Tables */
 
-table.dataTable thead th:last-child {
+table.dataTable thead th:last-child, table thead th:last-child{
   border-top-right-radius: 10px;
 }
 
@@ -574,7 +574,28 @@ table td {
 .card-form {
   font-size: 12px;
 }
+.header-card{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+form#search{
+  display: flex;
+  width: 30%;
+  margin-bottom: 10px;
+  align-items: center;
+  justify-content: center;
+}
+form#search input[type="text"]{
+  background-color: rgba(227, 226, 226, 0.657);
+  border: 2px solid var(--color-dangger);
+}
+form#search button{
+  width: auto;
+  border-radius: 5px;
 
+  margin-left: 10px;
+}
 .form-group {
   margin-top: 10px;
   display: flex;
@@ -625,7 +646,7 @@ table td {
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   min-width: 20em; /* Ubah ukuran lebar sesuai kebutuhan Anda */
-  min-height: 300px;
+  height: auto;
 }
 
 .close {
@@ -939,6 +960,7 @@ section {
     font-size: 8px;
   }
   table {
+ 
     font-size: 10px;
   }
 

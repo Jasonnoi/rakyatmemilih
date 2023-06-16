@@ -2,7 +2,8 @@ import express from "express";
 import { fileURLToPath } from "url";
 import path from "path";
 import dbConnect from "./Database/connection.js";
-import { get } from "http";
+import paginate from "express-paginate";
+
 
 const port = 3000;
 const app = express();
@@ -136,9 +137,193 @@ app.get("/admin/kelola-tps", async (req, res) => {
     res.status(500).send("Database connection error");
   }
 });
-app.get("/admin/kelola-rw", (req, res) => {
-  res.render("admin/kelolarw", { active: "kelolarw" });
+app.get("/admin/kelola-rw", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const selectDataRW = `SELECT * FROM rw`;
+    const countRW = `SELECT count(no) as jumRW FROM rw`;
+    const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
+
+    const getRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(selectDataRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const getCountRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(countRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const getCountTPS = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(countTPS, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const totalTPS = await getCountTPS();
+    const dataRW = await getRW();
+    const coun_rw = await getCountRW();
+
+    res.render("admin/kelolarw", {
+      totalTPS,
+      dataRW,
+      coun_rw,
+      active: "kelolarw",
+    });
+    conn.release();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database connection error");
+  }
 });
+app.get("/admin/kelola-rt", paginate.middleware(10, 50), async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const selectDataRW = `SELECT * FROM rt `;
+
+    const countRW = `SELECT count(no) as jumRW FROM rt`;
+    const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
+
+    // Mendapatkan nilai pencarian dari URL
+    const searchQuery = req.query.querySearch;
+    let selectDataRWWithSearch;
+
+    if (searchQuery) {
+      if (searchQuery.toUpperCase().includes("RW")) {
+        const modified = searchQuery.substring(4);
+        console.log(modified);
+        selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no_rw LIKE '%${modified}%'
+        `;
+      } else if (searchQuery.toUpperCase().includes("RT")) {
+        const modified = searchQuery.substring(4);
+        selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no LIKE '%${modified}%'
+        `;
+      } else {
+        const modified = searchQuery.substring(4);
+        selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no LIKE '%${modified}%'
+            OR no_rw LIKE '%${modified}%'
+        `;
+      }
+    } else {
+      selectDataRWWithSearch = selectDataRW;
+    }
+    let getRW;
+
+    if (typeof searchQuery === "undefined") {
+      getRW = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(selectDataRW, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      };
+    } else {
+      getRW = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(selectDataRWWithSearch, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      };
+    }
+
+    // Menggabungkan pencarian ke dalam query SQL
+
+    const getCountRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(countRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const getCountTPS = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(countTPS, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const [totalTPS, dataRW, coun_rw] = await Promise.all([
+      getCountTPS(),
+      getRW(),
+      getCountRW(),
+    ]);
+
+    const itemCount = dataRW.length;
+    const limit = 10; // Set nilai limit menjadi 10
+    const pageCount = Math.ceil(itemCount / limit);
+    const currentPage = parseInt(req.query.page) || 1;
+    const offset = (currentPage - 1) * limit; // Hitung offset berdasarkan halaman saat ini
+    const limitedDataRW = dataRW.slice(offset, offset + limit); // Batasi data yang ditampilkan sesuai limit dan offset
+    const pages = paginate.getArrayPages(req)(3, pageCount, currentPage);
+    console.log(pageCount, currentPage, itemCount, limit);
+    res.render("admin/kelolart", {
+      totalTPS,
+      dataRW: limitedDataRW, // Gunakan data yang telah dibatasi sesuai limit
+      coun_rw,
+      active: "kelolart",
+      pageCount,
+      itemCount,
+      pages,
+      current: currentPage,
+    });
+
+    conn.release();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database connection error");
+  }
+});
+
+
+
+
+
+
 // Pozt Untuk admin
 app.post("/hapus-data", async (req, res) => {
   const conn = await dbConnect();
@@ -169,7 +354,30 @@ app.post("/hapus-data", async (req, res) => {
     conn.release();
   });
 });
+app.post('/tambah-rw', async (req, res) =>{
+  try{
+    const conn = await dbConnect();
+    const query = `INSERT INTO rw VALUES(${req.body.rw}, 1)`;
+    conn.query(query, (err, result) =>{
+      if (err) {
+        console.error("Gagal Memasukan rw:", err);
+        res.send(
+          "<script>alert('Gagal Memasukan rw'); window.location.href='admin/kelola-rw';</script>"
+        );
+      } else {
+        console.log("Berhasil Memasukan rw");
+        res.send(
+          "<script>alert('Berhasil Memasukan rw'); window.location.href='admin/kelola-rw';</script>"
+        );
+      }
+    })
+    conn.release();
 
+  }catch(err){
+    res.status(500).send(err.message);
+    console.error(err);
+  }
+})
 app.post("/verif-data", async (req, res) => {
   const conn = await dbConnect();
   const idPemilih = req.body.idPemilih;
@@ -229,15 +437,15 @@ app.post("/tambah-tps", async (req, res) => {
 app.get("/lurah/", (req, res) => {
   res.render("lurah/beranda", { active: "beranda" });
 });
-app.get("/admin/verifikasi-data-pemilih", (req, res) => {
-  res.render("lurah/pilihsaksi", { active: "verifikasi" });
-});
-app.get("/admin/kelola-tps", (req, res) => {
-  res.render("admin/kelolatps", { active: "tps" });
-});
-app.get("/admin/kelola-rw", (req, res) => {
-  res.render("admin/kelolarw", { active: "kelolarw" });
-});
+// app.get("/lurah/verifikasi-data-pemilih", (req, res) => {
+//   res.render("lurah/pilihsaksi", { active: "verifikasi" });
+// });
+// app.get("/admin/kelola-tps", (req, res) => {
+//   res.render("admin/kelolatps", { active: "tps" });
+// });
+// app.get("/admin/kelola-rw", (req, res) => {
+//   res.render("admin/kelolarw", { active: "kelolarw" });
+// });
 
 //server listening
 app.listen(port, () => {
