@@ -108,15 +108,17 @@
           </section>
           <section class="section-Verif-Pengguna bawah">
             <div class="wrap-input-verifP">
-              <label class="label-Verif-Pengguna" for="ktp"
+              <label class="label-Verif-Pengguna" for="fotoKtp"
                 >Upload Foto KTP</label
               >
               <label class="file">
                 <input
                   class="inputFile-Verif-Pengguna"
                   type="file"
-                  id="file"
+                  id="fotoKtp"
+                  name="fotoKtp"
                   aria-label="File browser example"
+                  value="<%= resultPenggunaId.foto_ktp %>"
                 />
                 <span class="file-custom"></span>
               </label>

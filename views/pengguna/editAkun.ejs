@@ -27,12 +27,12 @@
             <div class="profile">
               <input name="ubahProfile" id="input-ubah-profile" type="file">
               <label for="input-ubah-profile" id="btn-uploadFoto">Pilih Foto</label>
-              <img id="foto-profile" src="../assets/null-profile.webp" alt="" />
+              <img id="foto-profile" src="../assets/<%= resultPenggunaId.profile %>" alt="" />
             </div>
             <div class="flex-kolom-EditAkun">
               <div>
                 <label class="label-EditAkun-Pengguna" for="nama">Nama</label>
-                <input class="input-EditAkun" type="text" name="nama" id="nama" value="Samuel Edward" />
+                <input class="input-EditAkun" type="text" name="nama" id="nama" value="<%= resultPenggunaId.nama %>" />
               </div>
               <div class="flex-row-EditAkun">
                 <div>
@@ -42,14 +42,14 @@
                     type="date"
                     name="tgl_lahir"
                     id="tgl_lahir"
-                    value="2002-04-12"
+                    value="<%= formattedDate %>"
                   />
                 </div>
                 <div>
                   <label class="label-EditAkun-Pengguna" for="jenis_kelamin">Jenis Kelamin</label>
                   <select class="input-EditAkun" name="kelamin" id="kelamin">
-                    <option value="pria">Pria</option>
-                    <option value="wanita">Wanita</option>
+                    <option value="pria" <% if (resultPenggunaId.kelamin === 'pria') { %>selected="selected"<% } %>>Pria</option>
+                    <option value="wanita" <% if (resultPenggunaId.kelamin === 'wanita') { %>selected="selected"<% } %>>Wanita</option>
                   </select>
                 </div>
               </div>
@@ -60,7 +60,7 @@
                   type="text"
                   name="noTelepon"
                   id="noTelepon"
-                  value="081382189198"
+                  value="<%= resultPenggunaId.no_hp %>"
                 />
               </div>
               <div>
@@ -70,24 +70,29 @@
                   type="text"
                   name="email"
                   id="email"
-                  value="samueledward@gmail.com"
+                  value="<%= resultPenggunaId.email %>"
                 />
               </div>
               <div>
                 <label class="label-EditAkun-Pengguna" for="password">Kata Sandi</label>
-                <input class="input-EditAkun" type="text" name="password" id="password" value="briirG" />
+                <input class="input-EditAkun" type="text" name="password" id="password" value="<%= resultPenggunaId.password %>" />
               </div>
               <div>
                 <label class="label-EditAkun-Pengguna" for="sVerifikasi">Status verifikasi</label>
                 <input
+                  disabled
                   class="input-EditAkun"
                   type="text"
                   name="sVerifikasi"
                   id="sVerifikasi"
-                  value="Sudah Terverifikasi"
+                  <% if (resultPenggunaId.status === null) { %>
+                    value="Belum Terverifikasi"
+                  <% } else if (resultPenggunaId.status === 1) { %>
+                    value="Sudah Terverifikasi"
+                  <% } %>
                 />
                 <i
-                  class="fa fa-check-circle"
+                  class="fa fa-check-circle <% if (resultPenggunaId.status === null) { %>hidden<% } %>"
                   id="sudah-verifikasi"
                   aria-hidden="true"
                 ></i>

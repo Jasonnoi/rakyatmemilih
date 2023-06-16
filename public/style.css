@@ -659,6 +659,10 @@ table.dataTable thead th:first-child {
   overflow-x: hidden;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .containerEditAkun-bintang {
   display: flex;
   flex-wrap: wrap;
@@ -852,6 +856,10 @@ table.dataTable thead th:first-child {
 .navbarKartu-bintang > a {
   padding-bottom: 1rem;
   color: black;
+}
+
+.navbarKartu-bintang a.active-navKartu {
+  border-bottom: 1px solid var(--color-dangger); /* Ganti warna dan gaya garis sesuai kebutuhan */
 }
 
 .navbarKartu-bintang a:hover {

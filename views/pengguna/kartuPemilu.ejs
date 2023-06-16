@@ -24,15 +24,12 @@
       <h1 class="headline" id="headline-KP">Kartu Pemilu</h1>
       <div class="containerKartu-bintang">
         <nav class="navbarKartu-bintang">
-          <a class="<% if (activeNav === 'kartu') { %>active-navKartu<% } %>" href="/pengguna/kartu-pemilu" >Kartu Pemilu</a>
-          <a class="<% if (activeNav === 'barcode') { %>active-navKartu<% } %>" href="/pengguna/kartu-pemiluB">Barcode</a>
+          <a class="active-navKartu" id="aKartu-pemilu" onclick="showImage('kartu-pemilu')" >Kartu Pemilu</a>
+          <a id="aBarcode" onclick="showImage('barcode-pemilu')">Barcode</a>
         </nav>
         <div class="image-kartu">
-            <% if (activeNav === 'kartu') { %>
-                <img id="kartu-pemilu" src="../assets/kartuPemilu.png" alt="" />
-            <% } else if (activeNav === 'barcode') { %>
-                <img id="barcode-pemilu" src="../assets/barcode.png" alt="" />
-            <% } %>
+          <img id="kartu-pemilu" src="../assets/kartuPemilu.png" alt="" />
+          <img id="barcode-pemilu" src="../assets/barcode.png" alt="" hidden/>
         </div>
       </div>
     </main>
@@ -42,3 +39,32 @@
     <script src="/script.js"></script>
   </body>
 </html>
+
+<script>
+  // Mengambil semua tautan di dalam elemen dengan kelas "navbarKartu-bintang"
+  var navLinks = document.querySelectorAll('.navbarKartu-bintang a');
+
+  // Menambahkan event listener untuk setiap tautan
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      // Menghapus kelas ".active-navKartu" dari semua tautan
+      navLinks.forEach(function(link) {
+        link.classList.remove('active-navKartu');
+      });
+
+      // Menambahkan kelas ".active-navKartu" pada tautan yang diklik
+      this.classList.add('active-navKartu');
+    });
+  });
+
+  function showImage(imageId) {
+    var images = document.getElementsByClassName("image-kartu")[0].getElementsByTagName("img");
+    for (var i = 0; i < images.length; i++) {
+      if (images[i].id === imageId) {
+        images[i].style.display = "block";
+      } else {
+        images[i].style.display = "none";
+      }
+    }
+  }
+</script>

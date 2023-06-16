@@ -1,4 +1,4 @@
-import express from "express";
+import express, { query } from "express";
 import { fileURLToPath } from "url";
 import path from "path";
 import dbConnect from "./Database/connection.js";
@@ -25,15 +25,43 @@ app.get("/register", (req, res) => {
 });
 
 // Routing untuk pengguna
-app.get("/pengguna/", (req, res) => {
-  res.render("pengguna/beranda", { active: "beranda" });
+app.get("/pengguna/", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const idPengguna = 2; // blm terverifikasi
+    const queryId = `SELECT * FROM pengguna WHERE id = ${idPengguna}`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const resultPenggunaId = await getData();
+
+    res.render("pengguna/beranda", {
+      resultPenggunaId,
+      active: "beranda",
+    });
+
+    conn.release();
+
+  } catch (error) {
+    res.status(500).send("Database connection error");
+  }
 });
 
 app.get("/pengguna/verif-data-pengguna", async (req, res) => {
   try {
     const conn = await dbConnect();
     const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+    const queryId = `SELECT * FROM pengguna WHERE id = ${idPengguna}`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -49,14 +77,13 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
 
     const resultPenggunaId = await getData();
     // membuat format date
-    const dateStr = '1995-02-13T17:00:00.000Z';
+    const dateStr = resultPenggunaId.tgl_lahir;
     const dateObj = new Date(dateStr);
 
     const tahun = dateObj.getFullYear();
     const bulan = String(dateObj.getMonth() + 1).padStart(2, '0');
     const hari = String(dateObj.getDate()).padStart(2, '0');
     const formattedDate = `${tahun}-${bulan}-${hari}`;
-
 
     const idKelurahan = resultPenggunaId.id_kelurahan;
     const queryRW = `SELECT * FROM rw WHERE id_kelurahan = ${idKelurahan}`;
@@ -109,18 +136,146 @@ app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
   }
 });
 
-app.get("/pengguna/edit-akun", (req, res) => {
-  res.render("pengguna/editAkun", { active: "editAkun" });
+app.post("/pengguna/verif-data-pengguna", async (req,res) => {
+  try {
+    const conn = await dbConnect();
+    const idPengguna = 2; // blm terverifikasi
+    const isiForm = req.body;
+    //update query di tabel pengguna
+    const queryUpdate = `UPDATE pengguna SET 
+                          NIK = '${isiForm.nik}',
+                          nama = '${isiForm.nama}',
+                          tgl_lahir = '${isiForm.tgl_lahir}',
+                          kelamin = '${isiForm.kelamin}',
+                          no_hp = '${isiForm.noTelepon}',
+                          email = '${isiForm.email}',
+                          rw = '${isiForm.RW}',
+                          rt = '${isiForm.RT}' WHERE id = ${idPengguna}`;
+
+    conn.query(queryUpdate, (err, result) => {
+      if(err){
+        console.error("Tidak dapat mengeksekusi query update:", err);
+        res.status(500).send("Tidak dapat mengeksekusi query update");
+      }else{
+        const queryInsert = `INSERT INTO tabel_verifikasi 
+                            (id_pengguna, foto_ktp) VALUES
+                            (${idPengguna},  '${isiForm.fotoKtp}')` ;
+        
+        conn.query(queryInsert, (err,resultInsert) => {
+          if(err){
+            console.error("Tidak dapat mengeksekusi query insert:", err);
+            res.status(500).send("Tidak dapat mengeksekusi query insert");
+          }else{
+            res.redirect("/pengguna/verif-data-pengguna");
+          }
+        });
+      }
+    });
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
 });
 
-app.get("/pengguna/kartu-pemilu", (req, res) => {
-  res.render("pengguna/kartuPemilu", { active: "kartuPemilu", activeNav: "kartu"});
+app.get("/pengguna/edit-akun", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const idPengguna = 2; // blm terverifikasi
+    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const resultPenggunaId = await getData();
+    // membuat format date
+    const dateStr = resultPenggunaId.tgl_lahir;
+    const dateObj = new Date(dateStr);
+
+    const tahun = dateObj.getFullYear();
+    const bulan = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const hari = String(dateObj.getDate()).padStart(2, '0');
+    const formattedDate = `${tahun}-${bulan}-${hari}`;
+
+
+    res.render("pengguna/editAkun", {
+      resultPenggunaId,
+      formattedDate,
+      active: "editAkun",
+    });
+
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
 });
 
-app.get("/pengguna/kartu-pemiluB", (req, res) => {
-  res.render("pengguna/kartuPemilu", { active: "kartuPemilu", activeNav: "barcode"});
+app.post("/pengguna/edit-akun", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const idPengguna = 2; // blm terverifikasi
+    const isiForm = req.body;
+    //update query di tabel pengguna
+    const queryUpdate = `UPDATE pengguna SET 
+                          nama = '${isiForm.nama}',
+                          tgl_lahir = '${isiForm.tgl_lahir}',
+                          kelamin = '${isiForm.kelamin}',
+                          no_hp = '${isiForm.noTelepon}',
+                          email = '${isiForm.email}' WHERE id = ${idPengguna}`;
+
+    conn.query(queryUpdate, (err, result) => {
+      if(err){
+        console.error("Tidak dapat mengeksekusi query update:", err);
+        res.status(500).send("Tidak dapat mengeksekusi query update");
+      }else{
+        res.redirect("/pengguna/edit-akun");
+      }
+    });
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
 });
 
+app.get("/pengguna/kartu-pemilu", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const idPengguna = 2; // blm terverifikasi
+    const queryId = `SELECT * FROM pengguna WHERE id = ${idPengguna}`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const resultPenggunaId = await getData();
+
+    res.render("pengguna/kartuPemilu", {
+      resultPenggunaId,
+      active: "kartuPemilu",
+    });
+
+    conn.release();
+
+  } catch (error) {
+    res.status(500).send("Database connection error");
+  }
+});
 
 
 
