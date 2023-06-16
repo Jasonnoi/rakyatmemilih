@@ -1,5 +1,6 @@
 import express, { query } from "express";
 import { fileURLToPath } from "url";
+import  qrcode from "qrcode";
 import path from "path";
 import dbConnect from "./Database/connection.js";
 
@@ -155,7 +156,9 @@ app.post("/pengguna/verif-data-pengguna", async (req,res) => {
     conn.query(queryUpdate, (err, result) => {
       if(err){
         console.error("Tidak dapat mengeksekusi query update:", err);
-        res.status(500).send("Tidak dapat mengeksekusi query update");
+        res.send(
+          "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
+        );
       }else{
         const queryInsert = `INSERT INTO tabel_verifikasi 
                             (id_pengguna, foto_ktp) VALUES
@@ -164,9 +167,13 @@ app.post("/pengguna/verif-data-pengguna", async (req,res) => {
         conn.query(queryInsert, (err,resultInsert) => {
           if(err){
             console.error("Tidak dapat mengeksekusi query insert:", err);
-            res.status(500).send("Tidak dapat mengeksekusi query insert");
+            res.send(
+              "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
+            );
           }else{
-            res.redirect("/pengguna/verif-data-pengguna");
+            res.send(
+              "<script>alert('Berhasil verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
+            );
           }
         });
       }
@@ -234,9 +241,13 @@ app.post("/pengguna/edit-akun", async (req, res) => {
     conn.query(queryUpdate, (err, result) => {
       if(err){
         console.error("Tidak dapat mengeksekusi query update:", err);
-        res.status(500).send("Tidak dapat mengeksekusi query update");
+        res.send(
+          "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
+        );
       }else{
-        res.redirect("/pengguna/edit-akun");
+        res.send(
+          "<script>alert('Data berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
+        );
       }
     });
     conn.release();
@@ -249,7 +260,7 @@ app.get("/pengguna/kartu-pemilu", async (req, res) => {
   try {
     const conn = await dbConnect();
     const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM pengguna WHERE id = ${idPengguna}`;
+    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -268,6 +279,42 @@ app.get("/pengguna/kartu-pemilu", async (req, res) => {
     res.render("pengguna/kartuPemilu", {
       resultPenggunaId,
       active: "kartuPemilu",
+    });
+
+    conn.release();
+
+  } catch (error) {
+    res.status(500).send("Database connection error");
+  }
+});
+
+app.get("/pengguna/barcode-pemilu", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const idPengguna = 2; // blm terverifikasi
+    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const resultPenggunaId = await getData();
+
+    //generate qr berdasarkan NIK
+    qrcode.toDataURL(resultPenggunaId.NIK, (err, src) => {
+      res.render("pengguna/kartuPemilu", {
+        resultPenggunaId,
+        active: "barcodePemilu",
+        qr_code: src,
+      });
     });
 
     conn.release();

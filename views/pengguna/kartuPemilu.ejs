@@ -22,14 +22,43 @@
     <%- include('./layout/navbar.ejs') %>
     <main id="main-kartuPemilu-Pengguna">
       <h1 class="headline" id="headline-KP">Kartu Pemilu</h1>
+      <nav class="navbarKartu-bintang">
+        <a class="<%if (active === 'kartuPemilu') { %>active-nav<% } %>" id="aKartu-pemilu" href="/pengguna/kartu-pemilu">Kartu Pemilu</a>
+        <a class="<%if (active === 'barcodePemilu') { %>active-nav<% } %>" id="aBarcode" href="/pengguna/barcode-pemilu">Barcode</a>
+      </nav>
       <div class="containerKartu-bintang">
-        <nav class="navbarKartu-bintang">
-          <a class="active-navKartu" id="aKartu-pemilu" onclick="showImage('kartu-pemilu')" >Kartu Pemilu</a>
-          <a id="aBarcode" onclick="showImage('barcode-pemilu')">Barcode</a>
-        </nav>
         <div class="image-kartu">
-          <img id="kartu-pemilu" src="../assets/kartuPemilu.png" alt="" />
-          <img id="barcode-pemilu" src="../assets/barcode.png" alt="" hidden/>
+          <% if (active === 'kartuPemilu') { %>
+            <div class="kartu-pemilu">
+              <div class="kartu-pemilu-atas">
+                <img src="../assets/logo-pemilu-2019.webp" alt="" />
+                <h2>Komisi Pemilihan Umum Indonesia</h2>
+              </div>
+              <div class="kartu-pemilu-bawah">
+                <div class="kartu-pemilu-bawahKiri">
+                  <img src="../assets/<%= resultPenggunaId.profile %>" alt="">
+                </div>
+                <div class="kartu-pemilu-bawahKanan">
+                  <h3>KARTU PEMILU</h3>
+                  <div>
+                    <p>Nama : <%= resultPenggunaId.nama %></p>
+                    <p>NIK : <%= resultPenggunaId.NIK %></p>
+                    <p>TPS : <%= resultPenggunaId.id_tps %></p>
+                    <p>Saksi : </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% } else if (active === 'barcodePemilu') { %>
+            <div class="barcode-pemilu">
+              <div class="barcode-pemilu-atas">
+                <h2>Barcode</h2>
+              </div>
+              <div class="barcode-pemilu-bawah">
+                <img id="barcode-pemilu" src="<%= qr_code %>  " alt="" />
+              </div>
+            </div>
+          <% } %>
         </div>
       </div>
     </main>
@@ -39,32 +68,3 @@
     <script src="/script.js"></script>
   </body>
 </html>
-
-<script>
-  // Mengambil semua tautan di dalam elemen dengan kelas "navbarKartu-bintang"
-  var navLinks = document.querySelectorAll('.navbarKartu-bintang a');
-
-  // Menambahkan event listener untuk setiap tautan
-  navLinks.forEach(function(link) {
-    link.addEventListener('click', function() {
-      // Menghapus kelas ".active-navKartu" dari semua tautan
-      navLinks.forEach(function(link) {
-        link.classList.remove('active-navKartu');
-      });
-
-      // Menambahkan kelas ".active-navKartu" pada tautan yang diklik
-      this.classList.add('active-navKartu');
-    });
-  });
-
-  function showImage(imageId) {
-    var images = document.getElementsByClassName("image-kartu")[0].getElementsByTagName("img");
-    for (var i = 0; i < images.length; i++) {
-      if (images[i].id === imageId) {
-        images[i].style.display = "block";
-      } else {
-        images[i].style.display = "none";
-      }
-    }
-  }
-</script>

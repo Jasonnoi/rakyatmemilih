@@ -120,14 +120,14 @@ body {
 }
 
 .user-account {
+  flex-wrap: wrap;
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   min-height: 80px;
   display: flex;
-  gap: 10px;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -141,8 +141,10 @@ body {
 }
 
 .user-info {
-  margin-top: 10px;
-  width: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: max-content;
   height: 50px;
 }
 
@@ -666,7 +668,11 @@ table.dataTable thead th:first-child {
 .containerEditAkun-bintang {
   display: flex;
   flex-wrap: wrap;
+  box-sizing: border-box;
   justify-content: center;
+  background-color: var(--color-bg);
+  padding: 0.5rem;
+  border-radius: 20px;
 }
 
 .flex-kolom-EditAkun {
@@ -840,6 +846,7 @@ table.dataTable thead th:first-child {
 .containerKartu-bintang {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .navbarKartu-bintang {
@@ -849,17 +856,14 @@ table.dataTable thead th:first-child {
   font-size: 400;
 }
 
-.active-navKartu {
+.active-nav {
   color: var(--color-dangger) !important;
+  border-bottom: 1px solid var(--color-dangger)
 }
 
 .navbarKartu-bintang > a {
   padding-bottom: 1rem;
   color: black;
-}
-
-.navbarKartu-bintang a.active-navKartu {
-  border-bottom: 1px solid var(--color-dangger); /* Ganti warna dan gaya garis sesuai kebutuhan */
 }
 
 .navbarKartu-bintang a:hover {
@@ -884,6 +888,105 @@ table.dataTable thead th:first-child {
   height: 60%;
   width: 60%;
 }
+
+image
+
+.kartu-pemilu{
+  display: flex;
+  height: 300px;
+  width: 600px;
+  flex-direction: column;
+}
+
+.kartu-pemilu-atas{
+  display: flex;
+  background-color: var(--color-dangger);
+  align-items: center;
+  width: max-content;
+  gap: 20px;
+  padding: 70px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: var(--color-bg);
+  border-radius: 20px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.kartu-pemilu-atas img{
+  width: 40px;
+  height: 50px;
+}
+
+.kartu-pemilu-bawah{
+  display: flex;
+}
+
+.kartu-pemilu-bawahKiri{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 200px;
+  background-color: var(--color-dangger);
+  border-bottom-left-radius: 20px;
+}
+
+.kartu-pemilu-bawahKiri img{
+  width: 130px;
+  height: 130px;
+  border-radius: 10px;
+}
+
+.kartu-pemilu-bawahKanan{
+  display: flex;
+  padding-top: 20px;
+  padding-left: 30px;
+  flex-direction: column;
+  border-bottom-right-radius:20px ;
+  background-color: white;
+  width: 70%;
+  gap: 15px;
+}
+
+.barcode-pemilu{
+  display: flex;
+  height: 350px;
+  width: 350px;
+  flex-direction: column;
+}
+
+.barcode-pemilu-atas{
+  display: flex;
+  background-color: var(--color-dangger);
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  gap: 20px;
+  padding: 70px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: var(--color-bg);
+  border-radius: 20px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.barcode-pemilu-bawah{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius:20px ;
+  border-bottom-right-radius:20px ;
+  background-color: white;
+}
+
+.barcode-pemilu-bawah img{
+  
+}
+
 
 /*END MAIN KARTU PEMILU BINTANG*/
 

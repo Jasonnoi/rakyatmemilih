@@ -18,15 +18,17 @@
       <i class="fa-solid fa-user-pen"></i>
       <a href="/pengguna/edit-akun">Edit Akun</a>
     </div>
-    <div class="nav-group <% if (active === 'kartuPemilu') { %>active<% } %>">
+    <div class="nav-group <% if (active === 'kartuPemilu' || active === 'barcodePemilu')  { %>active<% } %>">
       <i class="fa-solid fa-address-card"></i>
       <a href="/pengguna/kartu-pemilu">Kartu Pemilu</a>
     </div>
     <div class="user-account">
-      <img class="user-image" src="../assets/null-profile.webp" alt="" />
       <div class="user-info">
-        <h1 class="name"><%= resultPenggunaId.nama %></h1>
-        <p class="info">Online</p>
+        <img class="user-image" src="../assets/<%= resultPenggunaId.profile %>" alt="" />
+        <div>
+          <h1 class="name"><%= resultPenggunaId.nama %></h1>
+          <p class="info">Online</p>
+        </div>
       </div>
       <a href="/">
         <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
