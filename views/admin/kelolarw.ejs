@@ -16,190 +16,88 @@
     <title>Document</title>
   </head>
   <body>
+    <button class="hamburger">
+      <div class="bar"></div>
+    </button>
     <%- include('./layout/navbar.ejs') %>
     <main>
       <h1>Tambah Data RW di Kelurahan Sangkanhurip</h1>
       <div class="body">
         <div class="header-body">
           <div class="card-small opacity">
+            
             <div class="icon-verif primary">
               <i class="fa-solid fa-city" aria-hidden="true"></i>
             </div>
             <div class="info-verif">
               <h4>Jumlah RW Kelurahan Sangkanhurip :</h4>
-              <h2>10</h2>
-              <button class="large primary">Tambah</button>
+              <h2><%= coun_rw.jumRW %></h2>
+              <button id="buttonrw" class="large primary">Tambah</button>
             </div>
           </div>
+          
+        </div>
+
+        <br>
+        <div class="header-card">
+              <button onclick="cetakPDF_RW()" class="button-large dangger">
+                  <i class="fa fa-file-pdf"></i> Cetak PDF
+              </button>
         </div>
         <div class="card-table opacity">
+          
           <table id="example" class="display compact" style="width: 100%">
             <thead>
               <tr>
+                <th>Nomor</th>
                 <th>Kelurahan</th>
                 <th>Nomor RW</th>
-                <th>Jumlah TPS</th>
                 <th>Tambah TPS</th>
-                <th>Hapus Data RW</th>
+          
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>01</td>
-                <td>5</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>02</td>
-                <td>3</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>03</td>
-                <td>4</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>04</td>
-                <td>2</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>05</td>
-                <td>6</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>06</td>
-                <td>1</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>07</td>
-                <td>4</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>08</td>
-                <td>3</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>09</td>
-                <td>2</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Sangkanhurip</td>
-                <td>10</td>
-                <td>5</td>
-                <td>
-                  <a class="status-button">
-                    <i class="fa fa-plus"></i> Tambah TPS
-                  </a>
-                </td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus RW
-                  </button>
-                </td>
-              </tr>
+              <% let i = 0; %>
+              <% for(const row of dataRW) { %>
+                <tr>
+                  <td><%= i + 1 %></td>
+                  <td>Sangkanhurip</td>
+                  <td><%= "RW 0" + row.no %></td>
+                  
+                  <td><button onclick="window.location.href = '/admin/kelola-tps'" class="status-button"><i class="fa fa-add"></i>  Tambah TPS</button></td>
+                </tr>
+                <% i++; %>
+              <% } %>
             </tbody>
           </table>
+          
         </div>
       </div>
     </main>
-    <%- include('./layout/notif.ejs') %>
+    
+    <div id="overlay"></div>
+    <div id="myModal"  class="modal">
+      <div class="modal-content" style="height: auto !important;">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Tambah Data RW</h2>
+       
+        <form method="post" action="/tambah-rw">
+          
+          <div class="form-group">
+            <label for="rw">Masukan Nomor RW</label>
+            <input
+              type="text"
+              name="rw"
+              id="rw"
+              value=""
+              placeholder=""
+            />
+         
+          <br />
+          <button  class="button-large primary"><i class="fa fa-add"></i> Tambah</button>
+        </form>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -226,29 +124,28 @@
           button.style.backgroundColor = "var(--color-primary)";
         }
       }
-      Array.from(buttons).forEach((button) => {
-        button.addEventListener("click", () => {
-          var buttonText = button.textContent.trim();
+      
+      const btn = document.getElementById("buttonrw");
+      btn.addEventListener("click",() =>{
+        var modal = document.getElementById("myModal");
+            var overlay = document.getElementById("overlay");
 
-          if (buttonText === "Hapus RW") {
-            Swal.fire({
-              title: "Apakah anda ingin menghapus data ini?",
-              text: "anda tidak akan bisa membatalkan data yang di hapus",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Hapus",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              }
-            });
-          } else {
-            window.location.href = "kelolatps.html";
-          }
-        });
+            modal.style.display = "block";
+            overlay.style.display = "block";
       });
+      var closeModalBtn = document.getElementById("closeModal");
+      var overlay = document.getElementById("overlay");
+
+      closeModalBtn.addEventListener("click", closeModal);
+      overlay.addEventListener("click", closeModal);
+
+      function closeModal() {
+        var modal = document.getElementById("myModal");
+        var overlay = document.getElementById("overlay");
+
+        modal.style.display = "none";
+        overlay.style.display = "none";
+      }
     </script>
   </body>
 </html>
