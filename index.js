@@ -53,6 +53,7 @@ app.get("/admin/", async (req, res) => {
     };
     const tabel1 = await getTabel1();
     res.render("admin/beranda", { tabel1, active: "beranda" });
+    conn.release();
   } catch (err) {
     console.error(err.message);
   }
@@ -74,6 +75,52 @@ app.get("/admin/tabel1", async (req, res) => {
     const result = await getTabel1();
     const tabel1 = result;
     res.json(tabel1);
+    conn.release();
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+app.get("/admin/tabel2", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const query = `SELECT id_RW, COUNT(no_tps) as jum_tps FROM view_rwtps GROUP BY id_RW`;
+    const getTabel1 = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(query, (err, result) => {
+          // Ubah variabel res menjadi result
+          if (err) return reject(err);
+          else return resolve(result);
+        });
+      });
+    };
+    const result = await getTabel1();
+    const tabel1 = result;
+    res.json(tabel1);
+    conn.release();
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+app.get("/admin/tabel3", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const query = `SELECT nama_TPS, COUNT(idSaksi) as jum_saksi FROM (SELECT * FROM saksi JOIN tps on saksi.id_tps = tps.id) AS tabel GROUP BY id_tps
+`;
+    const getTabel1 = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(query, (err, result) => {
+          // Ubah variabel res menjadi result
+          if (err) return reject(err);
+          else return resolve(result);
+        });
+      });
+    };
+    const result = await getTabel1();
+    const tabel1 = result;
+    res.json(tabel1);
+    conn.release();
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ error: "Internal Server Error" });

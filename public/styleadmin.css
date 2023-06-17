@@ -659,28 +659,40 @@ form#search button{
 
 canvas#myChart{
   width: 100% !important;
-height: 100% !important;
+  height: 100% !important;
 }
+
 
 .data-right{
   padding-left: 10px;
-  width: 30%;
-  height: 100%;
-}
-.data-right .header{
-  border-radius: 15px;
-  width: 100%;
-  height: 20%;
-  background-color: white;
-}
-.data-right .content{
-  margin-top: 10px;
-  border-radius: 15px;
-  width: 100%;
-  height: 78%;
-  background-color: white;
+  width: 24%;
+  height: 92%;
 }
 
+.data-right .content{
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  padding: 20px;
+}
+.data-right header{
+  height: 10%;
+}
+.data-right .content .verif-data{
+  
+  height: 90%;
+}
+
+
+.back-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+ overflow-x: auto;
+  height: 80%;
+}
 /* End Of Tables */
 
 /* END MAin */
@@ -843,7 +855,7 @@ section {
 /* End Of Notification */
 @media (min-width: 1400px) {
   .sidebar {
-    width: 16vw;
+    width: 15vw;
   }
   main {
     height: 87vh;
@@ -863,7 +875,11 @@ section {
   .data-left .header{
     height: 20%;
   }
- 
+
+  .content-admin{
+    width: 100%;
+    height: 600px;
+  }
   .data-left .content{
     margin-top: 10px;
     height: 78%;
