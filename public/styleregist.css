@@ -64,6 +64,7 @@ body {
 
 .Signup .title {
   margin-top: 2px;
+  margin-bottom: 5px;
   font-weight: 600;
   font-size: 3em;
   text-align: center;
@@ -89,10 +90,8 @@ form {
 .form-group select,
 .form-group span {
   background: #eeeeee;
-
   display: flex;
   width: 90%;
-
   align-items: center;
   border-radius: 20px;
   padding: 10px;
@@ -100,6 +99,13 @@ form {
   border: none;
   align-items: center;
   justify-content: center;
+}
+
+.form-group input::placeholder,
+.form-group select::placeholder,
+.form-group span::placeholder {
+  font-weight: 400;
+  font-size: 8pt;
 }
 
 .split-form {
@@ -113,7 +119,7 @@ form {
 .right {
   flex-grow: 1;
 }
-button .tombol {
+.button .tombol {
   font-weight: 700;
   background: #322c38;
   color: white;
@@ -125,6 +131,7 @@ button .tombol {
   margin-top: 13px;
   border: none;
   margin-bottom: -5px;
+  justify-content: space-between;
 }
 .button {
   margin-bottom: 0;
