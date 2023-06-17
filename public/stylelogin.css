@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;500;600;700&display=swap");
 
 *,
 html,
@@ -6,8 +6,29 @@ body {
   font-family: "Outfit", sans-serif;
   margin: 0;
   padding: 0;
+  animation: transitionIn 0.75s;
 }
 
+@keyframes transitionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.text-input {
+  width: 91%;
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+}
+
+input::placeholder {
+  font-weight: 300;
+}
 body {
   height: 100vh;
   display: flex;
@@ -16,8 +37,8 @@ body {
   background: #e5ded6;
 }
 .container {
-  width: 50vw;
-  height: 60vh;
+  width: 67vw;
+  height: 70vh;
   display: grid;
   grid-template-columns: 100%;
   grid-template-areas: "login";
@@ -34,7 +55,7 @@ body {
 }
 
 .login {
-  font-weight: 200;
+  font-weight: 300;
   grid-area: login;
   display: flex;
   flex-direction: column;
@@ -43,27 +64,30 @@ body {
   position: relative;
 }
 
-.login h3{
-  font-size: 30px;
-}
-button
 .login h3.title {
   margin: 15px 0;
   position: absolute;
-  top: 10pt;
-  font-size: 40px;
+  top: 16pt;
+  font-size: 60px;
   color: #322c38;
+  font-weight: 600;
 }
 .text-input input {
   background: #eeeeee;
   height: 25px;
   display: flex;
-  width: 230px;
+  width: 93%;
   align-items: center;
   border-radius: 20px;
-  padding: 8px;
+  padding: 10px;
   margin: 5px;
   border: none;
+}
+
+button:is(:hover, :focus) {
+  outline-style: solid;
+  outline-color: rgb(185, 182, 182);
+  transition: outline-offset 0.3s ease;
 }
 
 .Login {
@@ -81,7 +105,11 @@ button
 }
 
 .Signup {
-  display: inline-flex;
+  width: 91%;
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   position: absolute;
   bottom: 0vh;
@@ -90,14 +118,14 @@ button
 }
 
 .Unregistered {
-  margin-right: 40pt;
+  margin-right: 70pt;
 }
 
 .Unregistered2 {
-  margin-right: 3px;
+  margin-right: px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 568px) {
   .container {
     display: grid;
     grid-template-columns: 50% 50%;
@@ -105,5 +133,11 @@ button
   }
   .foto {
     display: initial;
+  }
+}
+@media (max-width: 568px) {
+  body {
+    background-image: url("./assets/merahputih.jpeg");
+    display: flex;
   }
 }
