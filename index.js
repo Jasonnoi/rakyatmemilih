@@ -61,7 +61,7 @@ app.get("/pengguna/", async (req, res) => {
 app.get("/pengguna/verif-data-pengguna", async (req, res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 1; // blm terverifikasi
+    const idPengguna = 2; // blm terverifikasi
     const queryId = `SELECT * FROM view_outer_verifikasi WHERE id = ${idPengguna}`;
 
     const getData = () => {
