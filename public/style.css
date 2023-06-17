@@ -707,7 +707,7 @@ table.dataTable thead th:first-child {
   box-sizing: border-box;
   justify-content: center;
   background-color: var(--color-bg);
-  padding: 0.5rem;
+  padding: 2rem;
   border-radius: 20px;
 }
 
@@ -917,9 +917,8 @@ table.dataTable thead th:first-child {
   align-self: center;
 }
 
-image
 
-.kartu-pemilu{
+image.kartu-pemilu{
   display: flex;
   height: 300px;
   width: 600px;

@@ -61,8 +61,8 @@ app.get("/pengguna/", async (req, res) => {
 app.get("/pengguna/verif-data-pengguna", async (req, res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+    const idPengguna = 1; // blm terverifikasi
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE id = ${idPengguna}`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -140,8 +140,17 @@ app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
 app.post("/pengguna/verif-data-pengguna", async (req,res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 2; // blm terverifikasi
     const isiForm = req.body;
+
+    //membuat input waktu sekarang
+    const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
+    const options = { timeZone: 'Asia/Jakarta' };
+    const jakartaDate = now.toLocaleString('en-US', options).split(',')[0]; // Mendapatkan tanggal dalam format lokal Jakarta
+
+    // Ubah format tanggal menjadi "YYYY-MM-DD"
+    const [month, day, year] = jakartaDate.split('/');
+    const mysqlDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
     //update query di tabel pengguna
     const queryUpdate = `UPDATE pengguna SET 
                           NIK = '${isiForm.nik}',
@@ -151,7 +160,7 @@ app.post("/pengguna/verif-data-pengguna", async (req,res) => {
                           no_hp = '${isiForm.noTelepon}',
                           email = '${isiForm.email}',
                           rw = '${isiForm.RW}',
-                          rt = '${isiForm.RT}' WHERE id = ${idPengguna}`;
+                          rt = '${isiForm.RT}' WHERE id = '${isiForm.id}'`;
 
     conn.query(queryUpdate, (err, result) => {
       if(err){
@@ -161,8 +170,8 @@ app.post("/pengguna/verif-data-pengguna", async (req,res) => {
         );
       }else{
         const queryInsert = `INSERT INTO tabel_verifikasi 
-                            (id_pengguna, foto_ktp) VALUES
-                            (${idPengguna},  '${isiForm.fotoKtp}')` ;
+                            (id_pengguna, foto_ktp, tanggal) VALUES
+                            (${isiForm.id},  '${isiForm.fotoKtp}', '${mysqlDate}')`;
         
         conn.query(queryInsert, (err,resultInsert) => {
           if(err){

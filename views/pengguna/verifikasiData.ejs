@@ -35,6 +35,7 @@
         <% } %>
         <!-- END MODAL -->
         <form id="form-Verif-Pengguna" method="post" action="" <% if (resultPenggunaId.status != null) { %>class="disabled-form"<% } %>>
+          <input type="hidden" name="id" id="id" value="<%= resultPenggunaId.id %>">
           <section class="section-Verif-Pengguna kanan">
             <div class="wrap-input-verifP">
               <label class="label-Verif-Pengguna" for="nik">NIK</label>
