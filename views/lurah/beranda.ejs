@@ -35,7 +35,7 @@
                   <i class="fa fa-address-book" aria-hidden="true"></i>
                 </div>
                 <div class="info-verif">
-                  <h4>Distribusi Data Pengguna</h4>
+                  <h4>Jumlah Semua Data Pemilih :</h4>
                   <h2></h2>
                   <button onclick="grafData_pengguna()" class="large primary">Lihat</button>
                 </div>
@@ -45,7 +45,7 @@
                   <i class="fa fa-check-circle" aria-hidden="true"></i>
                 </div>
                 <div class="info-verif">
-                  <h4>Distribusi Data TPS</h4>
+                  <h4>Jumlah Data Ter-Verifikasi :</h4>
                   <h2></h2>
                   <button onclick="grafData_TPS()"  class="large success" >Lihat</button>
                 </div>
@@ -55,7 +55,7 @@
                   <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                 </div>
                 <div class="info-verif">
-                  <h4>Distribusi Data Saksi</h4>
+                  <h4>Jumlah Data Belum Verifikasi :</h4>
                   <h2></h2>
                   <button onclick="getSaksi_TPS()" class="large danger">Lihat</button>
                 </div>
@@ -75,24 +75,103 @@
                 <div class="verif-data">
                   <h1 class="info">Pengajuan Verifikasi Hari Ini</h1>
                   <div class="back-info">
-                    <% if(dataNow != null) {%>
-                      <% for(const row of dataNow) { %>
-                      <section class="notif-box">
-                        <div class="notif-info">
-                          <img class="notif" src="../assets/users1.jpg" alt="" />
-                          <div class="notif-user">
-                            <h1 class="name"><%= row.nama %></h1>
-                            <div class="button-notif">
-                              <button class="button-small success">Verifikasi</button>
-                              <button class="button-small danger">Hapus</button>
-                            </div>
+                    <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
                           </div>
                         </div>
+                      </div>
                     </section>
-                    <% } %>
-                    <% }else {%>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
 
-                    <% }%>   
                   </div>
                 </div>
             </div>
