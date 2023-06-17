@@ -1,4 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;600;700;800;900&display=swap");
+@keyframes transitionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
 
 * {
   margin: 0;
@@ -6,6 +16,7 @@
   box-sizing: border-box;
   font-family: "Outfit", sans-serif;
   color: #322c38;
+  animation: transitionIn 0.75s;
 }
 
 body {
@@ -19,43 +30,55 @@ body {
 }
 
 .container {
-  min-width: 70%;
-  min-height: 50%;
-  background-color: red;
-  display: flex;
-  flex-direction: row;
   border-radius: 6px;
+  width: 67vw;
+  height: 78vh;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: "Signup";
+  border-radius: 6px;
+  background: white;
 }
 
+/* BAGIAN DALAM CONTAINER*/
 .foto {
   background-image: url("./assets/merahputih.jpeg");
-  grid-area: foto;
-  width: 50%;
   background-size: cover;
+  grid-area: foto;
+  display: none;
   background-position: center;
   border-bottom-left-radius: 6px;
   border-top-left-radius: 6px;
 }
 
 .Signup {
+  grid-area: Signup;
   min-width: 50%;
   background: #fff;
   border-radius: 6px;
   padding: 2em;
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+  gap: 7px;
 }
 
 .Signup .title {
+  margin-top: 2px;
   font-weight: 600;
-  font-size: 3.5em;
+  font-size: 3em;
   text-align: center;
+  color: #322c38;
 }
 form {
+  height: fit-content;
   width: auto;
+  flex-wrap: nowrap;
+  margin-bottom: 0;
 }
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
+
   width: 100%;
 }
 .form-group label {
@@ -63,16 +86,20 @@ form {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group span {
   background: #eeeeee;
-  height: 25px;
+
   display: flex;
-  min-width: 96%;
+  width: 90%;
+
   align-items: center;
   border-radius: 20px;
-  padding: 20px;
-  margin: 5px;
+  padding: 10px;
+  margin: 3px;
   border: none;
+  align-items: center;
+  justify-content: center;
 }
 
 .split-form {
@@ -80,13 +107,13 @@ form {
   flex-wrap: nowrap;
   max-width: 100%;
   flex-grow: 1;
+  column-gap: 4px;
 }
 .left,
 .right {
-  flex-grow: 1; /* Meregangkan item secara proporsional */
+  flex-grow: 1;
 }
-.tombol {
-  cursor: pointer;
+button .tombol {
   font-weight: 700;
   background: #322c38;
   color: white;
@@ -100,7 +127,26 @@ form {
   margin-bottom: -5px;
 }
 .button {
-  cursor: pointer;
+  margin-bottom: 0;
   position: relative;
   text-align: center;
+}
+@media (min-width: 768px) {
+  .container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-areas: "foto Signup";
+  }
+  .foto {
+    display: initial;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    background-image: url("./assets/merahputih.jpeg");
+    display: flex;
+    background-position: center;
+    background-size: cover;
+  }
 }
