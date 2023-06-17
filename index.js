@@ -56,7 +56,6 @@ app.get("/pengguna/", async (req, res) => {
     });
 
     conn.release();
-
   } catch (error) {
     res.status(500).send("Database connection error");
   }
@@ -86,8 +85,8 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
     const dateObj = new Date(dateStr);
 
     const tahun = dateObj.getFullYear();
-    const bulan = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const hari = String(dateObj.getDate()).padStart(2, '0');
+    const bulan = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const hari = String(dateObj.getDate()).padStart(2, "0");
     const formattedDate = `${tahun}-${bulan}-${hari}`;
 
     const idKelurahan = resultPenggunaId.id_kelurahan;
@@ -106,7 +105,6 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
 
     const resultRW = await getRW();
 
-
     res.render("pengguna/verifikasiData", {
       resultPenggunaId,
       formattedDate,
@@ -116,6 +114,7 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
 
     conn.release();
   } catch (err) {
+    console.error(err.message);
     res.status(500).send("Database connection error");
   }
 });
@@ -141,19 +140,22 @@ app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
   }
 });
 
-app.post("/pengguna/verif-data-pengguna", async (req,res) => {
+app.post("/pengguna/verif-data-pengguna", async (req, res) => {
   try {
     const conn = await dbConnect();
     const isiForm = req.body;
 
     //membuat input waktu sekarang
     const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
-    const options = { timeZone: 'Asia/Jakarta' };
-    const jakartaDate = now.toLocaleString('en-US', options).split(',')[0]; // Mendapatkan tanggal dalam format lokal Jakarta
+    const options = { timeZone: "Asia/Jakarta" };
+    const jakartaDate = now.toLocaleString("en-US", options).split(",")[0]; // Mendapatkan tanggal dalam format lokal Jakarta
 
     // Ubah format tanggal menjadi "YYYY-MM-DD"
-    const [month, day, year] = jakartaDate.split('/');
-    const mysqlDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    const [month, day, year] = jakartaDate.split("/");
+    const mysqlDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+      2,
+      "0"
+    )}`;
 
     //update query di tabel pengguna
     const queryUpdate = `UPDATE pengguna SET 
@@ -167,23 +169,23 @@ app.post("/pengguna/verif-data-pengguna", async (req,res) => {
                           rt = '${isiForm.RT}' WHERE id = '${isiForm.id}'`;
 
     conn.query(queryUpdate, (err, result) => {
-      if(err){
+      if (err) {
         console.error("Tidak dapat mengeksekusi query update:", err);
         res.send(
           "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
         );
-      }else{
+      } else {
         const queryInsert = `INSERT INTO tabel_verifikasi 
                             (id_pengguna, foto_ktp, tanggal) VALUES
                             (${isiForm.id},  '${isiForm.fotoKtp}', '${mysqlDate}')`;
-        
-        conn.query(queryInsert, (err,resultInsert) => {
-          if(err){
+
+        conn.query(queryInsert, (err, resultInsert) => {
+          if (err) {
             console.error("Tidak dapat mengeksekusi query insert:", err);
             res.send(
               "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
             );
-          }else{
+          } else {
             res.send(
               "<script>alert('Berhasil verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
             );
@@ -221,10 +223,9 @@ app.get("/pengguna/edit-akun", async (req, res) => {
     const dateObj = new Date(dateStr);
 
     const tahun = dateObj.getFullYear();
-    const bulan = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const hari = String(dateObj.getDate()).padStart(2, '0');
+    const bulan = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const hari = String(dateObj.getDate()).padStart(2, "0");
     const formattedDate = `${tahun}-${bulan}-${hari}`;
-
 
     res.render("pengguna/editAkun", {
       resultPenggunaId,
@@ -252,12 +253,12 @@ app.post("/pengguna/edit-akun", async (req, res) => {
                           email = '${isiForm.email}' WHERE id = ${idPengguna}`;
 
     conn.query(queryUpdate, (err, result) => {
-      if(err){
+      if (err) {
         console.error("Tidak dapat mengeksekusi query update:", err);
         res.send(
           "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
         );
-      }else{
+      } else {
         res.send(
           "<script>alert('Data berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
         );
@@ -301,7 +302,6 @@ app.get("/pengguna/kartu-pemilu", async (req, res) => {
     });
 
     conn.release();
-
   } catch (error) {
     res.status(500).send("Database connection error");
   }
@@ -337,13 +337,10 @@ app.get("/pengguna/barcode-pemilu", async (req, res) => {
     });
 
     conn.release();
-
   } catch (error) {
     res.status(500).send("Database connection error");
   }
 });
-
-
 
 //routing untuk admin
 app.get("/admin/", async (req, res) => {
@@ -732,7 +729,7 @@ app.get("/admin/kelola-rt", paginate.middleware(10, 50), async (req, res) => {
 app.post("/hapus-data", async (req, res) => {
   const conn = await dbConnect();
   const idPemilih = req.body.idPemilih;
-  const query = `DELETE FROM pengguna WHERE id = ${idPemilih}`;
+  const query = `DELETE FROM tabel_verifikasi WHERE id_pengguna = ${idPemilih}`;
   conn.query(query, (err, result) => {
     if (err) {
       console.error("Gagal menghapus data:", err);
@@ -740,20 +737,10 @@ app.post("/hapus-data", async (req, res) => {
         "<script>alert('Gagal menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
       );
     } else {
-      const query2 = `DELETE FROM tabel_verifikasi WHERE id_pengguna =  ${idPemilih}`;
-      conn.query(query2, (err, resu) => {
-        if (err) {
-          console.error("Gagal menghapus data:", err);
-          res.send(
-            "<script>alert('Gagal menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
-          );
-        } else {
-          console.log("Berhasil menghapus data");
-          res.send(
-            "<script>alert('Berhasil menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
-          );
-        }
-      });
+      console.log("Berhasil menghapus data");
+      res.send(
+        "<script>alert('Berhasil menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+      );
     }
     conn.release();
   });
