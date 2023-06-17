@@ -22,6 +22,7 @@
       <div class="body">
         <div class="header-body">
           <div class="card-small opacity">
+            
             <div class="icon-verif primary">
               <i class="fa-solid fa-city" aria-hidden="true"></i>
             </div>
@@ -33,7 +34,15 @@
           </div>
           
         </div>
+
+        <br>
+        <div class="header-card">
+              <button onclick="cetakPDF_RW()" class="button-large dangger">
+                  <i class="fa fa-file-pdf"></i> Cetak PDF
+              </button>
+        </div>
         <div class="card-table opacity">
+          
           <table id="example" class="display compact" style="width: 100%">
             <thead>
               <tr>
@@ -63,7 +72,6 @@
       </div>
     </main>
     
-    <%- include('./layout/notif.ejs') %>
     <div id="overlay"></div>
     <div id="myModal"  class="modal">
       <div class="modal-content" style="height: auto !important;">
@@ -71,7 +79,7 @@
         <h2>Tambah Data RW</h2>
        
         <form method="post" action="/tambah-rw">
-        
+          
           <div class="form-group">
             <label for="rw">Masukan Nomor RW</label>
             <input
