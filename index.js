@@ -7,6 +7,8 @@ import paginate from "express-paginate";
 import pdf from "html-pdf";
 import ejs from "ejs";
 import { promisify } from "util";
+import session from "express-session";
+import crypto from "crypto";
 
 const port = 3000;
 const app = express();
@@ -21,16 +23,81 @@ app.use(express.static(path.join(dirname, "public")));
 
 //middleware express.urlencoded() untuk menguraikan data yang dikirim melalui form
 app.use(express.urlencoded({ extended: true }));
+
+//menggunakan session
+app.use(
+  session({
+    secret: "secret-key", // Ganti dengan secret key yang aman
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
 app.get("/", (req, res) => {
   res.render("login");
+});
+
+app.post("/", async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  if (username && password) {
+    //apakah username dan password ada
+    try {
+      const connection = await dbConnect();
+
+      // Mengubah password menjadi hash menggunakan algoritma SHA-256
+      const hashed_pass = crypto
+        .createHash("sha256")
+        .update(password)
+        .digest("base64");
+
+      const arrInputLogin = [username, hashed_pass];
+
+      // Query untuk mencari akun dengan username dan password yang benar
+      const query = `SELECT * FROM users WHERE username = ? AND pass = ?`;
+
+      connection.query(query, arrInputLogin, (err, results) => {
+        if (err) {
+          console.error("Tidak dapat mengeksekusi query:", err);
+          res.status(500).send("Tidak dapat mengeksekusi query");
+        } else {
+          if (results.length > 0) {
+            // Jika akun ditemukan, tambahkan session yang berisi nama akun
+            req.session.username = results[0].username;
+            res.redirect("/"); // Redirect ke halaman utama (tabel users)
+          } else {
+            // Jika akun tidak ditemukan, kirimkan respon dengan pesan error
+            res.render("login", { error: "Invalid username or password" });
+          }
+        }
+        connection.release();
+      });
+    } catch (error) {
+      console.error("Tidak berhasil terhubung ke database:", err);
+      res.status(500).send("Tidak berhasil terhubung ke database");
+    }
+  }
 });
 
 app.get("/register", (req, res) => {
   res.render("register");
 });
 
+// Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users
+const checkAuth = (req, res, next) => {
+  if (req.session.username) {
+    // Jika session username ada, lanjutkan ke halaman users
+    console.log(req.session.username);
+    next();
+  } else {
+    // Jika session tidak ada, arahkan ke halaman login
+    res.redirect("/login");
+  }
+};
+
 // Routing untuk pengguna
-app.get("/pengguna/", async (req, res) => {
+app.get("/pengguna/", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
     const idPengguna = 2; // blm terverifikasi
@@ -248,7 +315,8 @@ app.post("/pengguna/edit-akun", async (req, res) => {
                           tgl_lahir = '${isiForm.tgl_lahir}',
                           kelamin = '${isiForm.kelamin}',
                           no_hp = '${isiForm.noTelepon}',
-                          email = '${isiForm.email}' WHERE id = ${idPengguna}`;
+                          email = '${isiForm.email}',
+                          profile = '${isiForm.ubahProfile}' WHERE id = ${idPengguna}`;
 
     conn.query(queryUpdate, (err, result) => {
       if(err){
