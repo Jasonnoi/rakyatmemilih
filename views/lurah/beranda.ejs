@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styleadmin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>Document</title>
+  </head>
+  <body>
+   
+    <%- include('./layout/navbar.ejs') %>
+    <main>
+      <h1>Halaman Utama</h1>
+
+      <div class="body">
+        <div class="content-admin">
+          <div class="data-left">
+            <div class="header">
+              <div class="card-small opacity">
+                <div class="icon-verif primary">
+                  <i class="fa fa-address-book" aria-hidden="true"></i>
+                </div>
+                <div class="info-verif">
+                  <h4>Jumlah Semua Data Pemilih :</h4>
+                  <h2></h2>
+                  <button onclick="grafData_pengguna()" class="large primary">Lihat</button>
+                </div>
+              </div>
+              <div class="card-small opacity">
+                <div class="icon-verif success">
+                  <i class="fa fa-check-circle" aria-hidden="true"></i>
+                </div>
+                <div class="info-verif">
+                  <h4>Jumlah Data Ter-Verifikasi :</h4>
+                  <h2></h2>
+                  <button onclick="grafData_TPS()"  class="large success" >Lihat</button>
+                </div>
+              </div>
+              <div class="card-small opacity">
+                <div class="icon-verif danger">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                </div>
+                <div class="info-verif">
+                  <h4>Jumlah Data Belum Verifikasi :</h4>
+                  <h2></h2>
+                  <button onclick="getSaksi_TPS()" class="large danger">Lihat</button>
+                </div>
+              </div>
+            </div>
+            <div class="content ">
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
+          <div class="data-right">
+            <div class="content">
+                <header>
+                  <i class="fa-solid fa-bell"></i>
+                  <h1>Notifikasi</h1>
+                </header>
+
+                <div class="verif-data">
+                  <h1 class="info">Pengajuan Verifikasi Hari Ini</h1>
+                  <div class="back-info">
+                    <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                     <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    <section class="notif-box">
+                      <div class="notif-info">
+                        <img class="notif" src="../assets/users1.jpg" alt="" />
+                        <div class="notif-user">
+                          <h1 class="name">Adrian Jason</h1>
+                          <div class="button-notif">
+                            <button class="button-small success">Verifikasi</button>
+                            <button class="button-small danger">Hapus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+ 
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Edit Data Calon Presiden</h2>
+        <form action="">
+          <div class="form-group">
+            <label for="nama">Nama Calon Presiden</label>
+            <input
+              type="text"
+              name="nama"
+              id="nama"
+              placeholder="Masukan Nama Calon Presiden"
+            />
+          </div>
+          <div class="form-group">
+            <label for="Nomor">Nomor Urut</label>
+            <input
+              type="text"
+              name="nomor"
+              id="nomor"
+              placeholder="Masukan Nomor Urut Calon Presiden"
+            />
+          </div>
+          <div class="form-group">
+            <label for="Visi">Visi Presiden</label>
+            <input
+              type="text"
+              name="Visi"
+              id="Visi"
+              placeholder="Masukan Visi Presiden"
+            />
+          </div>
+          <div class="form-group">
+            <label for="Misi">Misi Presiden</label>
+            <input
+              type="text"
+              name="Misi"
+              id="Misi"
+              placeholder="Masukan Misi Presiden"
+            />
+          </div>
+
+          <br />
+          <button class="button-large primary">Ubah</button>
+        </form>
+      </div>
+    </div>
+    <div id="overlay"></div>
+    <!-- Modal Confirmations -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="/script.js"></script>
+    <script>
+       let myChart; // Declare the myChart variable in the global scope
+        let options;
+        let data1;
+        let data2;
+        let data3;
+      // Fetch and create the initial chart
+      fetch("/admin/tabel1")
+        .then((response) => response.json())
+        .then((tabel1) => {
+          const labels = tabel1.map((row) => "RW " + row.rw);
+          const status1Data = tabel1.map((row) => row.status_1_count);
+          const status0Data = tabel1.map((row) => row.status_0_count);
+
+          const ctx = document.getElementById("myChart").getContext("2d");
+          const data = {
+            labels: labels,
+            datasets: [
+              {
+                label: "Data Pemilih Ter-Verifikasi",
+                data: status1Data,
+                backgroundColor: "rgba(69, 191, 81, 0.688)",
+                borderSkipped: "bottom",
+                borderRadius: 10,
+                barPercentage: 0.6,
+                categoryPercentage: 0.8,
+              },
+              {
+                label: "Data Pemilih Belum-Verifikasi",
+                data: status0Data,
+                backgroundColor: "rgba(231, 61, 55, 0.769)",
+                borderSkipped: "bottom",
+                borderRadius: 10,
+                barPercentage: 0.6,
+                categoryPercentage: 0.8,
+              },
+            ],
+          };
+
+          data1 = [
+              {
+                label: "Data Pemilih Ter-Verifikasi",
+                data: status1Data,
+                backgroundColor: "rgba(69, 191, 81, 0.688)",
+                borderSkipped: "bottom",
+                borderRadius: 10,
+                barPercentage: 0.6,
+                categoryPercentage: 0.8,
+              },
+              {
+                label: "Data Pemilih Belum-Verifikasi",
+                data: status0Data,
+                backgroundColor: "rgba(231, 61, 55, 0.769)",
+                borderSkipped: "bottom",
+                borderRadius: 10,
+                barPercentage: 0.6,
+                categoryPercentage: 0.8,
+              },
+            ];
+
+          options = {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    display: false,
+                    drawBorder: false,
+                    drawTicks: false,
+                    drawOnChartArea: false,
+                  },
+                  ticks: {
+                    display: true,
+                    borderColor: "rgba(0, 0, 0, 0)",
+                    showLabelBackdrop: false,
+                    font: {
+                      family: "Poppins", // Ganti dengan jenis font yang diinginkan
+                      size: 12, // Ukuran font dalam piksel
+                      style: "normal", // Gaya font (normal, italic, atau oblique)
+                      weight: "normal", // Ketebalan font (normal, bold, atau bolder)
+                    },
+                  },
+                },
+              },
+            },
+
+          myChart = new Chart(ctx, {
+            type: "bar",
+            data: data,
+            options: options,
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      // Update the chart with new data
+      function grafData_TPS() {
+        fetch("/admin/tabel2")
+          .then((response) => response.json())
+          .then((tabel1) => {
+            const labels = tabel1.map((row) => "RW " + row.id_RW);
+            const Jumlah_tps = tabel1.map((row) => row.jum_tps);
+            data2 = [
+              {
+                label: labels,
+                data: Jumlah_tps,
+                backgroundColor: "rgba(28, 120, 219, 0.674)",
+                borderSkipped: "bottom",
+                borderRadius: 10,
+                barPercentage: 0.6,
+                categoryPercentage: 0.8,
+              }
+            ];
+            // Hapus dataset kedua
+            myChart.data.datasets = data2 ;
+             
+            // Memperbarui data dan label pada chart
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].data = Jumlah_tps;
+            myChart.data.datasets[0].label = "Data TPS";
+            myChart.option = options; // Memperbarui label untuk dataset
+            myChart.update();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      function grafData_pengguna(){
+        fetch("/admin/tabel1")
+          .then((response) => response.json())
+          .then((tabel1) => {
+            const labels = tabel1.map((row) => "RW " + row.rw);
+            const status1Data = tabel1.map((row) => row.status_1_count);
+            const status0Data = tabel1.map((row) => row.status_0_count);
+           
+            // Hapus dataset kedua
+            myChart.data.datasets = data1;
+             
+            // Memperbarui data dan label pada chart
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].data = status1Data;
+            myChart.data.datasets[0].label = "Data Pengguna Verifkisai";
+            myChart.data.datasets[1].data = status0Data;
+            myChart.data.datasets[1].label = "Data Pengguna Belum Verifikasi";
+            myChart.option = options; // Memperbarui label untuk dataset
+            myChart.update();
+
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+       function getSaksi_TPS() {
+        fetch("/admin/tabel3")
+          .then((response) => response.json())
+          .then((tabel1) => {
+            const labels = tabel1.map((row) =>  row.nama_TPS);
+            const Jumlah_tps = tabel1.map((row) => row.jum_saksi);
+            data2 = [
+              {
+                label: labels,
+                data: Jumlah_tps,
+                backgroundColor: "rgba(51, 184, 217, 0.709)",
+                borderSkipped: "bottom",
+                borderRadius: 10,
+                barPercentage: 0.6,
+                categoryPercentage: 0.8,
+              }
+            ];
+            // Hapus dataset kedua
+            myChart.data.datasets = data2 ;
+             
+            // Memperbarui data dan label pada chart
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].data = Jumlah_tps;
+            myChart.data.datasets[0].label ="Saksi TPS";
+            myChart.option = options; // Memperbarui label untuk dataset
+            myChart.update();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+    </script>
+  
+  </body>
+</html>

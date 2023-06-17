@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styleadmin.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <%- include('./layout/navbar.ejs') %>
+    <button class="hamburger">
+      <div class="bar"></div>
+    </button>
+    <main>
+      <h1>Pilih Saksi TPS</h1>
+      <div class="body">
+       
+        <div class="header-card">
+              <button onclick="cetakPDF_pengguna()" class="button-large dangger">
+                  <i class="fa fa-file-pdf"></i> Cetak PDF
+              </button>
+        </div>
+        <div class="card-table opacity">
+          <table id="example" class="display compact" style="width: 100%">
+            <thead>
+              <tr>
+                <th style="display: none;"></th>
+                <th>Nomor</th>
+                <th>Nama</th>
+                <th>NIK</th>
+                <th>RW</th>
+                <th>RT</th>
+                <th>TPS</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let i = 1; %>
+              <% for(const row of results) { %>
+                <tr>
+                  <td style="display: none;"><%= row.id_pengguna %></td>
+                  <td><%= i %></td>
+                  <td><%= row.nama %></td>
+                  <td><%= row.NIK %></td>
+                  <td><%= "RW " + row.rw %></td>
+                  <td><%= "RT " + row.rt %></td>
+                  <td>
+                   <%=row.id_tps %>
+                  </td>
+                  <td>
+                    <% if (row.idSaksi == null) { %>
+                      <button class="status-button" data-id="<%= row.id_pengguna %>">Bukan Saksi</button>
+                    <% } else { %>
+                      <button class="status-button" disabled>Saksi</button>
+                    <% } %>
+                  </td>
+                </tr>
+                <% i++; %>
+              <% } %>
+            </tbody>
+            
+            
+          </table>
+        </div>
+      </div>
+    </main>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Jadikan Saksi</h2>
+        <form method="post" id="form-pemilih">
+          <input type="text" name="idPemilih" id="idPemilih" value="" hidden>
+          <div class="form-group">
+            <label for="nama">Nama Pemilih</label>
+            <input
+              type="text"
+              name="nama"
+              id="nama"
+              value=""
+              placeholder=""
+              disabled
+            />
+          </div>
+          <div class="form-group">
+            <label for="NIK">NIK Pemilih</label>
+            <input
+              type="text"
+              name="NIK"
+              id="NIK"
+              value=""
+              placeholder=""
+              disabled
+            />
+          </div>
+          <div class="form-group">
+            <label for="RW">RW</label>
+            <input
+              type="text"
+              name="RW"
+              id="RW"
+              placeholder=""
+              value=""
+              disabled
+            />
+          </div>
+          <div class="form-group">
+            <label for="RT">RT</label>
+            <input
+              type="text"
+              name="RT"
+              id="RT"
+              placeholder=""
+              value=""
+              disabled
+            />
+          </div>
+          <div class="form-group">
+            <label for="tps">tps</label>
+            <input
+              type="text"
+              name="tps"
+              id="tps"
+              placeholder=""
+              value=""
+              disabled
+            />
+          </div>
+          <br />
+          <button id="verifikasiButton" class="button-large success">Jadikan Saksi</button>
+        </form>
+      </div>
+    </div>
+    <div id="overlay"></div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+      // Ambil semua elemen dengan class "status-button"
+      var buttons = document.getElementsByClassName("status-button");
+      // Loop melalui setiap tombol
+      for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i];
+        
+        // Periksa teks pada tombol
+        if (button.textContent === "Bukan Saksi") {
+          // Jika tombol belum diverifikasi, ubah warna menjadi merah
+          button.style.backgroundColor = "var(--color-dangger)";
+        } else if (button.textContent === "Saksi") {
+          // Jika tombol sudah diverifikasi, ubah warna menjadi hijau
+          button.style.backgroundColor = "var(--color-success)";
+        }
+
+    
+      }
+      
+      function setButtonListener() {
+        const buttons = document.getElementsByClassName("status-button");
+
+        for (let index = 0; index < buttons.length; index++) {
+          buttons[index].addEventListener("click", (event) => {
+            const button = event.target;
+            const row = button.closest("tr");
+            const id =  row.querySelector("td:nth-child(1)").textContent
+            const nama = row.querySelector("td:nth-child(3)").textContent;
+            const nik = row.querySelector("td:nth-child(4)").textContent;
+            const rw = row.querySelector("td:nth-child(5)").textContent;
+            const rwSubstring = rw.substring(3);
+            const rt = row.querySelector("td:nth-child(6)").textContent;
+            const tps = row.querySelector("td:nth-child(7)").textContent;
+
+            const idInput = document.getElementById("idPemilih");
+            const namaInput = document.getElementById("nama");
+            const nikInput = document.getElementById("NIK");
+            const rwInput = document.getElementById("RW");
+            const rtInput = document.getElementById("RT");
+            const tpsSelect = document.getElementById("tps");
+
+            idInput.value = id;
+            namaInput.value = nama;
+            nikInput.value = nik;
+            rwInput.value = rw;
+            rtInput.value = rt;
+            tpsSelect.value = tps;
+
+            var modal = document.getElementById("myModal");
+            var overlay = document.getElementById("overlay");
+
+            modal.style.display = "block";
+            overlay.style.display = "block";
+
+            const verifikasiButton = document.getElementById("verifikasiButton");
+            const tolakButton = document.getElementById("tolakButton");
+            const form = document.getElementById("form-pemilih");
+
+            // Menambahkan event listener ke tombol Verifikasi
+            verifikasiButton.addEventListener("click", () => {
+              form.action = "/pilih-saksi"; // Mengubah action ke '/verif-data'
+              form.submit(); // Mengirimkan permintaan POST
+            });
+
+            // Menambahkan event listener ke tombol Tolak Data
+            
+
+           
+          });
+        }
+      }
+
+      setButtonListener();
+
+      $('#myTable').on('draw.dt', function () {
+        setButtonListener();
+      });
+
+      var closeModalBtn = document.getElementById("closeModal");
+      var overlay = document.getElementById("overlay");
+
+      closeModalBtn.addEventListener("click", closeModal);
+      overlay.addEventListener("click", closeModal);
+
+      function closeModal() {
+        var modal = document.getElementById("myModal");
+        var overlay = document.getElementById("overlay");
+
+        modal.style.display = "none";
+        overlay.style.display = "none";
+      }
+    </script>
+    <script src="/script.js"></script>
+  </body>
+</html>

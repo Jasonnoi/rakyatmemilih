@@ -1383,19 +1383,307 @@ app.get("/cetak-pdf", async (req, res) => {
 });
 
 //routing untuk lurah
-app.get("/lurah/", (req, res) => {
-  res.render("lurah/beranda", { active: "beranda" });
-});
-// app.get("/lurah/verifikasi-data-pemilih", (req, res) => {
-//   res.render("lurah/pilihsaksi", { active: "verifikasi" });
-// });
-// app.get("/admin/kelola-tps", (req, res) => {
-//   res.render("admin/kelolatps", { active: "tps" });
-// });
-// app.get("/admin/kelola-rw", (req, res) => {
-//   res.render("admin/kelolarw", { active: "kelolarw" });
-// });
+app.get("/lurah", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    let query = `SELECT * FROM view_pilih_saksi`;
+    const hashedStatus = req.query.jenis_data_pemilih;
 
+    // Cek apakah parameter status ada dalam URL query
+    if (decodeURIComponent(hashedStatus) === "Pemilih Sudah Verifikasi") {
+      query = `SELECT * FROM view_verifikasi_pengguna WHERE status = 1`;
+    } else if (
+      decodeURIComponent(hashedStatus) === "Pemilih Belum Verifikasi"
+    ) {
+      query = `SELECT * FROM view_verifikasi_pengguna WHERE status is NULL`;
+    }
+
+    conn.query(query, (err, results) => {
+      const query2 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna`;
+      conn.query(query2, (err, totalPemilih) => {
+        const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status`;
+        conn.query(query3, (err, total) => {
+          if (err) {
+            console.error("Tidak dapat mengeksekusi query:", err);
+            res.status(500).send("Tidak dapat mengeksekusi query");
+          } else {
+            res.render("lurah/verifdata", {
+              total,
+              totalPemilih,
+              results,
+              active: "verifikasi",
+            });
+          }
+        });
+      });
+    });
+
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
+});
+app.get("/lurah/hasil-distribusi-tps", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const queryTPS = `SELECT * FROM tps `;
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryTPS, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+    const queryRW = `SELECT * FROM rw`;
+    const dataRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const dataTPS = await getData();
+    const getRW = await dataRW();
+    res.render("lurah/kelolatps", { getRW, dataTPS, active: "tps" });
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
+});
+app.get("/lurah/hasil-distribusi-rw", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const selectDataRW = `SELECT * FROM rw`;
+    const countRW = `SELECT count(no) as jumRW FROM rw`;
+    const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
+
+    const getRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(selectDataRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const getCountRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(countRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const getCountTPS = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(countTPS, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const totalTPS = await getCountTPS();
+    const dataRW = await getRW();
+    const coun_rw = await getCountRW();
+
+    res.render("lurah/kelolarw", {
+      totalTPS,
+      dataRW,
+      coun_rw,
+      active: "kelolarw",
+    });
+    conn.release();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database connection error");
+  }
+});
+
+app.get(
+  "/lurah/distribusi-rt",
+  paginate.middleware(10, 50),
+  async (req, res) => {
+    try {
+      const conn = await dbConnect();
+      const selectDataRW = `SELECT * FROM rt `;
+      const selectRW = `SELECT * FROM rw `;
+
+      const countRW = `SELECT count(no) as jumRW FROM rt`;
+      const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
+
+      // Mendapatkan nilai pencarian dari URL
+      const searchQuery = req.query.querySearch;
+      let selectDataRWWithSearch;
+
+      if (searchQuery) {
+        if (searchQuery.toUpperCase().includes("RW")) {
+          const modified = searchQuery.substring(4);
+          console.log(modified);
+          selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no_rw LIKE '%${modified}%'
+        `;
+        } else if (searchQuery.toUpperCase().includes("RT")) {
+          const modified = searchQuery.substring(4);
+          selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no LIKE '%${modified}%'
+        `;
+        } else {
+          const modified = searchQuery.substring(4);
+          selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no LIKE '%${modified}%'
+            OR no_rw LIKE '%${modified}%'
+        `;
+        }
+      } else {
+        selectDataRWWithSearch = selectDataRW;
+      }
+      let getRW;
+
+      if (typeof searchQuery === "undefined") {
+        getRW = () => {
+          return new Promise((resolve, reject) => {
+            conn.query(selectDataRW, (err, result) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(result);
+              }
+            });
+          });
+        };
+      } else {
+        getRW = () => {
+          return new Promise((resolve, reject) => {
+            conn.query(selectDataRWWithSearch, (err, result) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(result);
+              }
+            });
+          });
+        };
+      }
+
+      // Menggabungkan pencarian ke dalam query SQL
+
+      const getCountRW = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(countRW, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
+        });
+      };
+
+      const getCountTPS = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(countTPS, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      };
+
+      const data_rw = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(selectRW, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      };
+      const [totalTPS, dataRW, coun_rw, list_rw] = await Promise.all([
+        getCountTPS(),
+        getRW(),
+        getCountRW(),
+        data_rw(),
+      ]);
+
+      const itemCount = dataRW.length;
+      const limit = 10; // Set nilai limit menjadi 10
+      const pageCount = Math.ceil(itemCount / limit);
+      const currentPage = parseInt(req.query.page) || 1;
+      const offset = (currentPage - 1) * limit; // Hitung offset berdasarkan halaman saat ini
+      const limitedDataRW = dataRW.slice(offset, offset + limit); // Batasi data yang ditampilkan sesuai limit dan offset
+      const pages = paginate.getArrayPages(req)(3, pageCount, currentPage);
+      console.log(pageCount, currentPage, itemCount, limit);
+      res.render("lurah/kelolart", {
+        totalTPS,
+        dataRW: limitedDataRW, // Gunakan data yang telah dibatasi sesuai limit
+        coun_rw,
+        active: "kelolart",
+        pageCount,
+        itemCount,
+        pages,
+        list_rw,
+        current: currentPage,
+      });
+
+      conn.release();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Database connection error");
+    }
+  }
+);
+
+// Post Lurah
+app.post("/pilih-saksi", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+
+    const query = `INSERT INTO saksi(idPengguna,id_tps) VALUES('${req.body.idPemilih}', '${req.body.tps}')`;
+    conn.query(query, (err, result) => {
+      if (err) {
+        console.error("Gagal Menjadikan Saksi:", err);
+        res.send(
+          "<script>alert('Gagal Menjadikan Saksi'); window.location.href='/lurah';</script>"
+        );
+      } else {
+        console.log("Berhasil Menjadikan Saksi");
+        res.send(
+          "<script>alert('Berhasil Menjadikan Saksi'); window.location.href='/lurah';</script>"
+        );
+      }
+    });
+    conn.release();
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 // Register User
 app.post("/register-data", async (req, res) => {});
 
