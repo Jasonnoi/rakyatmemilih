@@ -221,19 +221,22 @@ main h1 {
   border-radius: 20px;
 }
 .info-presiden {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   background-color: rgba(191, 176, 160, 0.463);
   padding: 15px;
   min-height: auto;
   width: 30%;
+  height: auto;
   margin-right: 15px;
   border-radius: var(--card-radius);
   color: black;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 
-.info-presiden h3 {
-  font-size: 12px;
-  font-weight: 700;
+.info-presiden p{
+  font-size:smaller;
 }
 
 .gambar-presiden {
@@ -246,6 +249,7 @@ main h1 {
   margin-top: 20px;
   display: flex;
   width: 95%;
+  height: auto;
   margin-right: 15px;
   border-radius: var(--card-radius);
 }
