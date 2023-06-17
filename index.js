@@ -346,7 +346,17 @@ app.get("/pengguna/barcode-pemilu", async (req, res) => {
 app.get("/admin/", async (req, res) => {
   try {
     const conn = await dbConnect();
-    const query = `SELECT rw, SUM(status = 1) AS status_1_count, SUM(status IS NULL) AS status_0_count FROM view_verifikasi_pengguna GROUP BY rw;`;
+    const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
+    const options = { timeZone: "Asia/Jakarta" };
+    const jakartaDate = now.toLocaleString("en-US", options).split(",")[0]; // Mendapatkan tanggal dalam format lokal Jakarta
+
+    // Ubah format tanggal menjadi "YYYY-MM-DD"
+    const [month, day, year] = jakartaDate.split("/");
+    const mysqlDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+      2,
+      "0"
+    )}`;
+    const query = `SELECT * FROM view_verifikasi_pengguna WHERE  tanggal = '${mysqlDate}'`;
     const getTabel1 = () => {
       return new Promise((resolve, reject) => {
         conn.query(query, (err, result) => {
@@ -356,8 +366,9 @@ app.get("/admin/", async (req, res) => {
         });
       });
     };
-    const tabel1 = await getTabel1();
-    res.render("admin/beranda", { tabel1, active: "beranda" });
+    const dataNow = await getTabel1();
+    console.log(dataNow);
+    res.render("admin/beranda", { dataNow, active: "beranda" });
     conn.release();
   } catch (err) {
     console.error(err.message);
@@ -450,17 +461,26 @@ app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
     conn.query(query, (err, results) => {
       const query2 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna`;
       conn.query(query2, (err, totalPemilih) => {
-        const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status`;
+        const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna WHERE status = 1`;
         conn.query(query3, (err, total) => {
           if (err) {
             console.error("Tidak dapat mengeksekusi query:", err);
             res.status(500).send("Tidak dapat mengeksekusi query");
           } else {
-            res.render("admin/verifdata", {
-              total,
-              totalPemilih,
-              results,
-              active: "verifikasi",
+            const query4 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna WHERE status IS NULL`;
+            conn.query(query4, (err, hasil) => {
+              if (err) {
+                console.error("Tidak dapat mengeksekusi query:", err);
+                res.status(500).send("Tidak dapat mengeksekusi query");
+              } else {
+                res.render("admin/verifdata", {
+                  hasil,
+                  total,
+                  totalPemilih,
+                  results,
+                  active: "verifikasi",
+                });
+              }
             });
           }
         });

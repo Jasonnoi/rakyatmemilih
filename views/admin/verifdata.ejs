@@ -34,26 +34,57 @@
               <button onclick="redirectToDataLengkap()" class="large primary">Lihat</button>
             </div>
           </div>
-          <div class="card-small opacity">
+          
+          
+           <% if(total[0].totalData != null) {%>
+            
+            <div class="card-small opacity">
             <div class="icon-verif success">
               <i class="fa fa-check-circle" aria-hidden="true"></i>
             </div>
             <div class="info-verif">
               <h4>Jumlah Data Ter-Verifikasi :</h4>
-              <h2><%= total[1].totalData %></h2>
+              <h2><%= total[0].totalData %></h2>
               <button  class="large success" onclick="redirectToVerifikasiData()">Lihat</button>
             </div>
           </div>
-          <div class="card-small opacity">
-            <div class="icon-verif danger">
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            <% }else {%>
+              <div class="card-small opacity">
+            <div class="icon-verif success">
+              <i class="fa fa-check-circle" aria-hidden="true"></i>
             </div>
             <div class="info-verif">
-              <h4>Jumlah Data Belum Verifikasi :</h4>
-              <h2><%= total[0].totalData %></h2>
-              <button onclick="redirectToDataTidakLengkap()" class="large danger">Lihat</button>
+              <h4>Jumlah Data Ter-Verifikasi :</h4>
+              <h2>0</h2>
+              <button  class="large success" onclick="redirectToVerifikasiData()">Lihat</button>
             </div>
           </div>
+              
+          <% }%> 
+          <% if(hasil != null) {%>
+            
+            <div class="card-small opacity">
+              <div class="icon-verif danger">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              </div>
+              <div class="info-verif">
+                <h4>Jumlah Data Belum Verifikasi :</h4>
+                <h2><%= hasil[0].totalData %></h2>
+                <button onclick="redirectToDataTidakLengkap()" class="large danger">Lihat</button>
+              </div>
+            </div>
+            <% }else {%>
+              <div class="card-small opacity">
+                <div class="icon-verif danger">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                </div>
+                <div class="info-verif">
+                  <h4>Jumlah Data Belum Verifikasi :</h4>
+                  <h2>0</h2>
+                  <button onclick="redirectToDataTidakLengkap()" class="large danger">Lihat</button>
+                </div>
+              </div>
+          <% }%> 
         </div>
         <div class="header-card">
               <button onclick="cetakPDF_pengguna()" class="button-large dangger">
