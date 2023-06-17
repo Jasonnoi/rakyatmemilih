@@ -49,7 +49,7 @@ body {
   transition: 0.4s;
 }
 
-.hamburger.is-active {
+.hamburger.bar.is-active {
   display: block !important;
   position: absolute !important;
 }
@@ -59,7 +59,7 @@ body {
 }
 
 .hamburger.is-active:before {
-  transform: rotate(-45deg) translate(-8px, 6px);
+  transform: rotate(-45deg) translate(7px, -10px);
 }
 .hamburger.is-active .bar {
   opacity: 0;
@@ -575,7 +575,7 @@ table.dataTable thead th:first-child {
 .danger {
   background-color: var(--color-dangger);
 }
-.danger:hover{
+.danger:hover {
   background-color: rgb(128, 40, 37);
 }
 .warning {
@@ -583,11 +583,9 @@ table.dataTable thead th:first-child {
   background-color: #aac419e3;
 }
 .primary {
-
-
   background-color: var(--color-primary);
 }
-.primary:hover{
+.primary:hover {
   background-color: #134f90;
 }
 /* Main */
@@ -814,9 +812,7 @@ section {
     display: none;
     position: absolute;
   }
-  .sidebar {
-    width: 16vw;
-  }
+
   main {
     height: 87vh;
     width: 66vw;
@@ -883,15 +879,9 @@ section {
     display: none;
     position: absolute;
   }
-  .sidebar {
-    width: 18%;
-  }
+
   .logo a {
     font-size: 1rem;
-  }
-
-  .sidebar .nav-group {
-    margin-bottom: 10px;
   }
 
   .nav-group a {
@@ -1060,6 +1050,7 @@ section {
   .hamburger.is-active,
   .hamburger.is-active:before,
   .hamburger.is-active:after {
+    color: #322c38;
     display: block;
     position: absolute;
   }
@@ -1105,6 +1096,7 @@ section {
   .hamburger.is-active,
   .hamburger.is-active:before,
   .hamburger.is-active:after {
+    color: #322c38;
     display: block;
     position: absolute;
   }
@@ -1151,7 +1143,7 @@ section {
   .hamburger.is-active,
   .hamburger.is-active:before,
   .hamburger.is-active:after {
-    background-color: #322c38;
+    color: #322c38;
     display: block;
     position: absolute;
   }
