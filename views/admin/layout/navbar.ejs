@@ -1,0 +1,43 @@
+<aside class="sidebar">
+  <div class="logo">
+    <img src="../assets/logo-pemilu-2019.webp" alt="" />
+    <a href="">Rakyat Memilih</a>
+  </div>
+  <div
+    class="nav-group <% if (active === 'beranda') { %>active<% } %>"
+    onclick="location.href='/admin/'"
+  >
+    <i class="fa-solid fa-house-chimney"></i>
+    <a href="/admin/">Halaman Utama</a>
+  </div>
+  <div
+    class="nav-group <% if (active === 'verifikasi') { %>active<% } %>"
+    onclick="location.href='/admin/verifikasi-data-pemilih'"
+  >
+    <i class="fa fa-check-circle" aria-hidden="true"></i>
+    <a href="/admin/verifikasi-data-pemilih">Verifikasi Data</a>
+  </div>
+  <div
+    class="nav-group <% if (active === 'tps') { %>active<% } %>"
+    onclick="location.href='/admin/kelola-tps'"
+  >
+    <i class="fa-solid fa-box-tissue"></i>
+    <a href="/admin/kelola-tps">Kelola TPS</a>
+  </div>
+  <div
+    class="nav-group <% if (active === 'kelolarw') { %>active<% } %>"
+    onclick="location.href='/admin/kelola-rw'"
+  >
+    <i class="fa-solid fa-city"></i>
+    <a href="/admin/kelola-rw">Kelola RW</a>
+  </div>
+  <div class="nav-group <% if (active === 'kelolart') { %>active<% } %>">
+      <i class="fa-solid fa-building"></i>
+      <a href="/admin/kelola-rt">Kelola RT</a>
+    </div>
+  <div class="user-account">
+    <img class="user-image" src="../assets/users1.jpg" alt="" />
+    <div class="user-info">
+      <h1 class="name">Adrian Jason</h1>
+      <p class="info">Online</p>
+    </div>

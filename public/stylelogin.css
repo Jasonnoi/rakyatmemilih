@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;500;600;700&display=swap");
+
+*,
+html,
+body {
+  font-family: "Outfit", sans-serif;
+  margin: 0;
+  padding: 0;
+  animation: transitionIn 0.75s;
+}
+
+@keyframes transitionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.text-input {
+  width: 91%;
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+}
+
+input::placeholder {
+  font-weight: 300;
+}
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e5ded6;
+}
+.container {
+  width: 67vw;
+  height: 70vh;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: "login";
+  border-radius: 6px;
+  background: white;
+  border-radius: 6px;
+}
+
+.foto {
+  background-image: url("./assets/merahputih.jpeg");
+  background-size: cover;
+  grid-area: foto;
+  display: none;
+}
+
+.login {
+  font-weight: 300;
+  grid-area: login;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.login h3.title {
+  margin: 15px 0;
+  position: absolute;
+  top: 16pt;
+  font-size: 60px;
+  color: #322c38;
+  font-weight: 600;
+}
+.text-input input {
+  background: #eeeeee;
+  height: 25px;
+  display: flex;
+  width: 93%;
+  align-items: center;
+  border-radius: 20px;
+  padding: 10px;
+  margin: 5px;
+  border: none;
+}
+
+button:is(:hover, :focus) {
+  outline-style: solid;
+  outline-color: rgb(185, 182, 182);
+  transition: outline-offset 0.3s ease;
+}
+
+.Login {
+  font-weight: 700;
+  background: #322c38;
+  color: white;
+  font-size: 1em;
+  display: inline-flex;
+
+  align-items: center;
+  border-radius: 20px;
+  padding: 10px 35px;
+  margin-top: 13px;
+  border: none;
+}
+
+.Signup {
+  width: 91%;
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 0vh;
+  margin-bottom: 15pt;
+  text-align: right;
+}
+
+.Unregistered {
+  margin-right: 70pt;
+}
+
+.Unregistered2 {
+  margin-right: px;
+}
+
+@media (min-width: 568px) {
+  .container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-areas: "foto login";
+  }
+  .foto {
+    display: initial;
+  }
+}
+@media (max-width: 568px) {
+  body {
+    background-image: url("./assets/merahputih.jpeg");
+    display: flex;
+  }
+}

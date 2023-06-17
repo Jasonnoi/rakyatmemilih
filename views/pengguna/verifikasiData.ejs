@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="icon" href="/assets/icon/favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <%- include('./layout/navbar.ejs') %>
+    <main id="main-Verif-Pengguna">
+      <h1 id="h1-verif-pengguna">Verifikasi Data Pemilih</h1>
+      <div class="containerVerif-bintang">
+        <form id="form-Verif-Pengguna" method="post" action="">
+          <section class="section-Verif-Pengguna kanan">
+            <div class="wrap-input-verifP">
+              <label class="label-Verif-Pengguna" for="nik">NIK</label>
+              <input type="text" name="nik" id="nik" value="327544375278923" />
+            </div>
+            <div class="wrap-input-verifP">
+              <label class="label-Verif-Pengguna" for="nama">Nama</label>
+              <input type="text" name="nama" id="nama" value="Samuel Edward" />
+            </div>
+            <div class="flex-row">
+              <div class="wrap-input-verifP">
+                <label class="label-Verif-Pengguna" for="tgl_lahir"
+                  >Tangga Lahir</label
+                >
+                <input
+                  type="date"
+                  name="tgl_lahir"
+                  id="tgl_lahir"
+                  value="2002-04-12"
+                />
+              </div>
+              <div class="wrap-input-verifP">
+                <label class="label-Verif-Pengguna" for="jenis_kelamin"
+                  >Jenis Kelamin</label
+                >
+                <select name="kelamin" id="kelamin">
+                  <option value="pria">Pria</option>
+                  <option value="wanita">Wanita</option>
+                </select>
+              </div>
+            </div>
+            <div class="wrap-input-verifP">
+              <label class="label-Verif-Pengguna" for="noTelepon"
+                >No Telepon</label
+              >
+              <input
+                type="text"
+                name="noTelepon"
+                id="noTelepon"
+                value="081382189198"
+              />
+            </div>
+            <div class="wrap-input-verifP">
+              <label class="label-Verif-Pengguna" for="email">Email</label>
+              <input
+                type="text"
+                name="email"
+                id="email"
+                value="samueledward@gmail.com"
+              />
+            </div>
+          </section>
+          <section class="section-Verif-Pengguna kiri">
+            <div class="wrap-input-verifP">
+              <label class="label-Verif-Pengguna" for="kota">Kota</label>
+              <select name="kota" id="kota">
+                <option value="mustika jaya">Bekasi</option>
+                <option value="Bandung">Bandung</option>
+                <option value="Jakarta">Jakarta</option>
+                <option value="Palembang">Palembang</option>
+              </select>
+            </div>
+            <div class="wrap-input-verifP">
+              <label class="label-Verif-Pengguna" for="kecamatan"
+                >Kecamatan</label
+              >
+              <select name="kecamatan" id="kecamatan">
+                <option value="cimuning">Cimuning</option>
+                <option value="bekasi timur">Bekasi timur</option>
+                <option value="bekasi barat">Bekasi barat</option>
+                <option value="Keranji">Keranji</option>
+              </select>
+            </div>
+            <div class="wrap-input-verifP">
+              <label class="label-Verif-Pengguna" for="kelurahan"
+                >Kelurahan</label
+              >
+              <select name="kelurahan" id="kelurahan">
+                <option value="mustika jaya">Mustika jaya</option>
+                <option value="regensi 1">Regensi 1</option>
+              </select>
+            </div>
+          </section>
+          <section class="section-Verif-Pengguna bawah">
+            <div class="wrap-input-verifP">
+              <label class="label-Verif-Pengguna" for="ktp"
+                >Upload Foto KTP</label
+              >
+              <label class="file">
+                <input
+                  type="file"
+                  id="file"
+                  aria-label="File browser example"
+                />
+                <span class="file-custom"></span>
+              </label>
+            </div>
+          </section>
+          <button name="submit" id="submit">Simpan</button>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

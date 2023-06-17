@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
+  color: #322c38;
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  background: #e5ded6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  min-width: 70%;
+  min-height: 50%;
+  background-color: red;
+  display: flex;
+  flex-direction: row;
+  border-radius: 6px;
+}
+
+.foto {
+  background-image: url("./assets/merahputih.jpeg");
+  grid-area: foto;
+  width: 50%;
+  background-size: cover;
+  background-position: center;
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+}
+
+.Signup {
+  min-width: 50%;
+  background: #fff;
+  border-radius: 6px;
+  padding: 2em;
+}
+
+.Signup .title {
+  font-weight: 600;
+  font-size: 3.5em;
+  text-align: center;
+}
+form {
+  width: auto;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  width: 100%;
+}
+.form-group label {
+  font-weight: 200;
+}
+
+.form-group input,
+.form-group select {
+  background: #eeeeee;
+  height: 25px;
+  display: flex;
+  min-width: 96%;
+  align-items: center;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 5px;
+  border: none;
+}
+
+.split-form {
+  display: flex;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  flex-grow: 1;
+}
+.left,
+.right {
+  flex-grow: 1; /* Meregangkan item secara proporsional */
+}
+.tombol {
+  cursor: pointer;
+  font-weight: 700;
+  background: #322c38;
+  color: white;
+  font-size: 1.2em;
+  padding: 13px 35px;
+  align-items: center;
+  border-radius: 30px;
+  text-align: center;
+  margin-top: 13px;
+  border: none;
+  margin-bottom: -5px;
+}
+.button {
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+}

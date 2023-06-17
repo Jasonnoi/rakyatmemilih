@@ -1,0 +1,101 @@
+.notification {
+  display: flex;
+  position: fixed;
+  height: 96vh;
+  width: 20%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  height: auto;
+  width: max-content;
+  margin-bottom: 40px;
+}
+
+header i {
+  font-size: 2rem;
+  color: var(--color-dangger);
+}
+
+header h1 {
+  font-weight: 900;
+  margin-left: 15px;
+  font-size: 2rem;
+  color: var(--color-dangger);
+}
+
+section {
+  margin-top: 10px;
+  background-color: rgba(197, 64, 59, 0.47);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 200px;
+  height: auto;
+  padding: 15px;
+  border-radius: 20px;
+}
+
+.notif-info {
+  display: flex;
+}
+
+.notif {
+  margin-left: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.notif-user h1 {
+  width: auto;
+  color: black;
+}
+
+.button-small {
+  color: white;
+  cursor: pointer;
+  border: none;
+  padding: 4px;
+  margin-left: 3px;
+  border-radius: 10px;
+}
+.large {
+  margin-top: 10px;
+  color: white;
+  cursor: pointer;
+  border: none;
+  padding: 4px;
+  width: 50%;
+  height: 2em;
+  border-radius: 20px;
+}
+.button-large {
+  margin-top: 10px;
+  color: white;
+  cursor: pointer;
+  border: none;
+  padding: 4px;
+  width: 30%;
+  height: 2em;
+  border-radius: 20px;
+}
+
+.verif-data {
+  margin-bottom: 20px;
+}
+
+.success {
+  background-color: var(--color-success);
+}
+
+.danger {
+  background-color: var(--color-dangger);
+}
+.warning {
+  color: white;
+  background-color: #aac419e3;
+}
+.primary {
+  border-radius: 20px;
+
+  background-color: var(--color-primary);
+}

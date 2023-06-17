@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="/styleregist.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="foto"></div>
+    <div class="Signup">
+      <h3 class="title">Sign Up</h3>
+      <form method="post" action="/register-data">
+        <div class="split-form">
+          <div class="left">
+            <div class="form-group">
+              <label class="details">NIK</label>
+              <input type="text" placeholder="Masukkan NIK Anda" />
+            </div>
+            <div class="form-group">
+              <label class="details">Nama</label>
+              <input type="text" />
+            </div>
+            <div class="form-group">
+              <label class="details">Username</label>
+              <input type="text" />
+            </div>
+            <div class="form-group">
+              <label class="details">Password</label>
+              <input type="password" />
+            </div>
+            <div class="form-group">
+              <label class="details">Email</label>
+              <input type="text" />
+            </div>
+            <div class="form-group">
+              <label class="details">Tanggal Lahir</label>
+              <input type="date" />
+            </div>
+          </div>
+          <div class="right">
+            <div class="form-group">
+              <label class="details">Kota</label>
+              <select name="Kota">
+                <option value="kosong"></option>
+                <option value="Kota Bandung">Kota Bandung</option>
+                <option value="Kab. Bandung">Kab.Bandung</option>
+                <option value="Garut">Garut</option>
+                <option value="Tasikmalaya">Tasikmalaya</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="details">Kecamatan</label>
+              <select name="Kecamatan">
+                <option value="kosong"></option>
+                <option value="Cileunyi">Cileunyi</option>
+                <option value="Cileungsi">Cileungsi</option>
+                <option value="Bojongsoang">Bojongsoang</option>
+                <option value="Rancaekek">Rancaekek</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="details">Kelurahan</label>
+              <select name="Kelurahan">
+                <option value="kosong"></option>
+                <option value="Astana Anyar">01</option>
+                <option value="Antapani">Antapani</option>
+                <option value="Bandung Kidul">Bandung Kidul</option>
+                <option value="Bandung Kulon">Bandung Kulon</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="details">RW</label>
+              <select name="RW">
+                <option value="kosong"></option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="details">RT</label>
+              <select name="RT">
+                <option value="kosong"></option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="details">Alamat Lengkap</label>
+              <input type="text" />
+            </div>
+          </div>
+        </div>
+
+        <div class="button">
+          <input
+            onclick="window.open('/')"
+            type="submit"
+            class="tombol"
+            value="Simpan"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
