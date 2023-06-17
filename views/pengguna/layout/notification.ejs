@@ -6,15 +6,13 @@
       </header>
 
       <div class="verif-data">
-        <h1 class="info">Terdapat pesan untuk anda hari ini !</h1>
-        <section class="section-notif">
-          <h1>Verifikasi data anda!</h1>
-          <p>verifikasi data anda terlebih dahulu</p>
-        </section>
-        <section class="section-notif">
-          <h1>Verifikasi data anda!</h1>
-          <p>verifikasi data anda terlebih dahulu</p>
-        </section>
+        <h1 class="info">Terdapat pesan untuk anda!</h1>
+        <% if (resultPenggunaId.status === null) { %>
+          <section class="section-notif">
+            <h1>Verifikasi data anda!</h1>
+            <p>verifikasi data anda terlebih dahulu</p>
+          </section>
+        <% } %>
       </div>
     </aside>
 

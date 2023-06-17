@@ -43,8 +43,12 @@
                   <div>
                     <p>Nama : <%= resultPenggunaId.nama %></p>
                     <p>NIK : <%= resultPenggunaId.NIK %></p>
-                    <p>TPS : <%= resultPenggunaId.id_tps %></p>
-                    <p>Saksi : </p>
+                    <p>TPS : <%= resultPenggunaId.nama_TPS %></p>
+                    <p> 
+                      <% if (resultPenggunaId.idSaksi === null) { 
+                        %>Saksi : -<% 
+                      } else { %> Anda menjadi saksi di <%= resultPenggunaId.nama_TPS %><% } %>
+                      </p>
                   </div>
                 </div>
               </div>

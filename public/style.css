@@ -644,6 +644,38 @@ table.dataTable thead th:first-child {
   padding-bottom: 2rem;
 }
 
+.modal-verifikasi{
+  display: flex;
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  justify-content: center;
+  background-color: white;
+  border-radius: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.modal-verifikasi-content{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 80px;
+  gap: 100px;
+}
+
+.modal-verifikasi-content img{
+  height: 200px;
+  width: 200px;
+}
+
+#form-Verif-Pengguna.disabled-form {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 /*END MAIN VERIFIKASI DATA BINTANG*/
 
 
@@ -765,8 +797,10 @@ table.dataTable thead th:first-child {
 }
 
 .cetak-kartu {
+  display: flex;
   justify-content: center;
   text-align: center;
+  align-items: center;
   border: none;
   background: var(--color-dangger);
   width: 4rem;
@@ -879,16 +913,6 @@ table.dataTable thead th:first-child {
   align-self: center;
 }
 
-#kartu-pemilu {
-  height: 100%;
-  width: 100%;
-}
-
-#barcode-pemilu {
-  height: 60%;
-  width: 60%;
-}
-
 image
 
 .kartu-pemilu{
@@ -984,7 +1008,7 @@ image
 }
 
 .barcode-pemilu-bawah img{
-  
+  width: 80%;
 }
 
 

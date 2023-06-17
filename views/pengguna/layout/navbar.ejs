@@ -18,10 +18,12 @@
       <i class="fa-solid fa-user-pen"></i>
       <a href="/pengguna/edit-akun">Edit Akun</a>
     </div>
-    <div class="nav-group <% if (active === 'kartuPemilu' || active === 'barcodePemilu')  { %>active<% } %>">
-      <i class="fa-solid fa-address-card"></i>
-      <a href="/pengguna/kartu-pemilu">Kartu Pemilu</a>
-    </div>
+    <% if (resultPenggunaId.status != null) { %>
+      <div class="nav-group <% if (active === 'kartuPemilu' || active === 'barcodePemilu')  { %>active<% } %>">
+        <i class="fa-solid fa-address-card"></i>
+        <a href="/pengguna/kartu-pemilu">Kartu Pemilu</a>
+      </div>
+    <% } %>
     <div class="user-account">
       <div class="user-info">
         <img class="user-image" src="../assets/<%= resultPenggunaId.profile %>" alt="" />

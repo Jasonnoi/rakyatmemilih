@@ -30,7 +30,7 @@ app.get("/pengguna/", async (req, res) => {
   try {
     const conn = await dbConnect();
     const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM pengguna WHERE id = ${idPengguna}`;
+    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
   try {
     const conn = await dbConnect();
     const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM pengguna WHERE id = ${idPengguna}`;
+    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -260,7 +260,13 @@ app.get("/pengguna/kartu-pemilu", async (req, res) => {
   try {
     const conn = await dbConnect();
     const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+    const queryId = `SELECT * 
+                      FROM view_verifikasi_pengguna 
+                        LEFT OUTER JOIN saksi 
+                        ON view_verifikasi_pengguna.id = saksi.idPengguna 
+                        LEFT OUTER JOIN tps 
+                        ON saksi.id_tps = tps.id 
+                        WHERE view_verifikasi_pengguna.id = ${idPengguna}`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {

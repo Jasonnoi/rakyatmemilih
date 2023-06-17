@@ -23,7 +23,18 @@
     <main id="main-Verif-Pengguna">
       <h1 class="headline">Verifikasi Data Pemilih</h1>
       <div class="containerVerif-bintang">
-        <form id="form-Verif-Pengguna" method="post" action="">
+        <!-- MODAL -->
+        <% if (resultPenggunaId.status != null) { %>
+          <div class="modal-verifikasi">
+            <div class="modal-verifikasi-content">
+              <img src="../assets/success.webp" alt="">
+              <h3>Data anda berhasil di verifikasi</h3>
+            </div>
+          </div>
+          
+        <% } %>
+        <!-- END MODAL -->
+        <form id="form-Verif-Pengguna" method="post" action="" <% if (resultPenggunaId.status != null) { %>class="disabled-form"<% } %>>
           <section class="section-Verif-Pengguna kanan">
             <div class="wrap-input-verifP">
               <label class="label-Verif-Pengguna" for="nik">NIK</label>
@@ -126,6 +137,7 @@
           </section>
           <button name="submit" id="submit-Verif-Pengguna">Simpan</button>
         </form>
+        
       </div>
     </main>
   </body>
@@ -157,5 +169,5 @@ rw.addEventListener("change", () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    });
+  });
 </script>
