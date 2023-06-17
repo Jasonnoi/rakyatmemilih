@@ -25,7 +25,7 @@
         <div class="header-body">
           <div class="card-form opacity">
             <h2>Tambahkan TPS</h2>
-            <form action="">
+            <form action="/tambah-tps" method="post">
               <div class="form-group">
                 <label for="nama">Nama TPS</label>
                 <input
@@ -45,13 +45,13 @@
                 />
               </div>
               <div class="form-group">
-                <label for="RW">RW TPS</label>
-                <input
-                  type="text"
-                  name="RW"
-                  id="RW"
-                  placeholder="Masukan RW TPS"
-                />
+                <label for="RW">Pilih RW</label>
+                <select id="RW" name="RW">
+                  <option value="">-- Pilih RW --</option>
+                  <% for(const row of getRW) { %>
+                    <option value="<%= row.no %>"><%= row.no %></option>
+                  <% } %>
+                </select>
               </div>
               <div class="form-group">
                 <label for="Kapasitas">Kapasitas TPS</label>
@@ -66,189 +66,40 @@
             </form>
           </div>
         </div>
+         <div class="header-card">
+              <button onclick="cetakPDF_TPS()" class="button-large dangger">
+                  <i class="fa fa-file-pdf"></i> Cetak PDF
+              </button>
+        </div>
         <div class="card-table opacity">
           <table id="example" class="display compact" style="width: 100%">
             <thead>
               <tr>
+ 
+                <th>Nomor</th>
                 <th>Nama TPS</th>
                 <th>Nomor TPS</th>
                 <th>RW TPS</th>
                 <th>Kapasitas TPS</th>
-                <th>Hapus</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>TPS A</td>
-                <td>TPS 01</td>
-                <td>RW 01</td>
-                <td>100</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS B</td>
-                <td>TPS 02</td>
-                <td>RW 02</td>
-                <td>150</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS C</td>
-                <td>TPS 03</td>
-                <td>RW 03</td>
-                <td>200</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS D</td>
-                <td>TPS 04</td>
-                <td>RW 04</td>
-                <td>120</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS E</td>
-                <td>TPS 05</td>
-                <td>RW 05</td>
-                <td>180</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS F</td>
-                <td>TPS 06</td>
-                <td>RW 06</td>
-                <td>220</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS G</td>
-                <td>TPS 07</td>
-                <td>RW 07</td>
-                <td>130</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS H</td>
-                <td>TPS 08</td>
-                <td>RW 08</td>
-                <td>190</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS I</td>
-                <td>TPS 09</td>
-                <td>RW 09</td>
-                <td>250</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS J</td>
-                <td>TPS 10</td>
-                <td>RW 10</td>
-                <td>140</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS K</td>
-                <td>TPS 11</td>
-                <td>RW 11</td>
-                <td>200</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS L</td>
-                <td>TPS 12</td>
-                <td>RW 12</td>
-                <td>160</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS M</td>
-                <td>TPS 13</td>
-                <td>RW 13</td>
-                <td>210</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS N</td>
-                <td>TPS 14</td>
-                <td>RW 14</td>
-                <td>180</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>TPS O</td>
-                <td>TPS 15</td>
-                <td>RW 15</td>
-                <td>240</td>
-                <td>
-                  <button class="status-button">
-                    <i class="fa fa-trash"></i> Hapus
-                  </button>
-                </td>
-              </tr>
+              <% let i = 1; %>
+              <% for(const row of dataTPS) { %>
+                <tr>
+                  <td><%= i %></td>
+                  <td><%= row.nama_TPS %></td>
+                  <td><%= "TPS 0" + row.no_tps %></td>
+                  <td><%= "RW " + row.id_RW %></td>
+                  <td><%= row.kapasitas  %></td>
+                </tr>
+                <% i++; %>
+              <% } %>
             </tbody>
           </table>
         </div>
       </div>
     </main>
-    <%- include('./layout/notif.ejs') %>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -266,24 +117,11 @@
 
         // Jika tombol belum diverifikasi, ubah warna menjadi merah
         button.style.backgroundColor = "red";
+
+        // Menambahkan event listener pada setiap button
+        
       }
-      Array.from(buttons).forEach((button) => {
-        button.addEventListener("click", () => {
-          Swal.fire({
-            title: "Apakah anda ingin menghapus data ini?",
-            text: "anda tidak akan bisa membatalkan data yang di hapus",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Hapus",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
-            }
-          });
-        });
-      });
-    </script>
+
+       </script>
   </body>
 </html>

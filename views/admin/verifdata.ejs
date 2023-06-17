@@ -55,10 +55,17 @@
             </div>
           </div>
         </div>
+        <div class="header-card">
+              <button onclick="cetakPDF_pengguna()" class="button-large dangger">
+                  <i class="fa fa-file-pdf"></i> Cetak PDF
+              </button>
+        </div>
         <div class="card-table opacity">
           <table id="example" class="display compact" style="width: 100%">
             <thead>
               <tr>
+                <th style="display: none;"></th>
+                <th>Nomor</th>
                 <th>Nama</th>
                 <th>NIK</th>
                 <th>RW</th>
@@ -68,25 +75,34 @@
               </tr>
             </thead>
             <tbody>
+              <% let i = 1; %>
               <% for(const row of results) { %>
                 <tr>
+                  <td style="display: none;"><%= row.id %></td>
+                  <td><%= i %></td>
                   <td><%= row.nama %></td>
                   <td><%= row.NIK %></td>
                   <td><%= "RW " + row.rw %></td>
                   <td><%= "RT " + row.rt %></td>
-                  <td><%= row.id_pengguna %></td>
                   <td>
-    
-                      <% if (row.status == null) { %>
-                        <button class="status-button">Belum Verifikasi</button>
-                        <% } else { %>
-                          <button class="status-button">Sudah Verifikasi</button>
-                      <% } %>
-                  
+                    <% if (row.id_tps == null) { %>
+                      Verifikasi Terlebih Dahulu
+                    <% } else { %>
+                      <%= "TPS " + row.id_tps %>
+                    <% } %>
+                  </td>
+                  <td>
+                    <% if (row.status == null) { %>
+                      <button class="status-button" data-id="<%= row.id %>">Belum Verifikasi</button>
+                    <% } else { %>
+                      <button class="status-button" disabled>Sudah Verifikasi</button>
+                    <% } %>
                   </td>
                 </tr>
+                <% i++; %>
               <% } %>
             </tbody>
+            
             
           </table>
         </div>
@@ -95,52 +111,68 @@
     <div id="myModal" class="modal">
       <div class="modal-content">
         <span id="closeModal" class="close">&times;</span>
-        <h2>Edit Data Calon Presiden</h2>
-        <form action="">
+        <h2>Verifikasi Data Pemilih</h2>
+        <h4  style="color: red; font-size: 12px;">Isi TPS untuk Verifikasi</h4>
+        <form method="post" id="form-pemilih">
+          <input type="text" name="idPemilih" id="idPemilih" value="" hidden>
           <div class="form-group">
-            <label for="nama">Nama Calon Presiden</label>
+            <label for="nama">Nama Pemilih</label>
             <input
               type="text"
               name="nama"
               id="nama"
-              placeholder="Masukan Nama Calon Presiden"
+              value=""
+              placeholder=""
+              disabled
             />
           </div>
           <div class="form-group">
-            <label for="Nomor">Nomor Urut</label>
+            <label for="NIK">NIK Pemilih</label>
             <input
               type="text"
-              name="nomor"
-              id="nomor"
-              placeholder="Masukan Nomor Urut Calon Presiden"
+              name="NIK"
+              id="NIK"
+              value=""
+              placeholder=""
+              disabled
             />
           </div>
           <div class="form-group">
-            <label for="Visi">Visi Presiden</label>
+            <label for="RW">RW</label>
             <input
               type="text"
-              name="Visi"
-              id="Visi"
-              placeholder="Masukan Visi Presiden"
+              name="RW"
+              id="RW"
+              placeholder=""
+              value=""
+              disabled
             />
           </div>
           <div class="form-group">
-            <label for="Misi">Misi Presiden</label>
+            <label for="RT">RT</label>
             <input
               type="text"
-              name="Misi"
-              id="Misi"
-              placeholder="Masukan Misi Presiden"
+              name="RT"
+              id="RT"
+              placeholder=""
+              value=""
+              disabled
             />
           </div>
-
+          <div class="form-group">
+            <label for="TPS">Pilih TPS</label>
+            <select id="tps" name="tps">
+                
+            </select>
+          </div>
           <br />
-          <button class="button-large primary">Ubah</button>
+          <button id="verifikasiButton" class="button-large success">Verifikasi</button>
+          <button id="tolakButton" class="button-large danger">Tolak Data</button>
         </form>
       </div>
     </div>
     <div id="overlay"></div>
-    <%- include('./layout/notif.ejs') %>
+
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
@@ -150,7 +182,7 @@
       // Loop melalui setiap tombol
       for (var i = 0; i < buttons.length; i++) {
         var button = buttons[i];
-    
+        
         // Periksa teks pada tombol
         if (button.textContent === "Belum Verifikasi") {
           // Jika tombol belum diverifikasi, ubah warna menjadi merah
@@ -162,17 +194,86 @@
 
     
       }
-      for (let index = 0; index < buttons.length; index++) {
-        buttons[index].addEventListener("click", ()=>{
-          var modal = document.getElementById("myModal");
-          var overlay = document.getElementById("overlay");
+      
+      function setButtonListener() {
+        const buttons = document.getElementsByClassName("status-button");
 
-          modal.style.display = "block";
-          overlay.style.display = "block";
+        for (let index = 0; index < buttons.length; index++) {
+          buttons[index].addEventListener("click", (event) => {
+            const button = event.target;
+            const row = button.closest("tr");
+            const id =  row.querySelector("td:nth-child(1)").textContent
+            const nama = row.querySelector("td:nth-child(3)").textContent;
+            const nik = row.querySelector("td:nth-child(4)").textContent;
+            const rw = row.querySelector("td:nth-child(5)").textContent;
+            const rwSubstring = rw.substring(3);
+            const rt = row.querySelector("td:nth-child(5)").textContent;
 
-        })
-        
+            const idInput = document.getElementById("idPemilih");
+            const namaInput = document.getElementById("nama");
+            const nikInput = document.getElementById("NIK");
+            const rwInput = document.getElementById("RW");
+            const rtInput = document.getElementById("RT");
+            const tpsSelect = document.getElementById("tps");
+
+            idInput.value = id;
+           
+            namaInput.value = nama;
+            nikInput.value = nik;
+            rwInput.value = rw;
+            rtInput.value = rt;
+
+            var modal = document.getElementById("myModal");
+            var overlay = document.getElementById("overlay");
+
+            modal.style.display = "block";
+            overlay.style.display = "block";
+
+            const verifikasiButton = document.getElementById("verifikasiButton");
+            const tolakButton = document.getElementById("tolakButton");
+            const form = document.getElementById("form-pemilih");
+
+            // Menambahkan event listener ke tombol Verifikasi
+            verifikasiButton.addEventListener("click", () => {
+              form.action = "/verif-data"; // Mengubah action ke '/verif-data'
+              form.submit(); // Mengirimkan permintaan POST
+            });
+
+            // Menambahkan event listener ke tombol Tolak Data
+            tolakButton.addEventListener("click", () => {
+              form.action = "/hapus-data"; // Mengubah action ke '/hapus-data'
+              form.submit(); // Mengirimkan permintaan POST
+            });
+
+            // Mengosongkan dan mengganti pilihan TPS
+            tpsSelect.innerHTML = '<option value="">-- Pilih TPS --</option>';
+
+            fetch(`/admin/tps-by-rw/${rwSubstring}`)
+              .then((response) => response.json())
+              .then((data) => {
+                // Memperbarui select list TPS dengan hasil yang diperoleh
+                data.forEach((tps) => {
+                  const option = document.createElement("option");
+                  option.value = tps.id;
+                  option.textContent = tps.nama_TPS;
+
+                  // Tambahkan elemen option ke dalam elemen select
+                  tpsSelect.appendChild(option);
+                });
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+        }
       }
+
+      setButtonListener();
+
+      $('#myTable').on('draw.dt', function () {
+        setButtonListener();
+      });
+
       var closeModalBtn = document.getElementById("closeModal");
       var overlay = document.getElementById("overlay");
 
