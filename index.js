@@ -121,6 +121,7 @@ app.post("/register-data", async (req, res) => {
   const noHPPemilih = req.body.hp;
   const rwPemilih = req.body.rw;
   const rtPemilih = req.body.rt;
+  const alamatPemilih = req.body.alamat;
   const fotoKTP = req.body.fotoProfile;
 
   const query = `INSERT INTO pengguna (NIK,nama,username,password,email,tgl_lahir,no_hp,rw,rt,alamat,role,profile,id_kelurahan) VALUES ('${NIKPemilih}','${namaPemilih}','${usernamePemilih}','${passwordPemilih}','${emailPemilih}','${tanggallahirPemilih}','${noHPPemilih}','${rwPemilih}','${rtPemilih}','${alamatPemilih}', 'Pengguna','${fotoKTP}',1)`;
