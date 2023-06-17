@@ -3,7 +3,7 @@
 :root {
   --color-danger: #e73d377e;
   --color-dangger: rgb(197, 63, 59);
-  --color-success: #33bf41ae;
+  --color-success: rgba(51, 191, 65, 0.682);
   --color-primary: #1c78db;
   --color-secondary: #6c757d;
   --color-dangger-hover: rgb(162, 54, 50);
@@ -74,7 +74,7 @@ body {
   margin-left: 15px;
   position: relative;
   height: 95%;
-  width: 18vw;
+  width: 17vw;
   background-color: rgba(191, 176, 160, 30%);
   border-radius: 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
@@ -222,7 +222,7 @@ body {
 /* Main Content Styling */
 main {
   padding: 30px;
-  width: 66vw;
+  width: 80vw;
   height: 86vh;
   background-color: rgba(191, 176, 160, 30%);
   border-radius: 20px;
@@ -352,10 +352,13 @@ main h1 {
   font-size: 10px;
   margin-top: 0px !important;
 }
+.dangger{
+  background-color: rgba(146, 32, 32, 0.7);
+}
 .card-table {
   font-size: 13px !important;
   padding: 20px;
-  margin-top: 30px;
+  margin-top: 10px;
   width: 94%;
   min-height: 60%;
   background-color: white;
@@ -559,7 +562,7 @@ table tbody tr {
   color: rgb(82, 78, 78);
 }
 
-table.dataTable thead th:first-child {
+table.dataTable thead th:first-child, table thead th:first-child {
   border-top-left-radius: 10px;
 }
 /* End Of Main Content Styling */
@@ -593,7 +596,7 @@ table.dataTable thead th:first-child {
 /* Main */
 /* Tables */
 
-table.dataTable thead th:last-child {
+table.dataTable thead th:last-child, table thead th:last-child{
   border-top-right-radius: 10px;
 }
 
@@ -623,7 +626,34 @@ table td {
 .card-form {
   font-size: 12px;
 }
+.header-card{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-card button{
 
+  width: 80px ;
+  font-size: 10px;
+}
+form#search{
+  display: flex;
+  width: 30%;
+  margin-bottom: 10px;
+  align-items: center;
+  justify-content: center;
+}
+form#search input[type="text"]{
+  background-color: rgba(227, 226, 226, 0.657);
+  border: 2px solid var(--color-dangger);
+}
+form#search button{
+  width: auto;
+  border-radius: 5px;
+
+  margin-left: 10px;
+}
 .form-group {
   margin-top: 10px;
   display: flex;
@@ -646,7 +676,72 @@ table td {
   background-color: rgba(143, 140, 140, 0.303);
   border-radius: 10px;
 }
+.form-group select{
+  padding: 7px;
+  border: 1px solid red;
+  background-color: rgba(190, 186, 186, 0.303);
+  border-radius: 10px;
+}
 
+.content-admin{
+  width: 100%;
+  height: 520px;
+  display: flex;
+}
+
+.data-left{
+  width: 70%;
+  height: 100%;
+}
+.data-left .header{
+  width: 100%;
+  height: 20%;
+  display: flex;
+  flex-direction: space-evenly;
+}
+.data-left .content{
+  width: 100%;
+  height: 80%;
+  border-radius: 15px;
+  background-color: white;
+}
+
+canvas#myChart{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+.data-right{
+  padding-left: 10px;
+  width: 24%;
+  height: 92%;
+}
+
+.data-right .content{
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  padding: 20px;
+}
+.data-right header{
+  height: 10%;
+}
+.data-right .content .verif-data{
+  
+  height: 90%;
+}
+
+
+.back-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+ overflow-x: auto;
+  height: 80%;
+}
 /* End Of Tables */
 
 /* END MAin */
@@ -667,7 +762,7 @@ table td {
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   min-width: 20em; /* Ubah ukuran lebar sesuai kebutuhan Anda */
-  min-height: 300px;
+  height: auto;
 }
 
 .close {
@@ -815,11 +910,11 @@ section {
     position: absolute;
   }
   .sidebar {
-    width: 16vw;
+    width: 15vw;
   }
   main {
     height: 87vh;
-    width: 66vw;
+    width: 80vw;
   }
   .info-presiden h3 {
     font-size: 13px;
@@ -831,6 +926,22 @@ section {
   header i,
   header h1 {
     font-size: 1.8rem;
+  }
+  .data-left .header{
+    height: 20%;
+  }
+
+  .content-admin{
+    width: 100%;
+    height: 600px;
+  }
+  .data-left .content{
+    margin-top: 10px;
+    height: 78%;
+  }
+
+  .data-left .header .card-small{
+  height: 60%;
   }
 
   section {
@@ -999,6 +1110,7 @@ section {
     font-size: 8px;
   }
   table {
+ 
     font-size: 10px;
   }
 
