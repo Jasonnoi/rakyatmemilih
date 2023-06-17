@@ -962,9 +962,15 @@ section {
 
   .data-left .header .card-small{
   height: 80%;
+  margin-top: 20px;
 
   }
-  
+  .data-left .header .card-small .info-verif{
+    margin-top: 45px;
+  }
+  .data-left .header .card-small .info-verif h4{
+    font-size: 14px;
+  }
 
   section {
     width: 170px;
