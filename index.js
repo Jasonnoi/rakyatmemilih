@@ -34,7 +34,7 @@ app.get("/pengguna/", async (req, res) => {
   try {
     const conn = await dbConnect();
     const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE id = ${idPengguna}`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -105,7 +105,6 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
     };
 
     const resultRW = await getRW();
-
 
     res.render("pengguna/verifikasiData", {
       resultPenggunaId,
@@ -201,7 +200,7 @@ app.get("/pengguna/edit-akun", async (req, res) => {
   try {
     const conn = await dbConnect();
     const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE id = ${idPengguna}`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
