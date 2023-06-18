@@ -147,7 +147,7 @@ app.post("/", async (req, res) => {
 const checkAuthPengguna = (req, res, next) => {
   if (
     (req.session.username || req.cookies.usernameCookie) &&
-    req.cookies.roleCookie == "pengguna"
+    req.cookies.roleCookie == "Pengguna"
   ) {
     // Jika session username ada, lanjutkan ke halaman users
     next();
