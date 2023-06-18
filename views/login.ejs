@@ -10,12 +10,12 @@
     <div class="foto"></div>
     <div class="login">
       <h3 class="title">Sign In</h3>
-      <form class="text-input">
+      <form method="post" action="" class="text-input">
         <p>Username</p>
-        <input type="text" class="uname" placeholder="Username" />
+        <input type="text" name="username" class="uname" placeholder="Username" required/>
         <p>Password</p>
-        <input type="password" class="pword" placeholder="Password" />
-        <button onclick="window.open('../index.html')" class="Login">
+        <input type="password" name="password" class="pword" placeholder="Password" required/>
+        <button class="Login">
           Login
         </button>
       </form>
