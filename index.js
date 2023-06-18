@@ -584,6 +584,24 @@ app.get("/pengguna/barcode-pemilu",checkAuthPengguna, async (req, res) => {
 app.get("/admin/", checkAuthAdmin, async (req, res) => {
   try {
     const conn = await dbConnect();
+
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+    
+    const resultPenggunaId = await getData();
+
     const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
     const options = { timeZone: "Asia/Jakarta" };
     const jakartaDate = now.toLocaleString("en-US", options).split(",")[0]; // Mendapatkan tanggal dalam format lokal Jakarta
@@ -606,7 +624,7 @@ app.get("/admin/", checkAuthAdmin, async (req, res) => {
     };
     const dataNow = await getTabel1();
     console.log(dataNow);
-    res.render("admin/beranda", { dataNow, active: "beranda" });
+    res.render("admin/beranda", { resultPenggunaId,dataNow, active: "beranda" });
     conn.release();
   } catch (err) {
     console.error(err.message);
@@ -684,6 +702,24 @@ app.get("/admin/tabel3", checkAuthAdmin, async (req, res) => {
 app.get("/admin/verifikasi-data-pemilih", checkAuthAdmin, async (req, res) => {
   try {
     const conn = await dbConnect();
+
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+    
+    const resultPenggunaId = await getData();
+
     let query = `SELECT * FROM view_verifikasi_pengguna`;
     const hashedStatus = req.query.jenis_data_pemilih;
 
@@ -716,6 +752,7 @@ app.get("/admin/verifikasi-data-pemilih", checkAuthAdmin, async (req, res) => {
                   total,
                   totalPemilih,
                   results,
+                  resultPenggunaId,
                   active: "verifikasi",
                 });
               }
@@ -754,6 +791,24 @@ app.get("/admin/tps-by-rw/:rw", async (req, res) => {
 app.get("/admin/kelola-tps", checkAuthAdmin, async (req, res) => {
   try {
     const conn = await dbConnect();
+
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+    const getDataid = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+    
+    const resultPenggunaId = await getDataid();
+
     const queryTPS = `SELECT * FROM tps `;
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -781,7 +836,7 @@ app.get("/admin/kelola-tps", checkAuthAdmin, async (req, res) => {
 
     const dataTPS = await getData();
     const getRW = await dataRW();
-    res.render("admin/kelolatps", { getRW, dataTPS, active: "tps" });
+    res.render("admin/kelolatps", { getRW, dataTPS, resultPenggunaId, active: "tps" });
     conn.release();
   } catch (err) {
     res.status(500).send("Database connection error");
@@ -790,6 +845,24 @@ app.get("/admin/kelola-tps", checkAuthAdmin, async (req, res) => {
 app.get("/admin/kelola-rw", checkAuthAdmin, async (req, res) => {
   try {
     const conn = await dbConnect();
+
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+    
+    const resultPenggunaId = await getData();
+
     const selectDataRW = `SELECT * FROM rw`;
     const countRW = `SELECT count(no) as jumRW FROM rw`;
     const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
@@ -838,6 +911,7 @@ app.get("/admin/kelola-rw", checkAuthAdmin, async (req, res) => {
       totalTPS,
       dataRW,
       coun_rw,
+      resultPenggunaId,
       active: "kelolarw",
     });
     conn.release();
@@ -849,6 +923,24 @@ app.get("/admin/kelola-rw", checkAuthAdmin, async (req, res) => {
 app.get("/admin/kelola-rt", checkAuthAdmin, paginate.middleware(10, 50), async (req, res) => {
   try {
     const conn = await dbConnect();
+
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+    
+    const resultPenggunaId = await getData();
+
     const selectDataRW = `SELECT * FROM rt `;
     const selectRW = `SELECT * FROM rw `;
 
@@ -973,6 +1065,7 @@ app.get("/admin/kelola-rt", checkAuthAdmin, paginate.middleware(10, 50), async (
       itemCount,
       pages,
       list_rw,
+      resultPenggunaId,
       current: currentPage,
     });
 
@@ -1644,6 +1737,24 @@ app.get("/cetak-pdf", async (req, res) => {
 app.get("/lurah", checkAuthLurah, async (req, res) => {
   try {
     const conn = await dbConnect();
+
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+    
+    const resultPenggunaId = await getData();
+
     let query = `SELECT * FROM view_pilih_saksi`;
     const hashedStatus = req.query.jenis_data_pemilih;
 
@@ -1669,6 +1780,7 @@ app.get("/lurah", checkAuthLurah, async (req, res) => {
               total,
               totalPemilih,
               results,
+              resultPenggunaId,
               active: "verifikasi",
             });
           }
@@ -1684,6 +1796,24 @@ app.get("/lurah", checkAuthLurah, async (req, res) => {
 app.get("/lurah/hasil-distribusi-tps", checkAuthLurah, async (req, res) => {
   try {
     const conn = await dbConnect();
+
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+    const getDataid = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+    
+    const resultPenggunaId = await getDataid();
+
     const queryTPS = `SELECT * FROM tps `;
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -1711,7 +1841,7 @@ app.get("/lurah/hasil-distribusi-tps", checkAuthLurah, async (req, res) => {
 
     const dataTPS = await getData();
     const getRW = await dataRW();
-    res.render("lurah/kelolatps", { getRW, dataTPS, active: "tps" });
+    res.render("lurah/kelolatps", { getRW, dataTPS,resultPenggunaId, active: "tps" });
     conn.release();
   } catch (err) {
     res.status(500).send("Database connection error");
@@ -1720,6 +1850,24 @@ app.get("/lurah/hasil-distribusi-tps", checkAuthLurah, async (req, res) => {
 app.get("/lurah/hasil-distribusi-rw", async (req, res) => {
   try {
     const conn = await dbConnect();
+
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+    
+    const resultPenggunaId = await getData();
+
     const selectDataRW = `SELECT * FROM rw`;
     const countRW = `SELECT count(no) as jumRW FROM rw`;
     const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
@@ -1768,6 +1916,7 @@ app.get("/lurah/hasil-distribusi-rw", async (req, res) => {
       totalTPS,
       dataRW,
       coun_rw,
+      resultPenggunaId,
       active: "kelolarw",
     });
     conn.release();
@@ -1783,6 +1932,24 @@ app.get(
   async (req, res) => {
     try {
       const conn = await dbConnect();
+
+      const uPengguna = req.cookies.usernameCookie;
+      const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+      const getData = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(queryId, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
+        });
+      };
+      
+      const resultPenggunaId = await getData();
+
       const selectDataRW = `SELECT * FROM rt `;
       const selectRW = `SELECT * FROM rw `;
 
@@ -1907,6 +2074,7 @@ app.get(
         itemCount,
         pages,
         list_rw,
+        resultPenggunaId,
         current: currentPage,
       });
 
