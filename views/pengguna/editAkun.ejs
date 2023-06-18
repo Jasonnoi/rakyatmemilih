@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Halaman Edit akun</title>
+  </head>
+  <body>
+    <%- include('./layout/navbar.ejs') %>
+    <main id="main-EditAkun-Pengguna">
+      <h1 class="headline">Edit Akun</h1>
+      <div class="containerEditAkun-bintang">
+        <form id="form-EditAkun-Pengguna" method="post" action="">
+            <div class="profile">
+              <input name="ubahProfile" id="input-ubah-profile" type="file">
+              <label for="input-ubah-profile" id="btn-uploadFoto">Pilih Foto</label>
+              <img id="foto-profile" src="../assets/<%= resultPenggunaId.profile %>" alt="" />
+            </div>
+            <div class="flex-kolom-EditAkun">
+              <div>
+                <label class="label-EditAkun-Pengguna" for="nama">Nama</label>
+                <input class="input-EditAkun" type="text" name="nama" id="nama" value="<%= resultPenggunaId.nama %>" />
+              </div>
+              <div class="flex-row-EditAkun">
+                <div>
+                  <label class="label-EditAkun-Pengguna" for="tgl_lahir">Tangga Lahir</label>
+                  <input
+                    class="input-EditAkun"
+                    type="date"
+                    name="tgl_lahir"
+                    id="tgl_lahir"
+                    value="<%= formattedDate %>"
+                  />
+                </div>
+                <div>
+                  <label class="label-EditAkun-Pengguna" for="jenis_kelamin">Jenis Kelamin</label>
+                  <select class="input-EditAkun" name="kelamin" id="kelamin">
+                    <option value="pria" <% if (resultPenggunaId.kelamin === 'pria') { %>selected="selected"<% } %>>Pria</option>
+                    <option value="wanita" <% if (resultPenggunaId.kelamin === 'wanita') { %>selected="selected"<% } %>>Wanita</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="label-EditAkun-Pengguna" for="noTelepon">No Telepon</label>
+                <input
+                  class="input-EditAkun"
+                  type="text"
+                  name="noTelepon"
+                  id="noTelepon"
+                  value="<%= resultPenggunaId.no_hp %>"
+                />
+              </div>
+              <div>
+                <label class="label-EditAkun-Pengguna" for="email">Email</label>
+                <input
+                  class="input-EditAkun"
+                  type="text"
+                  name="email"
+                  id="email"
+                  value="<%= resultPenggunaId.email %>"
+                />
+              </div>
+              <div>
+                <label class="label-EditAkun-Pengguna" for="sVerifikasi">Status verifikasi</label>
+                <input
+                  disabled
+                  class="input-EditAkun"
+                  type="text"
+                  name="sVerifikasi"
+                  id="sVerifikasi"
+                  <% if (resultPenggunaId.status === null) { %>
+                    value="Belum terverifikasi"
+                  <% } else if (resultPenggunaId.status === 1) { %>
+                    value="Sudah terverifikasi"
+                  <% } %>
+                />
+                <i
+                  class="fa fa-check-circle <% if (resultPenggunaId.status === null) { %>hidden<% } %>"
+                  id="sudah-verifikasi"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <div class="kartu-pemilu">
+                <label class="label-EditAkun-Pengguna" for="kartu-p">Kartu Pemilu</label>
+                <a class="cetak-kartu" href="/pengguna/kartu-pemilu">Cetak</a>
+              </div>
+            </div>
+            <button type="submit" name="submit" id="submit-editAkun">Simpan</button>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styleadmin.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+    <style>
+    .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .pagination a {
+    color: #000;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+    border-radius: 12px;
+  }
+
+  .pagination a.active {
+    background-color:var(--color-dangger);
+    color: white;
+    border: 1px solid var(--color-dangger);
+  }
+
+  .pagination a:hover:not(.active) {
+    background-color: #ddd;
+  }
+    </style>
+  </head>
+  <body>
+    <%- include('./layout/navbar.ejs') %>
+    <main>
+      <h1>Distribusi Data RT di Kelurahan Sangkanhurip</h1>
+      <div class="body">
+            <div class="header-body">
+            <div class="card-small opacity">
+                <div class="icon-verif primary">
+                <i class="fa-solid fa-city" aria-hidden="true"></i>
+                </div>
+                <div class="info-verif">
+                <h4>Jumlah RT Kelurahan Sangkanhurip :</h4>
+                <h2><%= coun_rw.jumRW %></h2>
+                </div>
+            </div>
+            
+            </div>
+            <div class="card-table opacity">
+                <div class="header-card">
+                    <button onclick="cetakPDF_RT()" class="button-large danger">
+                       <i class="fa fa-file-pdf"></i> Cetak PDF
+                    </button>
+                    <form id="search" action="/admin/kelola-rt" method="get">
+                        <div class="form-group">
+                            <input placeholder="Cari Sesuatu di Sini" type="text" name="querySearch" id="search">
+                        </div>
+                        <button class="button-large danger"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Nomor</th>
+                        <th>Kelurahan</th>
+                        <th>Nomor RW</th>
+                        <th>Nomor RT</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% let i = 0; %>
+                    <% for(const row of dataRW) { %>
+                        <tr>
+                        <td><%= i + 1 %></td>
+                        <td>Sangkanhurip</td>
+                        <td><%= "RW 0" + row.no_rw %></td>
+                        <td><%= "RT 0" + row.no %></td>
+                        </tr>
+                        <% i++; %>
+                    <% } %>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                <% if (pages.length >= 1) { %>
+                    <% for (let i = 1; i <= pageCount; i++) { %>
+                    <a href="?page=<%= i %>" class="<%= current === i ? 'active' : '' %>"><%= i %></a>
+                    <% } %>
+                <% } %>
+                </div>
+
+
+            </div>
+            
+
+      </div>
+    </main>
+    
+
+    <div id="overlay"></div>
+    <div id="myModal"  class="modal">
+      <div class="modal-content" style="height: auto !important;">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Tambah Data RT</h2>
+       
+        <form method="post" action="/tambah-rt">
+            <div class="form-group">
+            <label for="RW">Pilih RW</label>
+            <select id="RW" name="RW">
+              <option value="">-- Pilih RW --</option>
+              <% for(const row of list_rw) { %>
+                <option value="<%= row.no %>"><%="RW 0" + row.no %></option>
+              <% } %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="rt">Masukan Nomor RT</label>
+            <input
+              type="text"
+              name="rt"
+              id="rt"
+              value=""
+              placeholder=""
+            />
+         </div>
+          <br />
+          <button  class="button-large primary"><i class="fa fa-add"></i> Tambah</button>
+        </form>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="/script.js"></script>
+    <script>
+      // Ambil semua elemen dengan class "status-button"
+      var buttons = document.getElementsByClassName("status-button");
+
+      // Loop melalui setiap tombol
+      for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i];
+
+        // Periksa teks pada tombol
+        var buttonText = button.textContent.trim();
+
+        // Jika tombol merupakan "Hapus RW", ubah warna menjadi merah
+        if (buttonText === "Hapus RW") {
+          button.style.backgroundColor = "red";
+        }
+
+        // Jika tombol merupakan "Tambah TPS", ubah warna menjadi biru
+        if (buttonText === "Tambah TPS") {
+          button.style.backgroundColor = "var(--color-primary)";
+        }
+      }
+      
+      const btn = document.getElementById("buttonrw");
+      btn.addEventListener("click",() =>{
+        var modal = document.getElementById("myModal");
+            var overlay = document.getElementById("overlay");
+
+            modal.style.display = "block";
+            overlay.style.display = "block";
+      });
+      var closeModalBtn = document.getElementById("closeModal");
+      var overlay = document.getElementById("overlay");
+
+      closeModalBtn.addEventListener("click", closeModal);
+      overlay.addEventListener("click", closeModal);
+
+      function closeModal() {
+        var modal = document.getElementById("myModal");
+        var overlay = document.getElementById("overlay");
+
+        modal.style.display = "none";
+        overlay.style.display = "none";
+      }
+    </script>
+  </body>
+</html>

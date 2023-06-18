@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <%- include('./layout/navbar.ejs') %>
+    <main id="main-kartuPemilu-Pengguna">
+      <h1 class="headline" id="headline-KP">Kartu Pemilu</h1>
+      <nav class="navbarKartu-bintang">
+        <a class="<%if (active === 'kartuPemilu') { %>active-nav<% } %>" id="aKartu-pemilu" href="/pengguna/kartu-pemilu">Kartu Pemilu</a>
+        <a class="<%if (active === 'barcodePemilu') { %>active-nav<% } %>" id="aBarcode" href="/pengguna/barcode-pemilu">Barcode</a>
+      </nav>
+      <div class="containerKartu-bintang">
+        <div class="image-kartu">
+          <% if (active === 'kartuPemilu') { %>
+            <div class="kartu-pemilu">
+              <div class="kartu-pemilu-atas">
+                <img src="../assets/logo-pemilu-2019.webp" alt="" />
+                <h2>Komisi Pemilihan Umum Indonesia</h2>
+              </div>
+              <div class="kartu-pemilu-bawah">
+                <div class="kartu-pemilu-bawahKiri">
+                  <img src="../assets/<%= resultPenggunaId.profile %>" alt="">
+                </div>
+                <div class="kartu-pemilu-bawahKanan">
+                  <h3>KARTU PEMILU</h3>
+                  <div>
+                    <p>Nama : <%= resultPenggunaId.nama %></p>
+                    <p>NIK : <%= resultPenggunaId.NIK %></p>
+                    <p>TPS : <%= resultPenggunaId.nama_TPS %></p>
+                    <p> 
+                      <% if (resultPenggunaId.idSaksi === null) { 
+                        %>Saksi : -<% 
+                      } else { %> Anda menjadi saksi di <%= resultPenggunaId.nama_TPS %><% } %>
+                      </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% } else if (active === 'barcodePemilu') { %>
+            <div class="barcode-pemilu">
+              <div class="barcode-pemilu-atas">
+                <h2>Barcode</h2>
+              </div>
+              <div class="barcode-pemilu-bawah">
+                <img id="barcode-pemilu" src="<%= qr_code %>  " alt="" />
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="/script.js"></script>
+  </body>
+</html>
