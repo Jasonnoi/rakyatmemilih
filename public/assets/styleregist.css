@@ -42,7 +42,7 @@ body {
 
 /* BAGIAN DALAM CONTAINER*/
 .foto {
-  background-image: url("./assets/merahputih.jpeg");
+  background-image: url("./merahputih.jpeg");
   background-size: cover;
   grid-area: foto;
   display: none;
