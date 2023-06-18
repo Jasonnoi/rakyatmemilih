@@ -9,6 +9,9 @@ import ejs from "ejs";
 import { promisify } from "util";
 import multer from "multer";
 import fs from "fs";
+import session from "express-session";
+import crypto from "crypto";
+import cookieParser from "cookie-parser";
 
 const port = 3000;
 const app = express();
@@ -23,41 +26,105 @@ app.use(express.static(path.join(dirname, "public")));
 
 //middleware express.urlencoded() untuk menguraikan data yang dikirim melalui form
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
+
+//menggunakan session
+app.use(
+  session({
+    secret: "secret-key", // Ganti dengan secret key yang aman
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, // Contoh: session kadaluarsa dalam 24 jam
+    },
+  })
+);
+
 app.get("/", (req, res) => {
+  //clear cookie ketika logout
+  res.clearCookie('usernameCookie');
+  //
   res.render("login");
 });
 
-app.get("/register-data-pengguna", async (req, res) => {
-  try {
-    const conn = await dbConnect();
-    const selectRW = `SELECT * FROM rw `;
+app.post("/", async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
 
-    const getRW = () => {
-      return new Promise((resolve, reject) => {
-        conn.query(selectRW, (err, result) => {
-          if (err) {
-            reject(err);
+  if(username && password){
+    try {
+      const conn = await dbConnect();
+
+      // Mengubah password menjadi hash menggunakan algoritma SHA-256
+      const hashed_pass = crypto
+        .createHash("sha256")
+        .update(password)
+        .digest("base64");
+
+      const arrInputLogin = [username, password];
+
+      // Query untuk mencari akun dengan username dan password yang benar
+      const query = `SELECT * FROM pengguna WHERE username = ? AND password = ?`;
+
+      conn.query(query, arrInputLogin, (err, result) => {
+        if (err) {
+          console.error("Tidak dapat mengeksekusi query:", err);
+          res.status(500).send("Tidak dapat mengeksekusi query");
+        }else{
+          if (result.length > 0) {
+            // Jika akun ditemukan, tambahkan session yang berisi nama akun
+            req.session.username = result[0].username;
+            //set cookie
+            res.cookie('usernameCookie', req.session.username);
+            //
+            res.redirect("pengguna"); // Redirect ke halaman utama
           } else {
-            resolve(result);
+            // Jika akun tidak ditemukan, kirimkan respon dengan pesan error
+            res.send(
+              "<script>alert('Data tidak ditemukan, silahkan signup terlebih dahulu'); window.location.href='/';</script>"
+            );;
           }
-        });
+        }
       });
-    };
 
-    const dataRW = await getRW();
-    res.render("register", { dataRW });
-    conn.release();
-  } catch (err) {
-    console.error(err.message);
+    } catch (error) {
+      console.error("Tidak berhasil terhubung ke database:", err);
+      res.status(500).send("Tidak berhasil terhubung ke database");
+    }
   }
 });
 
+app.get('/', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect('login'); // atau rute lain setelah logout
+  });
+});
+
+// Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users
+const checkAuth = (req, res, next) => {
+  if (req.session.username || req.cookies.usernameCookie) {
+    // Jika session username ada, lanjutkan ke halaman users
+    next();
+  } else {
+    // Jika session tidak ada, arahkan ke halaman login
+    res.redirect("/");
+  }
+};
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
 // Routing untuk pengguna
-app.get("/pengguna/", async (req, res) => {
+app.get("/pengguna/", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+    const uPengguna = req.cookies.usernameCookie; 
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -84,11 +151,11 @@ app.get("/pengguna/", async (req, res) => {
   }
 });
 
-app.get("/pengguna/verif-data-pengguna", async (req, res) => {
+app.get("/pengguna/verif-data-pengguna", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_outer_verifikasi WHERE id = ${idPengguna}`;
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -142,7 +209,7 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
   }
 });
 
-app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
+app.get("/pengguna/verif-data-pengguna/select/:rw",checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
     const idRw = req.params.rw;
@@ -163,7 +230,7 @@ app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
   }
 });
 
-app.post("/pengguna/verif-data-pengguna", async (req, res) => {
+app.post("/pengguna/verif-data-pengguna", checkAuth,async (req, res) => {
   try {
     const conn = await dbConnect();
     const isiForm = req.body;
@@ -222,11 +289,11 @@ app.post("/pengguna/verif-data-pengguna", async (req, res) => {
   }
 });
 
-app.get("/pengguna/edit-akun", async (req, res) => {
+app.get("/pengguna/edit-akun",checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -262,10 +329,10 @@ app.get("/pengguna/edit-akun", async (req, res) => {
   }
 });
 
-app.post("/pengguna/edit-akun", async (req, res) => {
+app.post("/pengguna/edit-akun", checkAuth,async (req, res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 2; // blm terverifikasi
+    const uPengguna = req.cookies.usernameCookie;
     const isiForm = req.body;
     //update query di tabel pengguna
     const queryUpdate = `UPDATE pengguna SET 
@@ -273,7 +340,8 @@ app.post("/pengguna/edit-akun", async (req, res) => {
                           tgl_lahir = '${isiForm.tgl_lahir}',
                           kelamin = '${isiForm.kelamin}',
                           no_hp = '${isiForm.noTelepon}',
-                          email = '${isiForm.email}' WHERE id = ${idPengguna}`;
+                          email = '${isiForm.email}',
+                          profile = '${isiForm.ubahProfile}' WHERE username = '${uPengguna}'`;
 
     conn.query(queryUpdate, (err, result) => {
       if (err) {
@@ -293,17 +361,17 @@ app.post("/pengguna/edit-akun", async (req, res) => {
   }
 });
 
-app.get("/pengguna/kartu-pemilu", async (req, res) => {
+app.get("/pengguna/kartu-pemilu",checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 2; // blm terverifikasi
+    const uPengguna = req.cookies.usernameCookie;
     const queryId = `SELECT * 
                       FROM view_verifikasi_pengguna 
                         LEFT OUTER JOIN saksi 
                         ON view_verifikasi_pengguna.id = saksi.idPengguna 
                         LEFT OUTER JOIN tps 
                         ON saksi.id_tps = tps.id 
-                        WHERE view_verifikasi_pengguna.id = ${idPengguna}`;
+                        WHERE view_verifikasi_pengguna.username = '${uPengguna}'`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
@@ -330,11 +398,11 @@ app.get("/pengguna/kartu-pemilu", async (req, res) => {
   }
 });
 
-app.get("/pengguna/barcode-pemilu", async (req, res) => {
+app.get("/pengguna/barcode-pemilu",checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
-    const idPengguna = 2; // blm terverifikasi
-    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE id = ${idPengguna}`;
+    const uPengguna = req.cookies.usernameCookie;
+    const queryId = `SELECT * FROM view_verifikasi_pengguna WHERE username = '${uPengguna}'`;
 
     const getData = () => {
       return new Promise((resolve, reject) => {
