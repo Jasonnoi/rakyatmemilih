@@ -843,6 +843,22 @@ table.dataTable thead th:first-child {
   transition: background 0.2s ease-in-out;
 }
 
+.kartu-kosong{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  border: none;
+  background: var(--color-dangger);
+  width: 7rem;
+  height: 2rem;
+  border-radius: 30px;
+  font-size: medium;
+  cursor: pointer;
+  color: white;
+  transition: background 0.2s ease-in-out;
+}
+
 .cetak-kartu:hover {
   background: var(--color-dangger-hover);
 }
