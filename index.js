@@ -633,7 +633,7 @@ app.get("/admin/", checkAuthAdmin, async (req, res) => {
       2,
       "0"
     )}`;
-    const query = `SELECT * FROM view_verifikasi_pengguna WHERE  tanggal = '${mysqlDate}'`;
+    const query = `SELECT * FROM view_verifikasi_pengguna WHERE  tanggal = '${mysqlDate}' AND status IS NULL`;
     const getTabel1 = () => {
       return new Promise((resolve, reject) => {
         conn.query(query, (err, result) => {

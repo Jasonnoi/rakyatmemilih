@@ -17,11 +17,11 @@
           <div class="left">
             <div class="form-group">
               <label class="details">NIK</label>
-              <input id="nik1" value="" name="nik1" type="text" placeholder="Masukkan NIK Anda" />
+              <input id="nik1" value="" name="nik1" type="text" placeholder="Masukkan NIK Anda" required />
             </div>
             <div class="form-group">
               <label class="details">Nama</label>
-              <input id="nama1" value="" name="nama" type="text" placeholder="Masukkan Nama Anda" />
+              <input id="nama1" value="" name="nama" type="text" placeholder="Masukkan Nama Anda" required />
             </div>
             <div class="form-group">
               <label class="details">Username</label>
@@ -31,6 +31,8 @@
                 value=""
                 type="text"
                 placeholder="Masukkan Username Anda"
+                required
+                maxlength="10"
               />
             </div>
             <div class="form-group">
@@ -41,6 +43,7 @@
                 type="password"
                 value=""
                 placeholder="Masukkan Password Anda"
+                required
               />
             </div>
             <div class="form-group">
@@ -51,6 +54,7 @@
                 name="email"
                 type="text"
                 placeholder="Masukkan Email Anda"
+                required
               />
             </div>
             <div class="form-group">
@@ -61,6 +65,7 @@
                 name="tanggallahir"
                 type="date"
                 placeholder="Masukkan Tanggal Lahir Anda"
+                required
               />
             </div>
           </div>
@@ -73,6 +78,7 @@
                 name="hp"
                 type="text"
                 placeholder="Masukkan No Telfon Anda"
+                required
               />
             </div>
 
@@ -89,7 +95,7 @@
             </div>
             <div class="form-group">
               <label for="RW">Pilih RW</label>
-              <select id="rw1" name="rw1">
+              <select id="rw1" name="rw1" required>
                 <option value="">-- Pilih RW --</option>
                 <% for(const row of dataRW) { %>
                   <option value="<%= row.no %>"><%="RW 0" + row.no %></option>
@@ -98,7 +104,7 @@
             </div>
             <div class="form-group">
             <label for="RT">Pilih RT</label>
-            <select id="rt1" name="rt">
+            <select id="rt1" name="rt" required>
                 
             </select>
           </div>
@@ -110,11 +116,12 @@
                 name="alamat"
                 type="text"
                 placeholder="Masukkan Alamat Anda"
+                required
               />
             </div>
             <div class="form-group">
               <label for="kelamin">Pilih Kelamin</label>
-              <select id="kelamin1" name="kelamin">
+              <select id="kelamin1" name="kelamin" required>
                 <option value="">-- Pilih Kelamin --</option>
                 <option value="pria">Pria</option>
                 <option value="wanita">Wanita</option>
@@ -154,6 +161,7 @@
               name="fotoProfile"
               type="file"
               placeholder="Pilih Foto Anda"
+              accept="image/png, image/jpeg, image/webp, image/jpg"
             />
           </div>
         <br />
