@@ -7,6 +7,8 @@ import paginate from "express-paginate";
 import pdf from "html-pdf";
 import ejs from "ejs";
 import { promisify } from "util";
+import multer from "multer";
+import fs from "fs";
 
 const port = 3000;
 const app = express();
@@ -1725,37 +1727,50 @@ app.post("/pilih-saksi", async (req, res) => {
     console.error(err.message);
   }
 });
-// Register User
-app.post("/register-data", async (req, res) => {
-  const db = await dbConnect();
-  const NIKPemilih = req.body.nik;
-  const namaPemilih = req.body.nama;
-  const usernamePemilih = req.body.username;
-  const passwordPemilih = req.body.password;
-  const emailPemilih = req.body.email;
-  const tanggallahirPemilih = req.body.tanggallahir;
-  const noHPPemilih = req.body.hp;
-  const rwPemilih = req.body.rw;
-  const rtPemilih = req.body.rt;
-  const alamatPemilih = req.body.alamat;
-  const fotoKTP = req.body.fotoProfile;
-
-  const query = `INSERT INTO pengguna (NIK,nama,username,password,email,tgl_lahir,no_hp,rw,rt,alamat,role,profile,id_kelurahan) VALUES ('${NIKPemilih}','${namaPemilih}','${usernamePemilih}','${passwordPemilih}','${emailPemilih}','${tanggallahirPemilih}','${noHPPemilih}','${rwPemilih}','${rtPemilih}','${alamatPemilih}', 'Pengguna','${fotoKTP}',1)`;
-  db.query(query, (err, redgdfbfds) => {
-    if (err) {
-      console.error("Tidak dapat mengeksekusi query:", err);
-      res.status(500).send("Tidak dapat mengeksekusi query");
-      res.send(
-        "<script>alert('Gagal mendaftarkan data'); window.location.href='/'</script>"
-      );
-    } else {
-      res.send(
-        "<script>alert('Berhasil mendaftarkan data'); window.location.href='/'</script>"
-      );
-    }
-  });
-  db.release();
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
+const upload = multer({ storage: storage });
+// Register User
+app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
+  try {
+    const db = await dbConnect();
+    const NIKPemilih = req.body.nik;
+    const namaPemilih = req.body.nama;
+    const usernamePemilih = req.body.username;
+    const passwordPemilih = req.body.password;
+    const emailPemilih = req.body.email;
+    const tanggallahirPemilih = req.body.tanggallahir;
+    const noHPPemilih = req.body.hp;
+    const rwPemilih = req.body.rw;
+    const rtPemilih = req.body.rt;
+    const alamatPemilih = req.body.alamat;
+    const kelamin = req.body.kelamin;
+    const fotoKTP = req.file.filename; // Mendapatkan nama file yang diupload
+
+    // Simpan nama file ke dalam database
+    const query = `INSERT INTO pengguna (NIK, nama, username, password, email, tgl_lahir, no_hp, rw, rt, alamat, role, profile, id_kelurahan, kelamin) VALUES ('${NIKPemilih}', '${namaPemilih}', '${usernamePemilih}', '${passwordPemilih}', '${emailPemilih}', '${tanggallahirPemilih}', '${noHPPemilih}', '${rwPemilih}', '${rtPemilih}', '${alamatPemilih}', 'Pengguna', '${fotoKTP}', 1, '${kelamin}')`;
+    await db.query(query);
+
+    // Pindahkan file yang diupload ke direktori yang diinginkan
+    const file = req.file;
+    fs.renameSync(file.path, "images/" + file.filename);
+
+    res.send(
+      "<script>alert('Berhasil mendaftarkan data'); window.location.href='/'</script>"
+    );
+    db.release();
+  } catch (error) {
+    console.error("Terjadi kesalahan:", error);
+    res.status(500).send("Tidak dapat mengeksekusi query");
+  }
+});
+
 
 //server listening
 app.listen(port, () => {

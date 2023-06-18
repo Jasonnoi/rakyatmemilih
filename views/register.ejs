@@ -2,27 +2,30 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="/styleregist.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
   <div class="container">
     <div class="foto"></div>
     <div class="Signup">
       <h3 class="title">Sign Up</h3>
-      <form method="post" action="/register-data">
+      <form action="" >
         <div class="split-form">
           <div class="left">
             <div class="form-group">
               <label class="details">NIK</label>
-              <input name="nik" type="text" placeholder="Masukkan NIK Anda" />
+              <input id="nik1" value="" name="nik1" type="text" placeholder="Masukkan NIK Anda" />
             </div>
             <div class="form-group">
               <label class="details">Nama</label>
-              <input name="nama" type="text" placeholder="Masukkan Nama Anda" />
+              <input id="nama1" value="" name="nama" type="text" placeholder="Masukkan Nama Anda" />
             </div>
             <div class="form-group">
               <label class="details">Username</label>
               <input
                 name="username"
+                id="username1"
+                value=""
                 type="text"
                 placeholder="Masukkan Username Anda"
               />
@@ -30,14 +33,18 @@
             <div class="form-group">
               <label class="details">Password</label>
               <input
+              id="password1"
                 name="password"
                 type="password"
+                value=""
                 placeholder="Masukkan Password Anda"
               />
             </div>
             <div class="form-group">
               <label class="details">Email</label>
               <input
+              id="email1"
+              value=""
                 name="email"
                 type="text"
                 placeholder="Masukkan Email Anda"
@@ -46,6 +53,8 @@
             <div class="form-group">
               <label class="details">Tanggal Lahir</label>
               <input
+              id="tanggallahir1"
+              value=""
                 name="tanggallahir"
                 type="date"
                 placeholder="Masukkan Tanggal Lahir Anda"
@@ -56,6 +65,8 @@
             <div class="form-group">
               <label class="details">No. HP</label>
               <input
+              id="hp1"
+              value=""
                 name="hp"
                 type="text"
                 placeholder="Masukkan No Telfon Anda"
@@ -65,6 +76,7 @@
             <div class="form-group">
               <label class="details">Kelurahan</label>
               <input
+              id="kelurahan1"
                 type="text"
                 value="Coblong"
                 name="kelurahan"
@@ -74,7 +86,7 @@
             </div>
             <div class="form-group">
               <label for="RW">Pilih RW</label>
-              <select id="RW" name="RW">
+              <select id="rw1" name="rw1">
                 <option value="">-- Pilih RW --</option>
                 <% for(const row of dataRW) { %>
                   <option value="<%= row.no %>"><%="RW 0" + row.no %></option>
@@ -82,36 +94,147 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="rt">Masukan Nomor RT</label>
-              <input
-                type="text"
-                name="rt"
-                id="rt"
-                value=""
-                placeholder=""
-              />
-            </div>
+            <label for="RT">Pilih RT</label>
+            <select id="rt1" name="rt">
+                
+            </select>
+          </div>
             <div class="form-group">
               <label class="details">Alamat Lengkap</label>
               <input
+              id="alamat1"
+              value=""
                 name="alamat"
                 type="text"
                 placeholder="Masukkan Alamat Anda"
               />
             </div>
             <div class="form-group">
-              <label class="details">Upload Foto Profile</label>
-              <label class="file">
-                <input type="file" name="fotoProfile" id="profileSignup" />
-              </label>
+              <label for="kelamin">Pilih Kelamin</label>
+              <select id="kelamin1" name="kelamin">
+                <option value="">-- Pilih Kelamin --</option>
+                <option value="pria">Pria</option>
+                <option value="wanita">Wanita</option>
+              </select>
             </div>
           </div>
         </div>
 
-        <div class="button">
-          <button class="tombol">Simpan</button>
-        </div>
+      </form>
+      <div class="button">
+        <button style="cursor: pointer;" onclick="openModal()" class="tombol">Lanjutkan <i class="fa-sharp fa-solid fa-forward"></i></button>
+      </div>
+    </div>
+  </div>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h2>Upload Terlebih Dahulu</h2>
+      <br>
+      <form enctype="multipart/form-data" action="/register-data" method="post" id="form-pemilih">
+        <input type="text" name="nik" id="nik" value="" hidden>
+        <input type="text" name="nama" id="nama" value="" hidden>
+        <input type="text" name="username" id="username" value="" hidden>
+        <input type="text" name="password" id="password" value="" hidden>
+        <input type="text" name="email" id="email" value="" hidden>
+        <input type="date" name="tanggallahir" id="tanggallahir" value="" hidden>
+        <input type="text" name="hp" id="hp" value="" hidden>
+        <input type="text" name="kelurahan" id="kelurahan" value="" hidden>
+        <input type="text" name="rw" id="rw" value="" hidden>
+        <input type="text" name="rt" id="rt" value="" hidden>
+        <input type="text" name="alamat" id="alamat" value="" hidden>
+        <input type="text" name="kelamin" id="kelamin" value="" hidden>
+        <div class="form-group">
+            <label class="details">Upload Foto Profile Anda</label>
+            <input
+              name="fotoProfile"
+              type="file"
+              placeholder="Pilih Foto Anda"
+            />
+          </div>
+        <br />
+        <button id="verifikasiButton" class="button-large success">Sign Up</button>
       </form>
     </div>
   </div>
+  <div id="overlay"></div>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script>
+    const rw = document.getElementById("rw1");
+    console.log(rw);
+    let no_rw = 0;
+    rw.addEventListener("change", () => {
+      rwValue = rw.value;
+      const selectRT = document.getElementById("rt1");
+      selectRT.innerHTML = '<option value="">-- Pilih RT --</option>';
+
+      fetch(`/pengguna/verif-data-pengguna/select/${rwValue}`)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            // Memperbarui select list TPS dengan hasil yang diperoleh
+            data.forEach((rt) => {
+              const option = document.createElement("option");
+              option.value = rt.no;
+              option.textContent = "RT 0"+rt.no;
+
+              // Tambahkan elemen option ke dalam elemen select
+              selectRT.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+    });
+
+  </script>
+  <script>
+    var closeModalBtn = document.getElementById("closeModal");
+    var overlay = document.getElementById("overlay");
+    function openModal(){
+      var modal = document.getElementById("myModal");
+      var overlay = document.getElementById("overlay");
+
+      modal.style.display = "block";
+      overlay.style.display = "block";
+      const nik = document.getElementById("nik1").value;
+      const nama = document.getElementById("nama1").value;
+      const username = document.getElementById("username1").value;
+      const password = document.getElementById("password1").value;
+      const email = document.getElementById("email1").value;
+      const tanggallahir = document.getElementById("tanggallahir1").value;
+      const hp = document.getElementById("hp1").value;
+      const kelurahan = document.getElementById("kelurahan1").value;
+      const rw = document.getElementById("rw1").value;
+      const rt = document.getElementById("rt1").value;
+      const alamat = document.getElementById("alamat1").value;
+      const kelamin = document.getElementById("kelamin1").value;
+      
+      const nik1 = document.getElementById("nik").value = nik;
+      const nama1 = document.getElementById("nama").value = nama;
+      const username1 = document.getElementById("username").value = username;
+      const password1 = document.getElementById("password").value = password;
+      const email1 = document.getElementById("email").value = email;
+      const tanggallahir1 = document.getElementById("tanggallahir").value = tanggallahir;
+      const hp1 = document.getElementById("hp").value = hp;
+      const kelurahan1 = document.getElementById("kelurahan").value = kelurahan;
+      const rw1 = document.getElementById("rw").value = rw;
+      const rt1 = document.getElementById("rt").value = rt;
+      const alamat1 = document.getElementById("alamat").value = alamat;
+      const kelamin1 = document.getElementById("kelamin").value = kelamin;
+    }
+    closeModalBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", closeModal);
+    function closeModal() {
+      var modal = document.getElementById("myModal");
+      var overlay = document.getElementById("overlay");
+
+      modal.style.display = "none";
+      overlay.style.display = "none";
+    }
+  </script>
+  <script>
+    
+  </script>
+  
 </body>
