@@ -216,17 +216,40 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
       .update(passwordPemilih)
       .digest("base64");
 
-    // Simpan nama file ke dalam database
-    const query = `INSERT INTO pengguna (NIK, nama, username, password, email, tgl_lahir, no_hp, rw, rt, alamat, role, profile, id_kelurahan, kelamin) VALUES ('${NIKPemilih}', '${namaPemilih}', '${usernamePemilih}', '${hashed_pass}', '${emailPemilih}', '${tanggallahirPemilih}', '${noHPPemilih}', '${rwPemilih}', '${rtPemilih}', '${alamatPemilih}', 'Pengguna', '${fotoKTP}', 1, '${kelamin}')`;
-    await db.query(query);
+    
+    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${usernamePemilih}'`;
 
-    // Pindahkan file yang diupload ke direktori yang diinginkan
-    // const file = req.file;
-    // fs.renameSync(file.path, "public/assets/" + file.filename);
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        db.query(queryId, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
 
-    res.send(
-      "<script>alert('Berhasil mendaftarkan data'); window.location.href='/'</script>"
-    );
+    const resultPenggunaId = await getData();
+
+    if(resultPenggunaId){
+      res.send(
+        "<script>alert('Akun sudah terdaftar'); window.location.href='/register-data-pengguna'</script>"
+      );
+    }else{
+      // Simpan nama file ke dalam database
+      const query = `INSERT INTO pengguna (NIK, nama, username, password, email, tgl_lahir, no_hp, rw, rt, alamat, role, profile, id_kelurahan, kelamin) VALUES ('${NIKPemilih}', '${namaPemilih}', '${usernamePemilih}', '${hashed_pass}', '${emailPemilih}', '${tanggallahirPemilih}', '${noHPPemilih}', '${rwPemilih}', '${rtPemilih}', '${alamatPemilih}', 'Pengguna', '${fotoKTP}', 1, '${kelamin}')`;
+      await db.query(query);
+
+      // Pindahkan file yang diupload ke direktori yang diinginkan
+      // const file = req.file;
+      // fs.renameSync(file.path, "public/assets/" + file.filename);
+      res.send(
+        "<script>alert('Berhasil mendaftarkan data'); window.location.href='/'</script>"
+      );
+    }
+    
     db.release();
   } catch (error) {
     console.error("Terjadi kesalahan:", error);
