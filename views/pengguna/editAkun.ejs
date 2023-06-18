@@ -96,10 +96,17 @@
                   aria-hidden="true"
                 ></i>
               </div>
-              <div class="kartu-pemilu">
-                <label class="label-EditAkun-Pengguna" for="kartu-p">Kartu Pemilu</label>
-                <a class="cetak-kartu" href="/pengguna/kartu-pemilu">Cetak</a>
-              </div>
+              <% if (resultPenggunaId.status === null) { %>
+                <div class="kartu-pemilu">
+                  <label class="label-EditAkun-Pengguna" for="kartu-p">Kartu Pemilu</label>
+                  <a class="kartu-kosong" href="/pengguna/verif-data-pengguna">Tidak tersedia</a>
+                </div>
+              <% } else if (resultPenggunaId.status === 1) { %>
+                <div class="kartu-pemilu">
+                  <label class="label-EditAkun-Pengguna" for="kartu-p">Kartu Pemilu</label>
+                  <a class="cetak-kartu" href="/pengguna/kartu-pemilu">Cetak</a>
+                </div>
+              <% } %>
             </div>
             <button  id="submit-editAkun">Simpan</button>
         </form>
