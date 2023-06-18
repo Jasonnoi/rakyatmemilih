@@ -47,12 +47,36 @@ app.get("/", (req, res) => {
   //
   res.render("login");
 });
+app.get("/register-data-pengguna", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const selectRW = `SELECT * FROM rw `;
+
+    const getRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(selectRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const dataRW = await getRW();
+    res.render("register", { dataRW });
+    conn.release();
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 app.post("/", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  if(username && password){
+  if (username && password) {
     try {
       const conn = await dbConnect();
 
@@ -71,23 +95,22 @@ app.post("/", async (req, res) => {
         if (err) {
           console.error("Tidak dapat mengeksekusi query:", err);
           res.status(500).send("Tidak dapat mengeksekusi query");
-        }else{
+        } else {
           if (result.length > 0) {
             // Jika akun ditemukan, tambahkan session yang berisi nama akun
             req.session.username = result[0].username;
             //set cookie
-            res.cookie('usernameCookie', req.session.username);
+            res.cookie("usernameCookie", req.session.username);
             //
             res.redirect("pengguna"); // Redirect ke halaman utama
           } else {
             // Jika akun tidak ditemukan, kirimkan respon dengan pesan error
             res.send(
               "<script>alert('Data tidak ditemukan, silahkan signup terlebih dahulu'); window.location.href='/';</script>"
-            );;
+            );
           }
         }
       });
-
     } catch (error) {
       console.error("Tidak berhasil terhubung ke database:", err);
       res.status(500).send("Tidak berhasil terhubung ke database");
@@ -95,12 +118,12 @@ app.post("/", async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error(err);
     }
-    res.redirect('login'); // atau rute lain setelah logout
+    res.redirect("login"); // atau rute lain setelah logout
   });
 });
 
@@ -123,7 +146,7 @@ app.get("/register", (req, res) => {
 app.get("/pengguna/", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
-    const uPengguna = req.cookies.usernameCookie; 
+    const uPengguna = req.cookies.usernameCookie;
     const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
 
     const getData = () => {
@@ -209,7 +232,7 @@ app.get("/pengguna/verif-data-pengguna", checkAuth, async (req, res) => {
   }
 });
 
-app.get("/pengguna/verif-data-pengguna/select/:rw",checkAuth, async (req, res) => {
+app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
   try {
     const conn = await dbConnect();
     const idRw = req.params.rw;
