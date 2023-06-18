@@ -3,15 +3,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE-edge" />
   <meta name="viewport" content="width-device=width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/stylelogin.css" />
-
-  <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+  <link rel="stylesheet" href="/assets/stylelogin.css" />
 </head>
 <body>
   <div class="container">
@@ -20,17 +12,33 @@
       <h3 class="title">Sign In</h3>
       <form method="post" action="" class="text-input">
         <p>Username</p>
-        <input type="text" name="username" class="uname" placeholder="Username" required/>
+        <input
+          type="text"
+          name="username"
+          class="uname"
+          placeholder="Username"
+          required
+        />
         <p>Password</p>
         <div class="input-group" id="show_hide_password">
-          <input type="password" id="myPassword" name="password" class="pword" placeholder="Password" required/>
+          <input
+            type="password"
+            id="myPassword"
+            name="password"
+            class="pword"
+            placeholder="Password"
+            required
+          />
           <div class="input-group-addon">
-            <i id="toogle-pw" class="fa fa-eye-slash" aria-hidden="true" onclick="togglePasswordVisibility()"></i>
+            <i
+              id="toogle-pw"
+              class="fa fa-eye-slash"
+              aria-hidden="true"
+              onclick="togglePasswordVisibility()"
+            ></i>
           </div>
         </div>
-        <button class="Login">
-          Login
-        </button>
+        <button class="Login">Login</button>
       </form>
 
       <div class="Signup">
@@ -43,18 +51,17 @@
 
 <script>
   function togglePasswordVisibility() {
-  const passwordInput = document.getElementById("myPassword");
-  const toggle = document.getElementById("toogle-pw");
+    const passwordInput = document.getElementById("myPassword");
+    const toggle = document.getElementById("toogle-pw");
 
-  if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    toggle.classList.remove("fa-eye-slash");
-    toggle.classList.add("fa-eye");
-  } else {
-    passwordInput.type = "password";
-    toggle.classList.remove("fa-eye");
-    toggle.classList.add("fa-eye-slash");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      toggle.classList.remove("fa-eye-slash");
+      toggle.classList.add("fa-eye");
+    } else {
+      passwordInput.type = "password";
+      toggle.classList.remove("fa-eye");
+      toggle.classList.add("fa-eye-slash");
+    }
   }
-}
-
 </script>

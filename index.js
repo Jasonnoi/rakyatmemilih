@@ -20,7 +20,6 @@ const dirname = path.dirname(filename);
 
 //set view engine
 app.set("view engine", "ejs");
-
 // Mengatur direktori public sebagai direktori statis
 app.use(express.static(path.join(dirname, "public")));
 
@@ -28,6 +27,16 @@ app.use(express.static(path.join(dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
+
+app.use("/assets", (req, res, next) => {
+  res.status(403).send("Forbidden");
+});
+app.use("/images", (req, res, next) => {
+  res.status(403).send("Forbidden");
+});
+app.use("/Database", (req, res, next) => {
+  res.status(403).send("Forbidden");
+});
 
 //menggunakan session
 app.use(

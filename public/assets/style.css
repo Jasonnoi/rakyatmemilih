@@ -254,19 +254,19 @@ main h1 {
   border-radius: var(--card-radius);
 }
 .pdip {
-  background-image: url("./assets/ganjar2.png");
+  background-image: url("./ganjar2.png");
   background-size: cover;
   background-position: center;
   opacity: 0.8;
 }
 .nasdem {
-  background-image: url("./assets/anies.png");
+  background-image: url("./anies.png");
   background-size: cover;
   background-position: center;
   opacity: 0.8;
 }
 .gerindra {
-  background-image: url("./assets/prabowo.png");
+  background-image: url("./prabowo.png");
   background-size: cover;
   background-position: center;
   opacity: 0.8;
