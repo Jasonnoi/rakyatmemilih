@@ -3,6 +3,9 @@
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="/assets/styleregist.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" />
 </head>
 <body>
   <div class="container">
@@ -159,7 +162,7 @@
     </div>
   </div>
   <div id="overlay"></div>
-  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  
   <script>
     const rw = document.getElementById("rw1");
     console.log(rw);
@@ -235,7 +238,26 @@
     }
   </script>
   <script>
-    
+    $(document).ready(function() {
+      $('#verifikasiButton').click(function(e) {
+        e.preventDefault(); // Mencegah pengiriman form secara otomatis
+
+        Swal.fire({
+          title: 'Konfirmasi',
+          text: 'Apakah Anda yakin ingin melakukan sign up?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Ya',
+          cancelButtonText: 'Tidak'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Jika pengguna mengonfirmasi, submit form
+            $('#form-pemilih').submit();
+          }
+        });
+      });
+    });
   </script>
+
   
 </body>

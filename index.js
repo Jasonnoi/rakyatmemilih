@@ -1,6 +1,6 @@
 import express, { query } from "express";
 import { fileURLToPath } from "url";
-import  qrcode from "qrcode";
+import qrcode from "qrcode";
 import path from "path";
 import dbConnect from "./Database/connection.js";
 import paginate from "express-paginate";
@@ -12,6 +12,7 @@ import fs from "fs";
 import session from "express-session";
 import crypto from "crypto";
 import cookieParser from "cookie-parser";
+import Swal from "sweetalert2";
 
 const port = 3000;
 const app = express();
@@ -49,14 +50,14 @@ app.use(
 
 app.get("/", (req, res) => {
   //clear cookie ketika logout
-  res.clearCookie('usernameCookie');
-  
+  res.clearCookie("usernameCookie");
+
   req.session.destroy((err) => {
     if (err) {
       console.error(err);
     }
   });
-  res.render("login");
+  res.render("login", { data: "" });
 });
 
 app.get("/register-data-pengguna", async (req, res) => {
@@ -115,27 +116,25 @@ app.post("/", async (req, res) => {
             res.cookie("roleCookie", req.session.role);
             //
             res.redirect("pengguna"); // Redirect ke halaman utama
-          } else if (result.length > 0 && result[0].role == "admin"){ //jika user adalah admin
+          } else if (result.length > 0 && result[0].role == "admin") {
+            //jika user adalah admin
             req.session.username = result[0].username;
             req.session.role = result[0].role;
             res.cookie("usernameCookie", req.session.username);
             res.cookie("roleCookie", req.session.role);
             res.redirect("admin"); // Redirect ke halaman utama
-          } else if(result.length > 0 && result[0].role == "lurah"){
+          } else if (result.length > 0 && result[0].role == "lurah") {
             req.session.username = result[0].username;
             req.session.role = result[0].role;
             res.cookie("usernameCookie", req.session.username);
             res.cookie("roleCookie", req.session.role);
             res.redirect("lurah"); // Redirect ke halaman utama
-          }else {
-            // Jika akun tidak ditemukan, kirimkan respon dengan pesan error
-            res.send(
-              "<script>alert('username atau password anda salah, Silahkan periksa kembali !'); window.location.href='/';</script>"
-            );
-            console.log(hashed_pass);
+          } else {
+            res.render("login", { data: "tidak ditemukan" });
           }
         }
       });
+      conn.release();
     } catch (error) {
       console.error("Tidak berhasil terhubung ke database:", err);
       res.status(500).send("Tidak berhasil terhubung ke database");
@@ -143,10 +142,13 @@ app.post("/", async (req, res) => {
   }
 });
 
-// Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users 
+// Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users
 //PENGGUNA
 const checkAuthPengguna = (req, res, next) => {
-  if ((req.session.username || req.cookies.usernameCookie) && req.cookies.roleCookie == "pengguna") {
+  if (
+    (req.session.username || req.cookies.usernameCookie) &&
+    req.cookies.roleCookie == "pengguna"
+  ) {
     // Jika session username ada, lanjutkan ke halaman users
     next();
   } else {
@@ -155,10 +157,13 @@ const checkAuthPengguna = (req, res, next) => {
   }
 };
 
-// Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users 
+// Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users
 //ADMIN
 const checkAuthAdmin = (req, res, next) => {
-  if ((req.session.username || req.cookies.usernameCookie) && req.cookies.roleCookie == "admin") {
+  if (
+    (req.session.username || req.cookies.usernameCookie) &&
+    req.cookies.roleCookie == "admin"
+  ) {
     // Jika session username ada, lanjutkan ke halaman users
     next();
   } else {
@@ -167,10 +172,13 @@ const checkAuthAdmin = (req, res, next) => {
   }
 };
 
-// Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users 
+// Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users
 //LURAH
 const checkAuthLurah = (req, res, next) => {
-  if ((req.session.username || req.cookies.usernameCookie) && req.cookies.roleCookie == "lurah") {
+  if (
+    (req.session.username || req.cookies.usernameCookie) &&
+    req.cookies.roleCookie == "lurah"
+  ) {
     // Jika session username ada, lanjutkan ke halaman users
     next();
   } else {
@@ -205,12 +213,11 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
     const kelamin = req.body.kelamin;
     const fotoKTP = req.file.filename; // Mendapatkan nama file yang diupload
 
-
     // Mengubah password menjadi hash menggunakan algoritma SHA-256
     const hashed_pass = crypto
-    .createHash("sha256")
-    .update(passwordPemilih)
-    .digest("base64");
+      .createHash("sha256")
+      .update(passwordPemilih)
+      .digest("base64");
 
     // Simpan nama file ke dalam database
     const query = `INSERT INTO pengguna (NIK, nama, username, password, email, tgl_lahir, no_hp, rw, rt, alamat, role, profile, id_kelurahan, kelamin) VALUES ('${NIKPemilih}', '${namaPemilih}', '${usernamePemilih}', '${hashed_pass}', '${emailPemilih}', '${tanggallahirPemilih}', '${noHPPemilih}', '${rwPemilih}', '${rtPemilih}', '${alamatPemilih}', 'Pengguna', '${fotoKTP}', 1, '${kelamin}')`;
@@ -230,8 +237,6 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
   }
 });
 
-
-
 // Routing untuk pengguna
 app.get("/pengguna/", checkAuthPengguna, async (req, res) => {
   try {
@@ -250,7 +255,7 @@ app.get("/pengguna/", checkAuthPengguna, async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getData();
 
     res.render("pengguna/beranda", {
@@ -264,63 +269,67 @@ app.get("/pengguna/", checkAuthPengguna, async (req, res) => {
   }
 });
 
-app.get("/pengguna/verif-data-pengguna", checkAuthPengguna, async (req, res) => {
-  try {
-    const conn = await dbConnect();
-    const uPengguna = req.cookies.usernameCookie;
-    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+app.get(
+  "/pengguna/verif-data-pengguna",
+  checkAuthPengguna,
+  async (req, res) => {
+    try {
+      const conn = await dbConnect();
+      const uPengguna = req.cookies.usernameCookie;
+      const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
 
-    const getData = () => {
-      return new Promise((resolve, reject) => {
-        conn.query(queryId, (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result[0]);
-          }
+      const getData = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(queryId, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
         });
-      });
-    };
+      };
 
-    const resultPenggunaId = await getData();
-    // membuat format date
-    const dateStr = resultPenggunaId.tgl_lahir;
-    const dateObj = new Date(dateStr);
+      const resultPenggunaId = await getData();
+      // membuat format date
+      const dateStr = resultPenggunaId.tgl_lahir;
+      const dateObj = new Date(dateStr);
 
-    const tahun = dateObj.getFullYear();
-    const bulan = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const hari = String(dateObj.getDate()).padStart(2, "0");
-    const formattedDate = `${tahun}-${bulan}-${hari}`;
+      const tahun = dateObj.getFullYear();
+      const bulan = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const hari = String(dateObj.getDate()).padStart(2, "0");
+      const formattedDate = `${tahun}-${bulan}-${hari}`;
 
-    const idKelurahan = resultPenggunaId.id_kelurahan;
-    const queryRW = `SELECT * FROM rw WHERE id_kelurahan = ${idKelurahan}`;
-    const getRW = () => {
-      return new Promise((resolve, reject) => {
-        conn.query(queryRW, (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
+      const idKelurahan = resultPenggunaId.id_kelurahan;
+      const queryRW = `SELECT * FROM rw WHERE id_kelurahan = ${idKelurahan}`;
+      const getRW = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(queryRW, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
         });
+      };
+
+      const resultRW = await getRW();
+
+      res.render("pengguna/verifikasiData", {
+        resultPenggunaId,
+        formattedDate,
+        resultRW,
+        active: "verifikasiData",
       });
-    };
 
-    const resultRW = await getRW();
-
-    res.render("pengguna/verifikasiData", {
-      resultPenggunaId,
-      formattedDate,
-      resultRW,
-      active: "verifikasiData",
-    });
-
-    conn.release();
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Database connection error");
+      conn.release();
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Database connection error");
+    }
   }
-});
+);
 
 app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
   try {
@@ -353,25 +362,28 @@ const storageKtp = multer.diskStorage({
 });
 const uploadKtp = multer({ storage: storageKtp });
 
-app.post("/pengguna/verif-data-pengguna",uploadKtp.single("fotoKtp"), async (req, res) => {
-  try {
-    const conn = await dbConnect();
-    const isiForm = req.body;
+app.post(
+  "/pengguna/verif-data-pengguna",
+  uploadKtp.single("fotoKtp"),
+  async (req, res) => {
+    try {
+      const conn = await dbConnect();
+      const isiForm = req.body;
 
-    //membuat input waktu sekarang
-    const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
-    const options = { timeZone: "Asia/Jakarta" };
-    const jakartaDate = now.toLocaleString("en-US", options).split(",")[0]; // Mendapatkan tanggal dalam format lokal Jakarta
+      //membuat input waktu sekarang
+      const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
+      const options = { timeZone: "Asia/Jakarta" };
+      const jakartaDate = now.toLocaleString("en-US", options).split(",")[0]; // Mendapatkan tanggal dalam format lokal Jakarta
 
-    // Ubah format tanggal menjadi "YYYY-MM-DD"
-    const [month, day, year] = jakartaDate.split("/");
-    const mysqlDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
-      2,
-      "0"
-    )}`;
+      // Ubah format tanggal menjadi "YYYY-MM-DD"
+      const [month, day, year] = jakartaDate.split("/");
+      const mysqlDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+        2,
+        "0"
+      )}`;
 
-    //update query di tabel pengguna
-    const queryUpdate = `UPDATE pengguna SET 
+      //update query di tabel pengguna
+      const queryUpdate = `UPDATE pengguna SET 
                           NIK = '${isiForm.nik}',
                           nama = '${isiForm.nama}',
                           tgl_lahir = '${isiForm.tgl_lahir}',
@@ -381,41 +393,43 @@ app.post("/pengguna/verif-data-pengguna",uploadKtp.single("fotoKtp"), async (req
                           rw = '${isiForm.RW}',
                           rt = '${isiForm.RT}' WHERE id = '${isiForm.id}'`;
 
-    conn.query(queryUpdate, (err, result) => {
-      if (err) {
-        console.error("Tidak dapat mengeksekusi query update:", err);
-        res.send(
-          "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
-        );
-      } else {
-        const fotoKTP = req.file.filename;
-        const queryInsert = `INSERT INTO tabel_verifikasi 
+      conn.query(queryUpdate, (err, result) => {
+        if (err) {
+          console.error("Tidak dapat mengeksekusi query update:", err);
+          res.send(
+            "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
+          );
+        } else {
+          const fotoKTP = req.file.filename;
+          const queryInsert = `INSERT INTO tabel_verifikasi 
                             (id_pengguna, foto_ktp, tanggal) VALUES
                             (${isiForm.id},  '${fotoKTP}', '${mysqlDate}')`;
-        conn.query(queryInsert, (err, resultInsert) => {
-          if (err) {
-            console.error("Tidak dapat mengeksekusi query insert:", err);
-            res.send(
-              "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
-            );
-          } else {
-            const file = req.file;
-            fs.renameSync(file.path, "imagesKtp/" + file.filename);
-            res.send(
-              "<script>alert('Berhasil verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
-            );
-          }
-        });
-      }
-    });
-    conn.release();
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Database connection error");
+          conn.query(queryInsert, (err, resultInsert) => {
+            if (err) {
+              console.error("Tidak dapat mengeksekusi query insert:", err);
+              res.send(
+                "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
+              );
+            } else {
+              const file = req.file;
+              fs.renameSync(file.path, "imagesKtp/" + file.filename);
+              res.json({
+                message: "Berhasil verifikasi data",
+                redirect: "/pengguna/verif-data-pengguna",
+              });
+            }
+          });
+        }
+      });
+      conn.release();
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Database connection error");
+    }
   }
-});
+);
 
-app.get("/pengguna/edit-akun",checkAuthPengguna, async (req, res) => {
+app.get("/pengguna/edit-akun", checkAuthPengguna, async (req, res) => {
   try {
     const conn = await dbConnect();
     const uPengguna = req.cookies.usernameCookie;
@@ -456,36 +470,39 @@ app.get("/pengguna/edit-akun",checkAuthPengguna, async (req, res) => {
 });
 
 const ubahProfile = multer({ storage: storage });
-app.post("/pengguna/edit-akun", ubahProfile.single("ubahProfile"), async (req, res) => {
-  try {
-    const conn = await dbConnect();
-    const uPengguna = req.cookies.usernameCookie;
-    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+app.post(
+  "/pengguna/edit-akun",
+  ubahProfile.single("ubahProfile"),
+  async (req, res) => {
+    try {
+      const conn = await dbConnect();
+      const uPengguna = req.cookies.usernameCookie;
+      const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
 
-    const getData = () => {
-      return new Promise((resolve, reject) => {
-        conn.query(queryId, (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result[0]);
-          }
+      const getData = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(queryId, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
         });
-      });
-    };
+      };
 
-    const resultPenggunaId = await getData();
-    const isiForm = req.body;
-    let profileBaru;
-    
-    if(req.file === undefined){
-      profileBaru = resultPenggunaId.profile;
-    }else{
-      profileBaru = req.file.filename;
-    }
-    
-    //update query di tabel pengguna
-    const queryUpdate = `UPDATE pengguna SET 
+      const resultPenggunaId = await getData();
+      const isiForm = req.body;
+      let profileBaru;
+
+      if (req.file === undefined) {
+        profileBaru = resultPenggunaId.profile;
+      } else {
+        profileBaru = req.file.filename;
+      }
+
+      //update query di tabel pengguna
+      const queryUpdate = `UPDATE pengguna SET 
                           nama = '${isiForm.nama}',
                           tgl_lahir = '${isiForm.tgl_lahir}',
                           kelamin = '${isiForm.kelamin}',
@@ -493,28 +510,28 @@ app.post("/pengguna/edit-akun", ubahProfile.single("ubahProfile"), async (req, r
                           email = '${isiForm.email}',
                           profile = '${profileBaru}' WHERE username = '${uPengguna}'`;
 
-    conn.query(queryUpdate, (err, result) => {
-      if (err) {
-        console.error("Tidak dapat mengeksekusi query update:", err);
-        res.send(
-          "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
-        );
-      } else {
-        console.log(profileBaru);
-        console.log(isiForm.ubahProfile);
-        res.send(
-          "<script>alert('Data berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
-        );
-      }
-    });
-    conn.release();
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Database connection error");
+      conn.query(queryUpdate, (err, result) => {
+        if (err) {
+          console.error("Tidak dapat mengeksekusi query update:", err);
+          res.send(
+            "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
+          );
+        } else {
+          res.json({
+            message: "Berhasil verifikasi data",
+            redirect: "/pengguna/edit-akun",
+          });
+        }
+      });
+      conn.release();
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Database connection error");
+    }
   }
-});
+);
 
-app.get("/pengguna/kartu-pemilu",checkAuthPengguna, async (req, res) => {
+app.get("/pengguna/kartu-pemilu", checkAuthPengguna, async (req, res) => {
   try {
     const conn = await dbConnect();
     const uPengguna = req.cookies.usernameCookie;
@@ -551,7 +568,7 @@ app.get("/pengguna/kartu-pemilu",checkAuthPengguna, async (req, res) => {
   }
 });
 
-app.get("/pengguna/barcode-pemilu",checkAuthPengguna, async (req, res) => {
+app.get("/pengguna/barcode-pemilu", checkAuthPengguna, async (req, res) => {
   try {
     const conn = await dbConnect();
     const uPengguna = req.cookies.usernameCookie;
@@ -605,7 +622,7 @@ app.get("/admin/", checkAuthAdmin, async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getData();
 
     const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
@@ -630,7 +647,11 @@ app.get("/admin/", checkAuthAdmin, async (req, res) => {
     };
     const dataNow = await getTabel1();
     console.log(dataNow);
-    res.render("admin/beranda", { resultPenggunaId,dataNow, active: "beranda" });
+    res.render("admin/beranda", {
+      resultPenggunaId,
+      dataNow,
+      active: "beranda",
+    });
     conn.release();
   } catch (err) {
     console.error(err.message);
@@ -723,7 +744,7 @@ app.get("/admin/verifikasi-data-pemilih", checkAuthAdmin, async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getData();
 
     let query = `SELECT * FROM view_verifikasi_pengguna`;
@@ -812,7 +833,7 @@ app.get("/admin/kelola-tps", checkAuthAdmin, async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getDataid();
 
     const queryTPS = `SELECT * FROM tps `;
@@ -842,7 +863,12 @@ app.get("/admin/kelola-tps", checkAuthAdmin, async (req, res) => {
 
     const dataTPS = await getData();
     const getRW = await dataRW();
-    res.render("admin/kelolatps", { getRW, dataTPS, resultPenggunaId, active: "tps" });
+    res.render("admin/kelolatps", {
+      getRW,
+      dataTPS,
+      resultPenggunaId,
+      active: "tps",
+    });
     conn.release();
   } catch (err) {
     res.status(500).send("Database connection error");
@@ -866,7 +892,7 @@ app.get("/admin/kelola-rw", checkAuthAdmin, async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getData();
 
     const selectDataRW = `SELECT * FROM rw`;
@@ -926,68 +952,111 @@ app.get("/admin/kelola-rw", checkAuthAdmin, async (req, res) => {
     res.status(500).send("Database connection error");
   }
 });
-app.get("/admin/kelola-rt", checkAuthAdmin, paginate.middleware(10, 50), async (req, res) => {
-  try {
-    const conn = await dbConnect();
+app.get(
+  "/admin/kelola-rt",
+  checkAuthAdmin,
+  paginate.middleware(10, 50),
+  async (req, res) => {
+    try {
+      const conn = await dbConnect();
 
-    const uPengguna = req.cookies.usernameCookie;
-    const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+      const uPengguna = req.cookies.usernameCookie;
+      const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
 
-    const getData = () => {
-      return new Promise((resolve, reject) => {
-        conn.query(queryId, (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result[0]);
-          }
+      const getData = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(queryId, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
         });
-      });
-    };
-    
-    const resultPenggunaId = await getData();
+      };
 
-    const selectDataRW = `SELECT * FROM rt `;
-    const selectRW = `SELECT * FROM rw `;
+      const resultPenggunaId = await getData();
 
-    const countRW = `SELECT count(no) as jumRW FROM rt`;
-    const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
+      const selectDataRW = `SELECT * FROM rt `;
+      const selectRW = `SELECT * FROM rw `;
 
-    // Mendapatkan nilai pencarian dari URL
-    const searchQuery = req.query.querySearch;
-    let selectDataRWWithSearch;
+      const countRW = `SELECT count(no) as jumRW FROM rt`;
+      const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
 
-    if (searchQuery) {
-      if (searchQuery.toUpperCase().includes("RW")) {
-        const modified = searchQuery.substring(4);
-        console.log(modified);
-        selectDataRWWithSearch = `
+      // Mendapatkan nilai pencarian dari URL
+      const searchQuery = req.query.querySearch;
+      let selectDataRWWithSearch;
+
+      if (searchQuery) {
+        if (searchQuery.toUpperCase().includes("RW")) {
+          const modified = searchQuery.substring(4);
+          console.log(modified);
+          selectDataRWWithSearch = `
           ${selectDataRW}
           WHERE no_rw LIKE '%${modified}%'
         `;
-      } else if (searchQuery.toUpperCase().includes("RT")) {
-        const modified = searchQuery.substring(4);
-        selectDataRWWithSearch = `
+        } else if (searchQuery.toUpperCase().includes("RT")) {
+          const modified = searchQuery.substring(4);
+          selectDataRWWithSearch = `
           ${selectDataRW}
           WHERE no LIKE '%${modified}%'
         `;
-      } else {
-        const modified = searchQuery.substring(4);
-        selectDataRWWithSearch = `
+        } else {
+          const modified = searchQuery.substring(4);
+          selectDataRWWithSearch = `
           ${selectDataRW}
           WHERE no LIKE '%${modified}%'
             OR no_rw LIKE '%${modified}%'
         `;
+        }
+      } else {
+        selectDataRWWithSearch = selectDataRW;
       }
-    } else {
-      selectDataRWWithSearch = selectDataRW;
-    }
-    let getRW;
+      let getRW;
 
-    if (typeof searchQuery === "undefined") {
-      getRW = () => {
+      if (typeof searchQuery === "undefined") {
+        getRW = () => {
+          return new Promise((resolve, reject) => {
+            conn.query(selectDataRW, (err, result) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(result);
+              }
+            });
+          });
+        };
+      } else {
+        getRW = () => {
+          return new Promise((resolve, reject) => {
+            conn.query(selectDataRWWithSearch, (err, result) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(result);
+              }
+            });
+          });
+        };
+      }
+
+      // Menggabungkan pencarian ke dalam query SQL
+
+      const getCountRW = () => {
         return new Promise((resolve, reject) => {
-          conn.query(selectDataRW, (err, result) => {
+          conn.query(countRW, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
+        });
+      };
+
+      const getCountTPS = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(countTPS, (err, result) => {
             if (err) {
               reject(err);
             } else {
@@ -996,10 +1065,10 @@ app.get("/admin/kelola-rt", checkAuthAdmin, paginate.middleware(10, 50), async (
           });
         });
       };
-    } else {
-      getRW = () => {
+
+      const data_rw = () => {
         return new Promise((resolve, reject) => {
-          conn.query(selectDataRWWithSearch, (err, result) => {
+          conn.query(selectRW, (err, result) => {
             if (err) {
               reject(err);
             } else {
@@ -1008,79 +1077,41 @@ app.get("/admin/kelola-rt", checkAuthAdmin, paginate.middleware(10, 50), async (
           });
         });
       };
+      const [totalTPS, dataRW, coun_rw, list_rw] = await Promise.all([
+        getCountTPS(),
+        getRW(),
+        getCountRW(),
+        data_rw(),
+      ]);
+
+      const itemCount = dataRW.length;
+      const limit = 10; // Set nilai limit menjadi 10
+      const pageCount = Math.ceil(itemCount / limit);
+      const currentPage = parseInt(req.query.page) || 1;
+      const offset = (currentPage - 1) * limit; // Hitung offset berdasarkan halaman saat ini
+      const limitedDataRW = dataRW.slice(offset, offset + limit); // Batasi data yang ditampilkan sesuai limit dan offset
+      const pages = paginate.getArrayPages(req)(3, pageCount, currentPage);
+      console.log(pageCount, currentPage, itemCount, limit);
+      res.render("admin/kelolart", {
+        totalTPS,
+        dataRW: limitedDataRW, // Gunakan data yang telah dibatasi sesuai limit
+        coun_rw,
+        active: "kelolart",
+        pageCount,
+        itemCount,
+        pages,
+        list_rw,
+        resultPenggunaId,
+        current: currentPage,
+      });
+
+      conn.release();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Database connection error");
     }
-
-    // Menggabungkan pencarian ke dalam query SQL
-
-    const getCountRW = () => {
-      return new Promise((resolve, reject) => {
-        conn.query(countRW, (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result[0]);
-          }
-        });
-      });
-    };
-
-    const getCountTPS = () => {
-      return new Promise((resolve, reject) => {
-        conn.query(countTPS, (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        });
-      });
-    };
-
-    const data_rw = () => {
-      return new Promise((resolve, reject) => {
-        conn.query(selectRW, (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        });
-      });
-    };
-    const [totalTPS, dataRW, coun_rw, list_rw] = await Promise.all([
-      getCountTPS(),
-      getRW(),
-      getCountRW(),
-      data_rw(),
-    ]);
-
-    const itemCount = dataRW.length;
-    const limit = 10; // Set nilai limit menjadi 10
-    const pageCount = Math.ceil(itemCount / limit);
-    const currentPage = parseInt(req.query.page) || 1;
-    const offset = (currentPage - 1) * limit; // Hitung offset berdasarkan halaman saat ini
-    const limitedDataRW = dataRW.slice(offset, offset + limit); // Batasi data yang ditampilkan sesuai limit dan offset
-    const pages = paginate.getArrayPages(req)(3, pageCount, currentPage);
-    console.log(pageCount, currentPage, itemCount, limit);
-    res.render("admin/kelolart", {
-      totalTPS,
-      dataRW: limitedDataRW, // Gunakan data yang telah dibatasi sesuai limit
-      coun_rw,
-      active: "kelolart",
-      pageCount,
-      itemCount,
-      pages,
-      list_rw,
-      resultPenggunaId,
-      current: currentPage,
-    });
-
-    conn.release();
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Database connection error");
   }
-});
+);
 
 // Pozt Untuk admin
 app.post("/hapus-data", async (req, res) => {
@@ -1114,9 +1145,10 @@ app.post("/tambah-rw", async (req, res) => {
         );
       } else {
         console.log("Berhasil Memasukan rw");
-        res.send(
-          "<script>alert('Berhasil Memasukan rw'); window.location.href='admin/kelola-rw';</script>"
-        );
+        res.json({
+          message: "Berhasil verifikasi data",
+          redirect: "/admin/kelola-rw",
+        });
       }
     });
     conn.release();
@@ -1136,10 +1168,10 @@ app.post("/tambah-rt", async (req, res) => {
           "<script>alert('Gagal Memasukan rt'); window.location.href='admin/kelola-rt';</script>"
         );
       } else {
-        console.log("Berhasil Memasukan rt");
-        res.send(
-          "<script>alert('Berhasil Memasukan rt'); window.location.href='admin/kelola-rt';</script>"
-        );
+        res.json({
+          message: "Berhasil verifikasi data",
+          redirect: "/admin/kelola-rt",
+        });
       }
     });
     conn.release();
@@ -1171,10 +1203,10 @@ app.post("/verif-data", async (req, res) => {
             "<script>alert('Gagal verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
           );
         } else {
-          console.log("Berhasil verifikasi data");
-          res.send(
-            "<script>alert('Berhasil verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
-          );
+          res.json({
+            message: "Berhasil verifikasi data",
+            redirect: "/admin/verifikasi-data-pemilih",
+          });
         }
       });
     }
@@ -1196,9 +1228,10 @@ app.post("/tambah-tps", async (req, res) => {
       );
     } else {
       console.log("Berhasil Tambah TPS");
-      res.send(
-        "<script>alert('Berhasil Tambah TPS'); window.location.href='admin/kelola-tps';</script>"
-      );
+      res.json({
+        message: "Berhasil verifikasi data",
+        redirect: "/admin/kelola-tps",
+      });
     }
   });
 });
@@ -1758,7 +1791,7 @@ app.get("/lurah", checkAuthLurah, async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getData();
 
     let query = `SELECT * FROM view_pilih_saksi`;
@@ -1817,7 +1850,7 @@ app.get("/lurah/hasil-distribusi-tps", checkAuthLurah, async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getDataid();
 
     const queryTPS = `SELECT * FROM tps `;
@@ -1847,7 +1880,12 @@ app.get("/lurah/hasil-distribusi-tps", checkAuthLurah, async (req, res) => {
 
     const dataTPS = await getData();
     const getRW = await dataRW();
-    res.render("lurah/kelolatps", { getRW, dataTPS,resultPenggunaId, active: "tps" });
+    res.render("lurah/kelolatps", {
+      getRW,
+      dataTPS,
+      resultPenggunaId,
+      active: "tps",
+    });
     conn.release();
   } catch (err) {
     res.status(500).send("Database connection error");
@@ -1871,7 +1909,7 @@ app.get("/lurah/hasil-distribusi-rw", async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getData();
 
     const selectDataRW = `SELECT * FROM rw`;
@@ -1933,7 +1971,8 @@ app.get("/lurah/hasil-distribusi-rw", async (req, res) => {
 });
 
 app.get(
-  "/lurah/distribusi-rt", checkAuthLurah,
+  "/lurah/distribusi-rt",
+  checkAuthLurah,
   paginate.middleware(10, 50),
   async (req, res) => {
     try {
@@ -1953,7 +1992,7 @@ app.get(
           });
         });
       };
-      
+
       const resultPenggunaId = await getData();
 
       const selectDataRW = `SELECT * FROM rt `;
@@ -2105,10 +2144,10 @@ app.post("/pilih-saksi", async (req, res) => {
           "<script>alert('Gagal Menjadikan Saksi'); window.location.href='/lurah';</script>"
         );
       } else {
-        console.log("Berhasil Menjadikan Saksi");
-        res.send(
-          "<script>alert('Berhasil Menjadikan Saksi'); window.location.href='/lurah';</script>"
-        );
+        res.json({
+          message: "Berhasil verifikasi data",
+          redirect: "/lurah",
+        });
       }
     });
     conn.release();

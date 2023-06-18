@@ -16,7 +16,11 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" />
     <title>Halaman verifikasi data pengguna</title>
+   
   </head>
   <body>
     <%- include('./layout/navbar.ejs') %>
@@ -146,7 +150,7 @@
               </label>
             </div>
           </section>
-          <button name="submit" id="submit-Verif-Pengguna">Simpan</button>
+          <button  id="submit-Verif-Pengguna">Simpan</button>
         </form>
         
       </div>
@@ -181,4 +185,57 @@ rw.addEventListener("change", () => {
         console.error("Error:", error);
       });
   });
+
+</script>
+<script>
+  $(document).ready(function() {
+  $('#form-Verif-Pengguna').submit(function(e) {
+    e.preventDefault(); // Mencegah pengiriman form secara otomatis
+
+    Swal.fire({
+      title: 'Konfirmasi',
+      text: 'Apakah Anda yakin untuk mengajukan verifikasi?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Tidak',
+      customClass: {
+        confirmButton: 'swal-button-yes',
+        cancelButton: 'swal-button-no'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Jika pengguna mengonfirmasi, submit form menggunakan AJAX
+        $.ajax({
+          type: 'POST',
+          url: '/pengguna/verif-data-pengguna',
+          dataType: 'json',
+          data: $('#form-Verif-Pengguna').serialize(),
+          success: function(response) {
+            console.log(response.redirect);
+            Swal.fire({
+              title: 'Berhasil Mengajukan Verifikasi',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              willClose: () => {
+                console.log(response.redirect);
+                window.location.href = response.redirect;
+              }
+            });
+          },
+          error: function() {
+            Swal.fire({
+              title: 'Gagal verifikasi data',
+              icon: 'error',
+              text: 'Terjadi kesalahan saat mengajukan verifikasi.'
+            });
+          }
+        });
+      }
+    });
+  });
+});
+
 </script>

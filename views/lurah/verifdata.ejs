@@ -13,6 +13,16 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+     <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" />
     <title>Document</title>
   </head>
   <body>
@@ -77,7 +87,7 @@
       <div class="modal-content">
         <span id="closeModal" class="close">&times;</span>
         <h2>Jadikan Saksi</h2>
-        <form method="post" id="form-pemilih">
+        <form  id="form-pemilih">
           <input type="text" name="idPemilih" id="idPemilih" value="" hidden>
           <div class="form-group">
             <label for="nama">Nama Pemilih</label>
@@ -203,11 +213,6 @@
             const form = document.getElementById("form-pemilih");
 
             // Menambahkan event listener ke tombol Verifikasi
-            verifikasiButton.addEventListener("click", () => {
-              form.action = "/pilih-saksi"; // Mengubah action ke '/verif-data'
-              form.submit(); // Mengirimkan permintaan POST
-            });
-
             // Menambahkan event listener ke tombol Tolak Data
             
 
@@ -237,5 +242,58 @@
       }
     </script>
     <script src="/assets/script.js"></script>
+
+<script>
+  $(document).ready(function() {
+  $('#form-pemilih').submit(function(e) {
+    e.preventDefault(); // Mencegah pengiriman form secara otomatis
+
+    Swal.fire({
+      title: 'Konfirmasi',
+      text: 'Apakah Anda yakin untuk menyimpan data?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Tidak',
+      customClass: {
+        confirmButton: 'swal-button-yes',
+        cancelButton: 'swal-button-no'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Jika pengguna mengonfirmasi, submit form menggunakan AJAX
+        $.ajax({
+          type: 'POST',
+          url: '/pilih-saksi',
+          dataType: 'json',
+          data: $('#form-pemilih').serialize(),
+          success: function(response) {
+            console.log(response.redirect);
+            Swal.fire({
+              title: 'Berhasil Menjadi Saksi',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              willClose: () => {
+                console.log(response.redirect);
+                window.location.href = response.redirect;
+              }
+            });
+          },
+          error: function() {
+            Swal.fire({
+              title: 'Gagal verifikasi data',
+              icon: 'error',
+              text: 'Terjadi kesalahan saat mengajukan verifikasi.'
+            });
+          }
+        });
+      }
+    });
+  });
+});
+
+</script>
   </body>
 </html>

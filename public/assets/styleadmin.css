@@ -25,6 +25,18 @@ body {
   height: 100vh;
   background-color: var(--color-bg);
 }
+.swal-button-yes {
+  background-color: rgba(51, 191, 65, 0.682) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 12px !important; ;
+}
+.swal-button-no {
+  background-color: rgb(197, 63, 59) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 12px !important; ;
+}
 .hamburger {
   position: absolute;
   display: none;
