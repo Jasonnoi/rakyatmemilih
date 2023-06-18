@@ -13,6 +13,9 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" />
     <title>Document</title>
     <style>
     .pagination {
@@ -117,7 +120,7 @@
         <span id="closeModal" class="close">&times;</span>
         <h2>Tambah Data RT</h2>
        
-        <form method="post" action="/tambah-rt">
+        <form id="tambah-rt">
             <div class="form-group">
             <label for="RW">Pilih RW</label>
             <select id="RW" name="RW">
@@ -191,5 +194,57 @@
         overlay.style.display = "none";
       }
     </script>
+     <script>
+  $(document).ready(function() {
+  $('#tambah-rt').submit(function(e) {
+    e.preventDefault(); // Mencegah pengiriman form secara otomatis
+
+    Swal.fire({
+      title: 'Konfirmasi',
+      text: 'Apakah Anda yakin untuk menambahkan RT?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Tidak',
+      customClass: {
+        confirmButton: 'swal-button-yes',
+        cancelButton: 'swal-button-no'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Jika pengguna mengonfirmasi, submit form menggunakan AJAX
+        $.ajax({
+          type: 'POST',
+          url: '/tambah-rt',
+          dataType: 'json',
+          data: $('#tambah-rt').serialize(),
+          success: function(response) {
+            console.log(response.redirect);
+            Swal.fire({
+              title: 'Data RT Berhasil di Tambahkan',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              willClose: () => {
+                console.log(response.redirect);
+                window.location.href = response.redirect;
+              }
+            });
+          },
+          error: function() {
+            Swal.fire({
+              title: 'Gagal menambahkan RT',
+              icon: 'error',
+              text: 'Terjadi kesalahan saat menambahkan RT.'
+            });
+          }
+        });
+      }
+    });
+  });
+});
+
+</script>
   </body>
 </html>

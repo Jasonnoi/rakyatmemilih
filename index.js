@@ -12,6 +12,7 @@ import fs from "fs";
 import session from "express-session";
 import crypto from "crypto";
 import cookieParser from "cookie-parser";
+import Swal from "sweetalert2";
 
 const port = 3000;
 const app = express();
@@ -52,14 +53,14 @@ app.use(
 
 app.get("/", (req, res) => {
   //clear cookie ketika logout
-  res.clearCookie('usernameCookie');
-  
+  res.clearCookie("usernameCookie");
+
   req.session.destroy((err) => {
     if (err) {
       console.error(err);
     }
   });
-  res.render("login");
+  res.render("login", { data: "" });
 });
 
 app.get("/register-data-pengguna", async (req, res) => {
@@ -119,13 +120,11 @@ app.post("/", async (req, res) => {
             //
             res.redirect("pengguna"); // Redirect ke halaman utama
           } else {
-            // Jika akun tidak ditemukan, kirimkan respon dengan pesan error
-            res.send(
-              "<script>alert('Data tidak ditemukan, silahkan signup terlebih dahulu'); window.location.href='/';</script>"
-            );
+            res.render("login", { data: "tidak ditemukan" });
           }
         }
       });
+      conn.release();
     } catch (error) {
       console.error("Tidak berhasil terhubung ke database:", err);
       res.status(500).send("Tidak berhasil terhubung ke database");
@@ -166,7 +165,7 @@ app.get("/pengguna/", checkAuth, async (req, res) => {
         });
       });
     };
-    
+
     const resultPenggunaId = await getData();
 
     console.log(resultPenggunaId);
@@ -260,7 +259,7 @@ app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
   }
 });
 
-app.post("/pengguna/verif-data-pengguna", checkAuth,async (req, res) => {
+app.post("/pengguna/verif-data-pengguna", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
     const isiForm = req.body;
@@ -306,9 +305,10 @@ app.post("/pengguna/verif-data-pengguna", checkAuth,async (req, res) => {
               "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
             );
           } else {
-            res.send(
-              "<script>alert('Berhasil verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
-            );
+            res.json({
+              message: "Berhasil verifikasi data",
+              redirect: "/pengguna/verif-data-pengguna",
+            });
           }
         });
       }
@@ -319,7 +319,7 @@ app.post("/pengguna/verif-data-pengguna", checkAuth,async (req, res) => {
   }
 });
 
-app.get("/pengguna/edit-akun",checkAuth, async (req, res) => {
+app.get("/pengguna/edit-akun", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
     const uPengguna = req.cookies.usernameCookie;
@@ -359,7 +359,7 @@ app.get("/pengguna/edit-akun",checkAuth, async (req, res) => {
   }
 });
 
-app.post("/pengguna/edit-akun", checkAuth,async (req, res) => {
+app.post("/pengguna/edit-akun", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
     const uPengguna = req.cookies.usernameCookie;
@@ -380,9 +380,10 @@ app.post("/pengguna/edit-akun", checkAuth,async (req, res) => {
           "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
         );
       } else {
-        res.send(
-          "<script>alert('Data berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
-        );
+        res.json({
+          message: "Berhasil verifikasi data",
+          redirect: "/pengguna/edit-akun",
+        });
       }
     });
     conn.release();
@@ -391,7 +392,7 @@ app.post("/pengguna/edit-akun", checkAuth,async (req, res) => {
   }
 });
 
-app.get("/pengguna/kartu-pemilu",checkAuth, async (req, res) => {
+app.get("/pengguna/kartu-pemilu", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
     const uPengguna = req.cookies.usernameCookie;
@@ -428,7 +429,7 @@ app.get("/pengguna/kartu-pemilu",checkAuth, async (req, res) => {
   }
 });
 
-app.get("/pengguna/barcode-pemilu",checkAuth, async (req, res) => {
+app.get("/pengguna/barcode-pemilu", checkAuth, async (req, res) => {
   try {
     const conn = await dbConnect();
     const uPengguna = req.cookies.usernameCookie;
@@ -898,9 +899,10 @@ app.post("/tambah-rw", async (req, res) => {
         );
       } else {
         console.log("Berhasil Memasukan rw");
-        res.send(
-          "<script>alert('Berhasil Memasukan rw'); window.location.href='admin/kelola-rw';</script>"
-        );
+        res.json({
+          message: "Berhasil verifikasi data",
+          redirect: "/admin/kelola-rw",
+        });
       }
     });
     conn.release();
@@ -920,10 +922,10 @@ app.post("/tambah-rt", async (req, res) => {
           "<script>alert('Gagal Memasukan rt'); window.location.href='admin/kelola-rt';</script>"
         );
       } else {
-        console.log("Berhasil Memasukan rt");
-        res.send(
-          "<script>alert('Berhasil Memasukan rt'); window.location.href='admin/kelola-rt';</script>"
-        );
+        res.json({
+          message: "Berhasil verifikasi data",
+          redirect: "/admin/kelola-rt",
+        });
       }
     });
     conn.release();
@@ -955,10 +957,10 @@ app.post("/verif-data", async (req, res) => {
             "<script>alert('Gagal verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
           );
         } else {
-          console.log("Berhasil verifikasi data");
-          res.send(
-            "<script>alert('Berhasil verifikasi data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
-          );
+          res.json({
+            message: "Berhasil verifikasi data",
+            redirect: "/admin/verifikasi-data-pemilih",
+          });
         }
       });
     }
@@ -980,9 +982,10 @@ app.post("/tambah-tps", async (req, res) => {
       );
     } else {
       console.log("Berhasil Tambah TPS");
-      res.send(
-        "<script>alert('Berhasil Tambah TPS'); window.location.href='admin/kelola-tps';</script>"
-      );
+      res.json({
+        message: "Berhasil verifikasi data",
+        redirect: "/admin/kelola-tps",
+      });
     }
   });
 });
@@ -1814,10 +1817,10 @@ app.post("/pilih-saksi", async (req, res) => {
           "<script>alert('Gagal Menjadikan Saksi'); window.location.href='/lurah';</script>"
         );
       } else {
-        console.log("Berhasil Menjadikan Saksi");
-        res.send(
-          "<script>alert('Berhasil Menjadikan Saksi'); window.location.href='/lurah';</script>"
-        );
+        res.json({
+          message: "Berhasil verifikasi data",
+          redirect: "/lurah",
+        });
       }
     });
     conn.release();
