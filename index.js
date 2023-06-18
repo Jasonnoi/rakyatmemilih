@@ -123,7 +123,6 @@ app.get("/pengguna/", checkAuth, async (req, res) => {
     });
 
     conn.release();
-
   } catch (error) {
     res.status(500).send("Database connection error");
   }
@@ -153,8 +152,8 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
     const dateObj = new Date(dateStr);
 
     const tahun = dateObj.getFullYear();
-    const bulan = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const hari = String(dateObj.getDate()).padStart(2, '0');
+    const bulan = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const hari = String(dateObj.getDate()).padStart(2, "0");
     const formattedDate = `${tahun}-${bulan}-${hari}`;
 
     const idKelurahan = resultPenggunaId.id_kelurahan;
@@ -182,6 +181,7 @@ app.get("/pengguna/verif-data-pengguna", async (req, res) => {
 
     conn.release();
   } catch (err) {
+    console.error(err.message);
     res.status(500).send("Database connection error");
   }
 });
@@ -207,19 +207,22 @@ app.get("/pengguna/verif-data-pengguna/select/:rw", async (req, res) => {
   }
 });
 
-app.post("/pengguna/verif-data-pengguna", async (req,res) => {
+app.post("/pengguna/verif-data-pengguna", async (req, res) => {
   try {
     const conn = await dbConnect();
     const isiForm = req.body;
 
     //membuat input waktu sekarang
     const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
-    const options = { timeZone: 'Asia/Jakarta' };
-    const jakartaDate = now.toLocaleString('en-US', options).split(',')[0]; // Mendapatkan tanggal dalam format lokal Jakarta
+    const options = { timeZone: "Asia/Jakarta" };
+    const jakartaDate = now.toLocaleString("en-US", options).split(",")[0]; // Mendapatkan tanggal dalam format lokal Jakarta
 
     // Ubah format tanggal menjadi "YYYY-MM-DD"
-    const [month, day, year] = jakartaDate.split('/');
-    const mysqlDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    const [month, day, year] = jakartaDate.split("/");
+    const mysqlDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+      2,
+      "0"
+    )}`;
 
     //update query di tabel pengguna
     const queryUpdate = `UPDATE pengguna SET 
@@ -233,23 +236,23 @@ app.post("/pengguna/verif-data-pengguna", async (req,res) => {
                           rt = '${isiForm.RT}' WHERE id = '${isiForm.id}'`;
 
     conn.query(queryUpdate, (err, result) => {
-      if(err){
+      if (err) {
         console.error("Tidak dapat mengeksekusi query update:", err);
         res.send(
           "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
         );
-      }else{
+      } else {
         const queryInsert = `INSERT INTO tabel_verifikasi 
                             (id_pengguna, foto_ktp, tanggal) VALUES
                             (${isiForm.id},  '${isiForm.fotoKtp}', '${mysqlDate}')`;
-        
-        conn.query(queryInsert, (err,resultInsert) => {
-          if(err){
+
+        conn.query(queryInsert, (err, resultInsert) => {
+          if (err) {
             console.error("Tidak dapat mengeksekusi query insert:", err);
             res.send(
               "<script>alert('Gagal verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
             );
-          }else{
+          } else {
             res.send(
               "<script>alert('Berhasil verifikasi data'); window.location.href='/pengguna/verif-data-pengguna';</script>"
             );
@@ -287,10 +290,9 @@ app.get("/pengguna/edit-akun", async (req, res) => {
     const dateObj = new Date(dateStr);
 
     const tahun = dateObj.getFullYear();
-    const bulan = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const hari = String(dateObj.getDate()).padStart(2, '0');
+    const bulan = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const hari = String(dateObj.getDate()).padStart(2, "0");
     const formattedDate = `${tahun}-${bulan}-${hari}`;
-
 
     res.render("pengguna/editAkun", {
       resultPenggunaId,
@@ -319,12 +321,12 @@ app.post("/pengguna/edit-akun", async (req, res) => {
                           profile = '${isiForm.ubahProfile}' WHERE id = ${idPengguna}`;
 
     conn.query(queryUpdate, (err, result) => {
-      if(err){
+      if (err) {
         console.error("Tidak dapat mengeksekusi query update:", err);
         res.send(
           "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
         );
-      }else{
+      } else {
         res.send(
           "<script>alert('Data berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
         );
@@ -368,7 +370,6 @@ app.get("/pengguna/kartu-pemilu", async (req, res) => {
     });
 
     conn.release();
-
   } catch (error) {
     res.status(500).send("Database connection error");
   }
@@ -404,19 +405,26 @@ app.get("/pengguna/barcode-pemilu", async (req, res) => {
     });
 
     conn.release();
-
   } catch (error) {
     res.status(500).send("Database connection error");
   }
 });
 
-
-
 //routing untuk admin
 app.get("/admin/", async (req, res) => {
   try {
     const conn = await dbConnect();
-    const query = `SELECT rw, SUM(status = 1) AS status_1_count, SUM(status IS NULL) AS status_0_count FROM view_verifikasi_pengguna GROUP BY rw;`;
+    const now = new Date(); // Membuat objek Date baru yang mewakili waktu sekarang
+    const options = { timeZone: "Asia/Jakarta" };
+    const jakartaDate = now.toLocaleString("en-US", options).split(",")[0]; // Mendapatkan tanggal dalam format lokal Jakarta
+
+    // Ubah format tanggal menjadi "YYYY-MM-DD"
+    const [month, day, year] = jakartaDate.split("/");
+    const mysqlDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+      2,
+      "0"
+    )}`;
+    const query = `SELECT * FROM view_verifikasi_pengguna WHERE  tanggal = '${mysqlDate}'`;
     const getTabel1 = () => {
       return new Promise((resolve, reject) => {
         conn.query(query, (err, result) => {
@@ -426,8 +434,9 @@ app.get("/admin/", async (req, res) => {
         });
       });
     };
-    const tabel1 = await getTabel1();
-    res.render("admin/beranda", { tabel1, active: "beranda" });
+    const dataNow = await getTabel1();
+    console.log(dataNow);
+    res.render("admin/beranda", { dataNow, active: "beranda" });
     conn.release();
   } catch (err) {
     console.error(err.message);
@@ -520,17 +529,26 @@ app.get("/admin/verifikasi-data-pemilih", async (req, res) => {
     conn.query(query, (err, results) => {
       const query2 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna`;
       conn.query(query2, (err, totalPemilih) => {
-        const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status`;
+        const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna WHERE status = 1`;
         conn.query(query3, (err, total) => {
           if (err) {
             console.error("Tidak dapat mengeksekusi query:", err);
             res.status(500).send("Tidak dapat mengeksekusi query");
           } else {
-            res.render("admin/verifdata", {
-              total,
-              totalPemilih,
-              results,
-              active: "verifikasi",
+            const query4 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna WHERE status IS NULL`;
+            conn.query(query4, (err, hasil) => {
+              if (err) {
+                console.error("Tidak dapat mengeksekusi query:", err);
+                res.status(500).send("Tidak dapat mengeksekusi query");
+              } else {
+                res.render("admin/verifdata", {
+                  hasil,
+                  total,
+                  totalPemilih,
+                  results,
+                  active: "verifikasi",
+                });
+              }
             });
           }
         });
@@ -799,7 +817,7 @@ app.get("/admin/kelola-rt", paginate.middleware(10, 50), async (req, res) => {
 app.post("/hapus-data", async (req, res) => {
   const conn = await dbConnect();
   const idPemilih = req.body.idPemilih;
-  const query = `DELETE FROM pengguna WHERE id = ${idPemilih}`;
+  const query = `DELETE FROM tabel_verifikasi WHERE id_pengguna = ${idPemilih}`;
   conn.query(query, (err, result) => {
     if (err) {
       console.error("Gagal menghapus data:", err);
@@ -807,20 +825,10 @@ app.post("/hapus-data", async (req, res) => {
         "<script>alert('Gagal menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
       );
     } else {
-      const query2 = `DELETE FROM tabel_verifikasi WHERE id_pengguna =  ${idPemilih}`;
-      conn.query(query2, (err, resu) => {
-        if (err) {
-          console.error("Gagal menghapus data:", err);
-          res.send(
-            "<script>alert('Gagal menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
-          );
-        } else {
-          console.log("Berhasil menghapus data");
-          res.send(
-            "<script>alert('Berhasil menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
-          );
-        }
-      });
+      console.log("Berhasil menghapus data");
+      res.send(
+        "<script>alert('Berhasil menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
+      );
     }
     conn.release();
   });
@@ -1463,19 +1471,307 @@ app.get("/cetak-pdf", async (req, res) => {
 });
 
 //routing untuk lurah
-app.get("/lurah/", (req, res) => {
-  res.render("lurah/beranda", { active: "beranda" });
-});
-// app.get("/lurah/verifikasi-data-pemilih", (req, res) => {
-//   res.render("lurah/pilihsaksi", { active: "verifikasi" });
-// });
-// app.get("/admin/kelola-tps", (req, res) => {
-//   res.render("admin/kelolatps", { active: "tps" });
-// });
-// app.get("/admin/kelola-rw", (req, res) => {
-//   res.render("admin/kelolarw", { active: "kelolarw" });
-// });
+app.get("/lurah", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    let query = `SELECT * FROM view_pilih_saksi`;
+    const hashedStatus = req.query.jenis_data_pemilih;
 
+    // Cek apakah parameter status ada dalam URL query
+    if (decodeURIComponent(hashedStatus) === "Pemilih Sudah Verifikasi") {
+      query = `SELECT * FROM view_verifikasi_pengguna WHERE status = 1`;
+    } else if (
+      decodeURIComponent(hashedStatus) === "Pemilih Belum Verifikasi"
+    ) {
+      query = `SELECT * FROM view_verifikasi_pengguna WHERE status is NULL`;
+    }
+
+    conn.query(query, (err, results) => {
+      const query2 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna`;
+      conn.query(query2, (err, totalPemilih) => {
+        const query3 = `SELECT COUNT(id) as totalData FROM view_verifikasi_pengguna GROUP BY status`;
+        conn.query(query3, (err, total) => {
+          if (err) {
+            console.error("Tidak dapat mengeksekusi query:", err);
+            res.status(500).send("Tidak dapat mengeksekusi query");
+          } else {
+            res.render("lurah/verifdata", {
+              total,
+              totalPemilih,
+              results,
+              active: "verifikasi",
+            });
+          }
+        });
+      });
+    });
+
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
+});
+app.get("/lurah/hasil-distribusi-tps", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const queryTPS = `SELECT * FROM tps `;
+    const getData = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryTPS, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+    const queryRW = `SELECT * FROM rw`;
+    const dataRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(queryRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const dataTPS = await getData();
+    const getRW = await dataRW();
+    res.render("lurah/kelolatps", { getRW, dataTPS, active: "tps" });
+    conn.release();
+  } catch (err) {
+    res.status(500).send("Database connection error");
+  }
+});
+app.get("/lurah/hasil-distribusi-rw", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const selectDataRW = `SELECT * FROM rw`;
+    const countRW = `SELECT count(no) as jumRW FROM rw`;
+    const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
+
+    const getRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(selectDataRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const getCountRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(countRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]);
+          }
+        });
+      });
+    };
+
+    const getCountTPS = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(countTPS, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const totalTPS = await getCountTPS();
+    const dataRW = await getRW();
+    const coun_rw = await getCountRW();
+
+    res.render("lurah/kelolarw", {
+      totalTPS,
+      dataRW,
+      coun_rw,
+      active: "kelolarw",
+    });
+    conn.release();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database connection error");
+  }
+});
+
+app.get(
+  "/lurah/distribusi-rt",
+  paginate.middleware(10, 50),
+  async (req, res) => {
+    try {
+      const conn = await dbConnect();
+      const selectDataRW = `SELECT * FROM rt `;
+      const selectRW = `SELECT * FROM rw `;
+
+      const countRW = `SELECT count(no) as jumRW FROM rt`;
+      const countTPS = `SELECT count(no) as totTPS FROM view_rwtps GROUP BY no `;
+
+      // Mendapatkan nilai pencarian dari URL
+      const searchQuery = req.query.querySearch;
+      let selectDataRWWithSearch;
+
+      if (searchQuery) {
+        if (searchQuery.toUpperCase().includes("RW")) {
+          const modified = searchQuery.substring(4);
+          console.log(modified);
+          selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no_rw LIKE '%${modified}%'
+        `;
+        } else if (searchQuery.toUpperCase().includes("RT")) {
+          const modified = searchQuery.substring(4);
+          selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no LIKE '%${modified}%'
+        `;
+        } else {
+          const modified = searchQuery.substring(4);
+          selectDataRWWithSearch = `
+          ${selectDataRW}
+          WHERE no LIKE '%${modified}%'
+            OR no_rw LIKE '%${modified}%'
+        `;
+        }
+      } else {
+        selectDataRWWithSearch = selectDataRW;
+      }
+      let getRW;
+
+      if (typeof searchQuery === "undefined") {
+        getRW = () => {
+          return new Promise((resolve, reject) => {
+            conn.query(selectDataRW, (err, result) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(result);
+              }
+            });
+          });
+        };
+      } else {
+        getRW = () => {
+          return new Promise((resolve, reject) => {
+            conn.query(selectDataRWWithSearch, (err, result) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(result);
+              }
+            });
+          });
+        };
+      }
+
+      // Menggabungkan pencarian ke dalam query SQL
+
+      const getCountRW = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(countRW, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
+        });
+      };
+
+      const getCountTPS = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(countTPS, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      };
+
+      const data_rw = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(selectRW, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      };
+      const [totalTPS, dataRW, coun_rw, list_rw] = await Promise.all([
+        getCountTPS(),
+        getRW(),
+        getCountRW(),
+        data_rw(),
+      ]);
+
+      const itemCount = dataRW.length;
+      const limit = 10; // Set nilai limit menjadi 10
+      const pageCount = Math.ceil(itemCount / limit);
+      const currentPage = parseInt(req.query.page) || 1;
+      const offset = (currentPage - 1) * limit; // Hitung offset berdasarkan halaman saat ini
+      const limitedDataRW = dataRW.slice(offset, offset + limit); // Batasi data yang ditampilkan sesuai limit dan offset
+      const pages = paginate.getArrayPages(req)(3, pageCount, currentPage);
+      console.log(pageCount, currentPage, itemCount, limit);
+      res.render("lurah/kelolart", {
+        totalTPS,
+        dataRW: limitedDataRW, // Gunakan data yang telah dibatasi sesuai limit
+        coun_rw,
+        active: "kelolart",
+        pageCount,
+        itemCount,
+        pages,
+        list_rw,
+        current: currentPage,
+      });
+
+      conn.release();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Database connection error");
+    }
+  }
+);
+
+// Post Lurah
+app.post("/pilih-saksi", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+
+    const query = `INSERT INTO saksi(idPengguna,id_tps) VALUES('${req.body.idPemilih}', '${req.body.tps}')`;
+    conn.query(query, (err, result) => {
+      if (err) {
+        console.error("Gagal Menjadikan Saksi:", err);
+        res.send(
+          "<script>alert('Gagal Menjadikan Saksi'); window.location.href='/lurah';</script>"
+        );
+      } else {
+        console.log("Berhasil Menjadikan Saksi");
+        res.send(
+          "<script>alert('Berhasil Menjadikan Saksi'); window.location.href='/lurah';</script>"
+        );
+      }
+    });
+    conn.release();
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 // Register User
 app.post("/register-data", async (req, res) => {});
 

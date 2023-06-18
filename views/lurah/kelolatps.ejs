@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styleadmin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <button class="hamburger">
+      <div class="bar"></div>
+    </button>
+    <%- include('./layout/navbar.ejs') %>
+    <main>
+      <h1>Distribusi TPS Kelurahan Sangkanhurip</h1>
+      <div class="body">
+        
+         <div class="header-card">
+              <button onclick="cetakPDF_TPS()" class="button-large dangger">
+                  <i class="fa fa-file-pdf"></i> Cetak PDF
+              </button>
+        </div>
+        <div class="card-table opacity">
+          <table id="example" class="display compact" style="width: 100%">
+            <thead>
+              <tr>
+ 
+                <th>Nomor</th>
+                <th>Nama TPS</th>
+                <th>Nomor TPS</th>
+                <th>RW TPS</th>
+                <th>Kapasitas TPS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let i = 1; %>
+              <% for(const row of dataTPS) { %>
+                <tr>
+                  <td><%= i %></td>
+                  <td><%= row.nama_TPS %></td>
+                  <td><%= "TPS 0" + row.no_tps %></td>
+                  <td><%= "RW " + row.id_RW %></td>
+                  <td><%= row.kapasitas  %></td>
+                </tr>
+                <% i++; %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="/script.js"></script>
+    <script>
+      // Ambil semua elemen dengan class "status-button"
+      var buttons = document.getElementsByClassName("status-button");
+
+      // Loop melalui setiap tombol
+      for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i];
+
+        // Periksa teks pada tombol
+
+        // Jika tombol belum diverifikasi, ubah warna menjadi merah
+        button.style.backgroundColor = "red";
+
+        // Menambahkan event listener pada setiap button
+        
+      }
+
+       </script>
+  </body>
+</html>
