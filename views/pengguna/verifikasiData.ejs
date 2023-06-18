@@ -187,10 +187,11 @@ rw.addEventListener("change", () => {
   });
 
 </script>
+
 <script>
-  $(document).ready(function() {
+    $(document).ready(function() {
   $('#form-Verif-Pengguna').submit(function(e) {
-    e.preventDefault(); // Mencegah pengiriman form secara otomatis
+    e.preventDefault();
 
     Swal.fire({
       title: 'Konfirmasi',
@@ -205,16 +206,23 @@ rw.addEventListener("change", () => {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        // Jika pengguna mengonfirmasi, submit form menggunakan AJAX
+        // Hapus Swal.fire() dari sini
+        // ...
+
+        // Submit form menggunakan AJAX tanpa Swal
         $.ajax({
           type: 'POST',
           url: '/pengguna/verif-data-pengguna',
           dataType: 'json',
-          data: $('#form-Verif-Pengguna').serialize(),
+          data: new FormData($('#form-Verif-Pengguna')[0]),
+          processData: false,
+          contentType: false,
           success: function(response) {
             console.log(response.redirect);
+
+            // Tambahkan Swal.fire() kembali di sini
             Swal.fire({
-              title: 'Berhasil Mengajukan Verifikasi',
+              title: 'Data Berhasil Tersimpan',
               icon: 'success',
               showConfirmButton: false,
               timer: 2000,
@@ -238,4 +246,4 @@ rw.addEventListener("change", () => {
   });
 });
 
-</script>
+  </script>
