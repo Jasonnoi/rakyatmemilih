@@ -25,8 +25,29 @@ app.get("/", (req, res) => {
   res.render("login");
 });
 
-app.get("/register", (req, res) => {
-  res.render("register");
+app.get("/register-data-pengguna", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const selectRW = `SELECT * FROM rw `;
+
+    const getRW = () => {
+      return new Promise((resolve, reject) => {
+        conn.query(selectRW, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
+    const dataRW = await getRW();
+    res.render("register", { dataRW });
+    conn.release();
+  } catch (err) {
+    console.error(err.message);
+  }
 });
 
 // Routing untuk pengguna

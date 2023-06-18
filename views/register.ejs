@@ -73,22 +73,23 @@
               />
             </div>
             <div class="form-group">
-              <label class="details">RW</label>
-              <select name="rw">
-                <option value="kosong">Pilih RW Anda</option>
-                <option value="1">RW 1</option>
-                <option value="2">RW 2</option>
-                <option value="3">RW 3</option>
-                <option value="4">RW 4</option>
+              <label for="RW">Pilih RW</label>
+              <select id="RW" name="RW">
+                <option value="">-- Pilih RW --</option>
+                <% for(const row of dataRW) { %>
+                  <option value="<%= row.no %>"><%="RW 0" + row.no %></option>
+                <% } %>
               </select>
             </div>
             <div class="form-group">
-              <label class="details">RT</label>
-              <select name="rt">
-                <option value="kosong">Pilih RT Anda</option>
-                <option value="1">RT 1</option>
-                <option value="2">RT 2</option>
-              </select>
+              <label for="rt">Masukan Nomor RT</label>
+              <input
+                type="text"
+                name="rt"
+                id="rt"
+                value=""
+                placeholder=""
+              />
             </div>
             <div class="form-group">
               <label class="details">Alamat Lengkap</label>
