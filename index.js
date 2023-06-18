@@ -44,9 +44,15 @@ app.use(
 app.get("/", (req, res) => {
   //clear cookie ketika logout
   res.clearCookie('usernameCookie');
-  //
+  
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
   res.render("login");
 });
+
 app.get("/register-data-pengguna", async (req, res) => {
   try {
     const conn = await dbConnect();
@@ -118,15 +124,6 @@ app.post("/", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error(err);
-    }
-    res.redirect("login"); // atau rute lain setelah logout
-  });
-});
-
 // Middleware untuk memeriksa keberadaan session sebelum mengakses halaman users
 const checkAuth = (req, res, next) => {
   if (req.session.username || req.cookies.usernameCookie) {
@@ -160,9 +157,10 @@ app.get("/pengguna/", checkAuth, async (req, res) => {
         });
       });
     };
-
+    
     const resultPenggunaId = await getData();
 
+    console.log(resultPenggunaId);
     res.render("pengguna/beranda", {
       resultPenggunaId,
       active: "beranda",

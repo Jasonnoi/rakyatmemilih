@@ -125,6 +125,38 @@ button:is(:hover, :focus) {
   margin-right: px;
 }
 
+#show_hide_password {
+  position: relative;
+}
+
+#toogle-pw {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.fa-eye-slash{
+  transition: color 0.2s ease-in-out;
+  color: black;
+}
+
+.fa-eye-slash:hover{
+  color:rgb(197, 63, 59);
+  transition: color 0.2s ease-in-out;
+}
+
+.fa-eye{
+  transition: color 0.2s ease-in-out;
+  color:rgb(197, 63, 59);
+}
+
+.fa-eye:hover{
+  color: black;
+  transition: color 0.2s ease-in-out;
+}
+
 @media (min-width: 568px) {
   .container {
     display: grid;
