@@ -675,10 +675,26 @@ table.dataTable thead th:first-child {
   width: 200px;
 }
 
+.tulisan-proses{
+  text-align: center;
+}
+
+#process-verif{
+  height: 300px;
+  width: 300px;
+}
+
+#modal-process{
+  padding-top: 50px !important;
+  gap: 40px !important;
+}
+
 #form-Verif-Pengguna.disabled-form {
   pointer-events: none;
   opacity: 0.5;
 }
+
+
 
 /*END MAIN VERIFIKASI DATA BINTANG*/
 
