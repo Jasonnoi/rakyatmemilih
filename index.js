@@ -499,6 +499,8 @@ app.post(
         profileBaru = resultPenggunaId.profile;
       } else {
         profileBaru = req.file.filename;
+        const file = req.file;
+        fs.renameSync(file.path, "public/assets/" + file.filename);
       }
 
       //update query di tabel pengguna
@@ -517,6 +519,8 @@ app.post(
             "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
           );
         } else {
+          console.log(resultPenggunaId.profile);
+          console.log(profileBaru);
           res.json({
             message: "Berhasil verifikasi data",
             redirect: "/pengguna/edit-akun",
