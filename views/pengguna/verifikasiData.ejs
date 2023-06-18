@@ -43,7 +43,7 @@
         <% } %>
         
         <!-- END MODAL -->
-        <form id="form-Verif-Pengguna" method="post" action="" <% if (resultPenggunaId.status != null || (resultPenggunaId.status === null && resultPenggunaId.tanggal !== null )) { %>class="disabled-form"<% } %>>
+        <form id="form-Verif-Pengguna" enctype="multipart/form-data" method="post" action="" <% if (resultPenggunaId.status != null || (resultPenggunaId.status === null && resultPenggunaId.tanggal !== null )) { %>class="disabled-form"<% } %>>
           <input type="hidden" name="id" id="id" value="<%= resultPenggunaId.id %>">
           <section class="section-Verif-Pengguna kanan">
             <div class="wrap-input-verifP">
@@ -139,7 +139,8 @@
                   id="fotoKtp"
                   name="fotoKtp"
                   aria-label="File browser example"
-                  value="<%= resultPenggunaId.foto_ktp %>"
+                  accept="image/png, image/jpeg, image/webp, image/jpg"
+                  required
                 />
                 <span class="file-custom"></span>
               </label>
