@@ -26,9 +26,9 @@
     <main id="main-EditAkun-Pengguna">
       <h1 class="headline">Edit Akun</h1>
       <div class="containerEditAkun-bintang">
-        <form id="form-EditAkun-Pengguna" enctype="multipart/form-data" method="post" action="">
+        <form id="form-EditAkun-Pengguna" enctype="multipart/form-data">
             <div class="profile">
-              <input name="ubahProfile" id="input-ubah-profile" type="file" accept="image/png, image/jpeg, image/webp, image/jpg">
+              <input name="ubahProfile"  id="input-ubah-profile" type="file" accept="image/png, image/jpeg, image/webp, image/jpg">
               <label for="input-ubah-profile" id="btn-uploadFoto">Pilih Foto</label>
               <img name="fotoProfile" id="foto-profile" src="../assets/<%= resultPenggunaId.profile %>" alt="" />
             </div>
@@ -124,9 +124,9 @@
     </script>
   </body>
   <script>
-  $(document).ready(function() {
+    $(document).ready(function() {
   $('#form-EditAkun-Pengguna').submit(function(e) {
-    e.preventDefault(); // Mencegah pengiriman form secara otomatis
+    e.preventDefault();
 
     Swal.fire({
       title: 'Konfirmasi',
@@ -141,14 +141,21 @@
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        // Jika pengguna mengonfirmasi, submit form menggunakan AJAX
+        // Hapus Swal.fire() dari sini
+        // ...
+
+        // Submit form menggunakan AJAX tanpa Swal
         $.ajax({
           type: 'POST',
           url: '/pengguna/edit-akun',
           dataType: 'json',
-          data: $('#form-EditAkun-Pengguna ').serialize(),
+          data: new FormData($('#form-EditAkun-Pengguna')[0]),
+          processData: false,
+          contentType: false,
           success: function(response) {
             console.log(response.redirect);
+
+            // Tambahkan Swal.fire() kembali di sini
             Swal.fire({
               title: 'Data Berhasil Tersimpan',
               icon: 'success',
@@ -174,5 +181,5 @@
   });
 });
 
-</script>
+  </script>
 </html>

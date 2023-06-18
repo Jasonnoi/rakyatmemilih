@@ -29,9 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-app.use("/assets", (req, res, next) => {
-  res.status(403).send("Forbidden");
-});
+
 app.use("/Database", (req, res, next) => {
   res.status(403).send("Forbidden");
 });
@@ -224,8 +222,8 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
     await db.query(query);
 
     // Pindahkan file yang diupload ke direktori yang diinginkan
-    const file = req.file;
-    fs.renameSync(file.path, "public/assets/" + file.filename);
+    // const file = req.file;
+    // fs.renameSync(file.path, "public/assets/" + file.filename);
 
     res.send(
       "<script>alert('Berhasil mendaftarkan data'); window.location.href='/'</script>"
@@ -236,6 +234,67 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
     res.status(500).send("Tidak dapat mengeksekusi query");
   }
 });
+app.post(
+  "/pengguna/edit-akun",
+  upload.single("ubahProfile"),
+  async (req, res) => {
+    try {
+      console.log(req.file);
+      const conn = await dbConnect();
+      const uPengguna = req.cookies.usernameCookie;
+      const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
+
+      const getData = () => {
+        return new Promise((resolve, reject) => {
+          conn.query(queryId, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
+        });
+      };
+
+      const resultPenggunaId = await getData();
+      const isiForm = req.body;
+      let profileBaru;
+
+      if (req.file === undefined) {
+        profileBaru = resultPenggunaId.profile;
+      } else {
+        profileBaru = req.file.filename;
+      }
+
+      //update query di tabel pengguna
+      const queryUpdate = `UPDATE pengguna SET 
+                          nama = '${isiForm.nama}',
+                          tgl_lahir = '${isiForm.tgl_lahir}',
+                          kelamin = '${isiForm.kelamin}',
+                          no_hp = '${isiForm.noTelepon}',
+                          email = '${isiForm.email}',
+                          profile = '${profileBaru}' WHERE username = '${uPengguna}'`;
+
+      conn.query(queryUpdate, (err, result) => {
+        if (err) {
+          console.error("Tidak dapat mengeksekusi query update:", err);
+          res.send(
+            "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
+          );
+        } else {
+          res.json({
+            message: "Berhasil verifikasi data",
+            redirect: "/pengguna/edit-akun",
+          });
+        }
+      });
+      conn.release();
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Database connection error");
+    }
+  }
+);
 
 // Routing untuk pengguna
 app.get("/pengguna/", checkAuthPengguna, async (req, res) => {
@@ -470,66 +529,7 @@ app.get("/pengguna/edit-akun", checkAuthPengguna, async (req, res) => {
 });
 
 const ubahProfile = multer({ storage: storage });
-app.post(
-  "/pengguna/edit-akun",
-  ubahProfile.single("ubahProfile"),
-  async (req, res) => {
-    try {
-      const conn = await dbConnect();
-      const uPengguna = req.cookies.usernameCookie;
-      const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
 
-      const getData = () => {
-        return new Promise((resolve, reject) => {
-          conn.query(queryId, (err, result) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(result[0]);
-            }
-          });
-        });
-      };
-
-      const resultPenggunaId = await getData();
-      const isiForm = req.body;
-      let profileBaru;
-
-      if (req.file === undefined) {
-        profileBaru = resultPenggunaId.profile;
-      } else {
-        profileBaru = req.file.filename;
-      }
-
-      //update query di tabel pengguna
-      const queryUpdate = `UPDATE pengguna SET 
-                          nama = '${isiForm.nama}',
-                          tgl_lahir = '${isiForm.tgl_lahir}',
-                          kelamin = '${isiForm.kelamin}',
-                          no_hp = '${isiForm.noTelepon}',
-                          email = '${isiForm.email}',
-                          profile = '${profileBaru}' WHERE username = '${uPengguna}'`;
-
-      conn.query(queryUpdate, (err, result) => {
-        if (err) {
-          console.error("Tidak dapat mengeksekusi query update:", err);
-          res.send(
-            "<script>alert('Data tidak berhasil di simpan'); window.location.href='/pengguna/edit-akun';</script>"
-          );
-        } else {
-          res.json({
-            message: "Berhasil verifikasi data",
-            redirect: "/pengguna/edit-akun",
-          });
-        }
-      });
-      conn.release();
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Database connection error");
-    }
-  }
-);
 
 app.get("/pengguna/kartu-pemilu", checkAuthPengguna, async (req, res) => {
   try {
