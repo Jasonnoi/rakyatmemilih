@@ -29,7 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-
 app.use("/Database", (req, res, next) => {
   res.status(403).send("Forbidden");
 });
@@ -529,7 +528,6 @@ app.get("/pengguna/edit-akun", checkAuthPengguna, async (req, res) => {
 });
 
 const ubahProfile = multer({ storage: storage });
-
 
 app.get("/pengguna/kartu-pemilu", checkAuthPengguna, async (req, res) => {
   try {
