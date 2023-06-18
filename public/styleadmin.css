@@ -578,7 +578,7 @@ table.dataTable thead th:first-child, table thead th:first-child {
 .danger {
   background-color: var(--color-dangger);
 }
-.danger:hover{
+.danger:hover {
   background-color: rgb(128, 40, 37);
 }
 .warning {
@@ -586,11 +586,9 @@ table.dataTable thead th:first-child, table thead th:first-child {
   background-color: #aac419e3;
 }
 .primary {
-
-
   background-color: var(--color-primary);
 }
-.primary:hover{
+.primary:hover {
   background-color: #134f90;
 }
 

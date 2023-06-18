@@ -1705,7 +1705,36 @@ app.post("/pilih-saksi", async (req, res) => {
   }
 });
 // Register User
-app.post("/register-data", async (req, res) => {});
+app.post("/register-data", async (req, res) => {
+  const db = await dbConnect();
+  const NIKPemilih = req.body.nik;
+  const namaPemilih = req.body.nama;
+  const usernamePemilih = req.body.username;
+  const passwordPemilih = req.body.password;
+  const emailPemilih = req.body.email;
+  const tanggallahirPemilih = req.body.tanggallahir;
+  const noHPPemilih = req.body.hp;
+  const rwPemilih = req.body.rw;
+  const rtPemilih = req.body.rt;
+  const alamatPemilih = req.body.alamat;
+  const fotoKTP = req.body.fotoProfile;
+
+  const query = `INSERT INTO pengguna (NIK,nama,username,password,email,tgl_lahir,no_hp,rw,rt,alamat,role,profile,id_kelurahan) VALUES ('${NIKPemilih}','${namaPemilih}','${usernamePemilih}','${passwordPemilih}','${emailPemilih}','${tanggallahirPemilih}','${noHPPemilih}','${rwPemilih}','${rtPemilih}','${alamatPemilih}', 'Pengguna','${fotoKTP}',1)`;
+  db.query(query, (err, redgdfbfds) => {
+    if (err) {
+      console.error("Tidak dapat mengeksekusi query:", err);
+      res.status(500).send("Tidak dapat mengeksekusi query");
+      res.send(
+        "<script>alert('Gagal mendaftarkan data'); window.location.href='/'</script>"
+      );
+    } else {
+      res.send(
+        "<script>alert('Berhasil mendaftarkan data'); window.location.href='/'</script>"
+      );
+    }
+  });
+  db.release();
+});
 
 //server listening
 app.listen(port, () => {

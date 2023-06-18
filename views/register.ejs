@@ -13,94 +13,102 @@
           <div class="left">
             <div class="form-group">
               <label class="details">NIK</label>
-              <input type="text" placeholder="Masukkan NIK Anda" />
+              <input name="nik" type="text" placeholder="Masukkan NIK Anda" />
             </div>
             <div class="form-group">
               <label class="details">Nama</label>
-              <input type="text" />
+              <input name="nama" type="text" placeholder="Masukkan Nama Anda" />
             </div>
             <div class="form-group">
               <label class="details">Username</label>
-              <input type="text" />
+              <input
+                name="username"
+                type="text"
+                placeholder="Masukkan Username Anda"
+              />
             </div>
             <div class="form-group">
               <label class="details">Password</label>
-              <input type="password" />
+              <input
+                name="password"
+                type="password"
+                placeholder="Masukkan Password Anda"
+              />
             </div>
             <div class="form-group">
               <label class="details">Email</label>
-              <input type="text" />
+              <input
+                name="email"
+                type="text"
+                placeholder="Masukkan Email Anda"
+              />
             </div>
             <div class="form-group">
               <label class="details">Tanggal Lahir</label>
-              <input type="date" />
+              <input
+                name="tanggallahir"
+                type="date"
+                placeholder="Masukkan Tanggal Lahir Anda"
+              />
             </div>
           </div>
           <div class="right">
             <div class="form-group">
-              <label class="details">Kota</label>
-              <select name="Kota">
-                <option value="kosong"></option>
-                <option value="Kota Bandung">Kota Bandung</option>
-                <option value="Kab. Bandung">Kab.Bandung</option>
-                <option value="Garut">Garut</option>
-                <option value="Tasikmalaya">Tasikmalaya</option>
-              </select>
+              <label class="details">No. HP</label>
+              <input
+                name="hp"
+                type="text"
+                placeholder="Masukkan No Telfon Anda"
+              />
             </div>
-            <div class="form-group">
-              <label class="details">Kecamatan</label>
-              <select name="Kecamatan">
-                <option value="kosong"></option>
-                <option value="Cileunyi">Cileunyi</option>
-                <option value="Cileungsi">Cileungsi</option>
-                <option value="Bojongsoang">Bojongsoang</option>
-                <option value="Rancaekek">Rancaekek</option>
-              </select>
-            </div>
+
             <div class="form-group">
               <label class="details">Kelurahan</label>
-              <select name="Kelurahan">
-                <option value="kosong"></option>
-                <option value="Astana Anyar">01</option>
-                <option value="Antapani">Antapani</option>
-                <option value="Bandung Kidul">Bandung Kidul</option>
-                <option value="Bandung Kulon">Bandung Kulon</option>
-              </select>
+              <input
+                type="text"
+                value="Coblong"
+                name="kelurahan"
+                placeholder="Coblong"
+                disabled
+              />
             </div>
             <div class="form-group">
               <label class="details">RW</label>
-              <select name="RW">
-                <option value="kosong"></option>
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
+              <select name="rw">
+                <option value="kosong">Pilih RW Anda</option>
+                <option value="1">RW 1</option>
+                <option value="2">RW 2</option>
+                <option value="3">RW 3</option>
+                <option value="4">RW 4</option>
               </select>
             </div>
             <div class="form-group">
               <label class="details">RT</label>
-              <select name="RT">
-                <option value="kosong"></option>
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
+              <select name="rt">
+                <option value="kosong">Pilih RT Anda</option>
+                <option value="1">RT 1</option>
+                <option value="2">RT 2</option>
               </select>
             </div>
             <div class="form-group">
               <label class="details">Alamat Lengkap</label>
-              <input type="text" />
+              <input
+                name="alamat"
+                type="text"
+                placeholder="Masukkan Alamat Anda"
+              />
+            </div>
+            <div class="form-group">
+              <label class="details">Upload Foto Profile</label>
+              <label class="file">
+                <input type="file" name="fotoProfile" id="profileSignup" />
+              </label>
             </div>
           </div>
         </div>
 
         <div class="button">
-          <input
-            onclick="window.open('/')"
-            type="submit"
-            class="tombol"
-            value="Simpan"
-          />
+          <button class="tombol">Simpan</button>
         </div>
       </form>
     </div>
