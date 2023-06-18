@@ -91,14 +91,12 @@ app.post("/", async (req, res) => {
   if (username && password) {
     try {
       const conn = await dbConnect();
-
-      // Mengubah password menjadi hash menggunakan algoritma SHA-256
       const hashed_pass = crypto
         .createHash("sha256")
         .update(password)
         .digest("base64");
 
-      const arrInputLogin = [username, password];
+      const arrInputLogin = [username, hashed_pass];
 
       // Query untuk mencari akun dengan username dan password yang benar
       const query = `SELECT * FROM pengguna WHERE username = ? AND password = ?`;
@@ -108,7 +106,7 @@ app.post("/", async (req, res) => {
           console.error("Tidak dapat mengeksekusi query:", err);
           res.status(500).send("Tidak dapat mengeksekusi query");
         } else {
-          if (result.length > 0 && result[0].role == "pengguna") {
+          if (result.length > 0 && result[0].role == "Pengguna") {
             // Jika akun ditemukan, tambahkan session yang berisi nama akun
             req.session.username = result[0].username;
             req.session.role = result[0].role;
@@ -134,6 +132,7 @@ app.post("/", async (req, res) => {
             res.send(
               "<script>alert('username atau password anda salah, Silahkan periksa kembali !'); window.location.href='/';</script>"
             );
+            console.log(hashed_pass);
           }
         }
       });
@@ -206,8 +205,15 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
     const kelamin = req.body.kelamin;
     const fotoKTP = req.file.filename; // Mendapatkan nama file yang diupload
 
+
+    // Mengubah password menjadi hash menggunakan algoritma SHA-256
+    const hashed_pass = crypto
+    .createHash("sha256")
+    .update(passwordPemilih)
+    .digest("base64");
+
     // Simpan nama file ke dalam database
-    const query = `INSERT INTO pengguna (NIK, nama, username, password, email, tgl_lahir, no_hp, rw, rt, alamat, role, profile, id_kelurahan, kelamin) VALUES ('${NIKPemilih}', '${namaPemilih}', '${usernamePemilih}', '${passwordPemilih}', '${emailPemilih}', '${tanggallahirPemilih}', '${noHPPemilih}', '${rwPemilih}', '${rtPemilih}', '${alamatPemilih}', 'Pengguna', '${fotoKTP}', 1, '${kelamin}')`;
+    const query = `INSERT INTO pengguna (NIK, nama, username, password, email, tgl_lahir, no_hp, rw, rt, alamat, role, profile, id_kelurahan, kelamin) VALUES ('${NIKPemilih}', '${namaPemilih}', '${usernamePemilih}', '${hashed_pass}', '${emailPemilih}', '${tanggallahirPemilih}', '${noHPPemilih}', '${rwPemilih}', '${rtPemilih}', '${alamatPemilih}', 'Pengguna', '${fotoKTP}', 1, '${kelamin}')`;
     await db.query(query);
 
     // Pindahkan file yang diupload ke direktori yang diinginkan
