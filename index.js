@@ -727,7 +727,7 @@ app.get("/admin/tabel2", checkAuthAdmin, async (req, res) => {
 app.get("/admin/tabel3", checkAuthAdmin, async (req, res) => {
   try {
     const conn = await dbConnect();
-    const query = `SELECT nama_TPS, COUNT(idSaksi) as jum_saksi FROM (SELECT * FROM saksi JOIN tps on saksi.id_tps = tps.id) AS tabel GROUP BY id_tps
+    const query = `SELECT nama_TPS, COUNT(idSaksi) as jum_saksi FROM (SELECT * FROM saksi JOIN tps on saksi.idtps = tps.id) AS tabel GROUP BY idtps
 `;
     const getTabel1 = () => {
       return new Promise((resolve, reject) => {
@@ -1816,7 +1816,7 @@ app.get("/lurah", checkAuthLurah, async (req, res) => {
 
     const resultPenggunaId = await getData();
 
-    let query = `SELECT * FROM view_pilih_saksi`;
+    let query = `SELECT * FROM view_pilih_saksi WHERE status IS NOT NULL`;
     const hashedStatus = req.query.jenis_data_pemilih;
 
     // Cek apakah parameter status ada dalam URL query
