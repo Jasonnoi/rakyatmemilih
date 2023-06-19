@@ -561,7 +561,7 @@ app.get("/pengguna/kartu-pemilu", checkAuthPengguna, async (req, res) => {
                         LEFT OUTER JOIN saksi 
                         ON view_verifikasi_pengguna.id = saksi.idPengguna 
                         LEFT OUTER JOIN tps 
-                        ON saksi.id_tps = tps.id 
+                        ON view_verifikasi_pengguna.id_tps = tps.id 
                         WHERE view_verifikasi_pengguna.username = '${uPengguna}'`;
 
     const getData = () => {
@@ -578,6 +578,7 @@ app.get("/pengguna/kartu-pemilu", checkAuthPengguna, async (req, res) => {
 
     const resultPenggunaId = await getData();
 
+    console.log(resultPenggunaId.nama_TPS);
     res.render("pengguna/kartuPemilu", {
       resultPenggunaId,
       active: "kartuPemilu",
