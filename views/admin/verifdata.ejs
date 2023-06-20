@@ -272,6 +272,7 @@
 
             // Menambahkan event listener ke tombol Tolak Data
             tolakButton.addEventListener("click", () => {
+              form.method = "POST"; // Mengatur method form menjadi "POST"
               form.action = "/hapus-data"; // Mengubah action ke '/hapus-data'
               form.submit(); // Mengirimkan permintaan POST
             });
