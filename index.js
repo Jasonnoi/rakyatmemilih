@@ -261,7 +261,6 @@ app.post(
   upload.single("ubahProfile"),
   async (req, res) => {
     try {
-      console.log(req.file);
       const conn = await dbConnect();
       const uPengguna = req.cookies.usernameCookie;
       const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${uPengguna}'`;
@@ -578,7 +577,6 @@ app.get("/pengguna/kartu-pemilu", checkAuthPengguna, async (req, res) => {
 
     const resultPenggunaId = await getData();
 
-    console.log(resultPenggunaId.nama_TPS);
     res.render("pengguna/kartuPemilu", {
       resultPenggunaId,
       active: "kartuPemilu",
@@ -668,7 +666,7 @@ app.get("/admin/", checkAuthAdmin, async (req, res) => {
       });
     };
     const dataNow = await getTabel1();
-    console.log(dataNow);
+
     res.render("admin/beranda", {
       resultPenggunaId,
       dataNow,
@@ -1012,7 +1010,7 @@ app.get(
       if (searchQuery) {
         if (searchQuery.toUpperCase().includes("RW")) {
           const modified = searchQuery.substring(4);
-          console.log(modified);
+
           selectDataRWWithSearch = `
           ${selectDataRW}
           WHERE no_rw LIKE '%${modified}%'
@@ -1113,7 +1111,7 @@ app.get(
       const offset = (currentPage - 1) * limit; // Hitung offset berdasarkan halaman saat ini
       const limitedDataRW = dataRW.slice(offset, offset + limit); // Batasi data yang ditampilkan sesuai limit dan offset
       const pages = paginate.getArrayPages(req)(3, pageCount, currentPage);
-      console.log(pageCount, currentPage, itemCount, limit);
+
       res.render("admin/kelolart", {
         totalTPS,
         dataRW: limitedDataRW, // Gunakan data yang telah dibatasi sesuai limit
@@ -1147,7 +1145,6 @@ app.post("/hapus-data", async (req, res) => {
         "<script>alert('Gagal menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
       );
     } else {
-      console.log("Berhasil menghapus data");
       res.send(
         "<script>alert('Berhasil menghapus data'); window.location.href='admin/verifikasi-data-pemilih';</script>"
       );
@@ -1166,7 +1163,6 @@ app.post("/tambah-rw", async (req, res) => {
           "<script>alert('Gagal Memasukan rw'); window.location.href='admin/kelola-rw';</script>"
         );
       } else {
-        console.log("Berhasil Memasukan rw");
         res.json({
           message: "Berhasil verifikasi data",
           redirect: "/admin/kelola-rw",
@@ -1206,7 +1202,7 @@ app.post("/verif-data", async (req, res) => {
   const conn = await dbConnect();
   const idPemilih = req.body.idPemilih;
   const tps = req.body.tps;
-  console.log(tps);
+
   // Mengubah status menjadi 'Ditolak' dan mengupdate TPS
   const query = `UPDATE tabel_verifikasi SET status = 1 , id_tps = ${tps}  WHERE id_pengguna = ${idPemilih}`;
   const perintah = `UPDATE tps set kapasitas = kapasitas - 1 WHERE id = ${tps}`;
@@ -1249,7 +1245,6 @@ app.post("/tambah-tps", async (req, res) => {
         "<script>alert('Gagal Tambah TPS'); window.location.href='admin/kelola-tps';</script>"
       );
     } else {
-      console.log("Berhasil Tambah TPS");
       res.json({
         message: "Berhasil verifikasi data",
         redirect: "/admin/kelola-tps",
@@ -1266,6 +1261,7 @@ app.get("/cetak-pdf", async (req, res) => {
     let selectData;
 
     const tabel = req.query.data;
+    console.log(tabel);
 
     let query; // Mengubah conn.query menjadi versi promise
 
@@ -1780,6 +1776,7 @@ app.get("/cetak-pdf", async (req, res) => {
 
     pdf.create(renderedHtml).toStream((err, stream) => {
       if (err) {
+        console.error(err.message);
         res.status(500).send("Error generating PDF");
       } else {
         res.setHeader("Content-Type", "application/pdf");
@@ -1789,7 +1786,6 @@ app.get("/cetak-pdf", async (req, res) => {
 
     conn.release();
   } catch (err) {
-    console.error(err);
     res.status(500).send("Database connection error");
   }
 });
@@ -2030,7 +2026,7 @@ app.get(
       if (searchQuery) {
         if (searchQuery.toUpperCase().includes("RW")) {
           const modified = searchQuery.substring(4);
-          console.log(modified);
+
           selectDataRWWithSearch = `
           ${selectDataRW}
           WHERE no_rw LIKE '%${modified}%'
@@ -2131,7 +2127,7 @@ app.get(
       const offset = (currentPage - 1) * limit; // Hitung offset berdasarkan halaman saat ini
       const limitedDataRW = dataRW.slice(offset, offset + limit); // Batasi data yang ditampilkan sesuai limit dan offset
       const pages = paginate.getArrayPages(req)(3, pageCount, currentPage);
-      console.log(pageCount, currentPage, itemCount, limit);
+
       res.render("lurah/kelolart", {
         totalTPS,
         dataRW: limitedDataRW, // Gunakan data yang telah dibatasi sesuai limit
