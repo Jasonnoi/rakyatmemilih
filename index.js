@@ -12,7 +12,7 @@ import fs from "fs";
 import session from "express-session";
 import crypto from "crypto";
 import cookieParser from "cookie-parser";
-import Swal from "sweetalert2";
+
 
 const port = 3000;
 const app = express();
@@ -216,7 +216,6 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
       .update(passwordPemilih)
       .digest("base64");
 
-    
     const queryId = `SELECT * FROM view_outer_verifikasi WHERE username = '${usernamePemilih}'`;
 
     const getData = () => {
@@ -233,11 +232,11 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
 
     const resultPenggunaId = await getData();
 
-    if(resultPenggunaId){
+    if (resultPenggunaId) {
       res.send(
         "<script>alert('Akun sudah terdaftar'); window.location.href='/register-data-pengguna'</script>"
       );
-    }else{
+    } else {
       // Simpan nama file ke dalam database
       const query = `INSERT INTO pengguna (NIK, nama, username, password, email, tgl_lahir, no_hp, rw, rt, alamat, role, profile, id_kelurahan, kelamin) VALUES ('${NIKPemilih}', '${namaPemilih}', '${usernamePemilih}', '${hashed_pass}', '${emailPemilih}', '${tanggallahirPemilih}', '${noHPPemilih}', '${rwPemilih}', '${rtPemilih}', '${alamatPemilih}', 'Pengguna', '${fotoKTP}', 1, '${kelamin}')`;
       await db.query(query);
@@ -249,7 +248,7 @@ app.post("/register-data", upload.single("fotoProfile"), async (req, res) => {
         "<script>alert('Berhasil mendaftarkan data'); window.location.href='/'</script>"
       );
     }
-    
+
     db.release();
   } catch (error) {
     console.error("Terjadi kesalahan:", error);
@@ -1261,7 +1260,6 @@ app.get("/cetak-pdf", async (req, res) => {
     let selectData;
 
     const tabel = req.query.data;
-    console.log(tabel);
 
     let query; // Mengubah conn.query menjadi versi promise
 
